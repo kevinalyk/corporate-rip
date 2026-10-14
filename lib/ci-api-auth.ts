@@ -91,6 +91,12 @@ export const CI_SCOPES = {
   // visitor/traffic data (including anonymous visitors) across the whole
   // site, not just CI workflow data or client billing rosters.
   SITE_VISITS_READ: "ci:site_visits_read",
+  // Read-only keyword search over message content (email subject/body and SMS
+  // text) via search_content. Separate from "ci:read" (which only lists
+  // UNASSIGNED messages for the assignment workflow). The tool also accepts
+  // "campaigns:read" (email only) and "sms:read" (SMS only) so keys minted
+  // for the public v1 API scopes work too.
+  CONTENT_READ: "ci:content_read",
 } as const
 
 export type CiScope = (typeof CI_SCOPES)[keyof typeof CI_SCOPES]
@@ -108,6 +114,7 @@ export const CI_ASSIGNMENT_ALL_SCOPES: CiScope[] = [
   CI_SCOPES.NEWS_WRITE,
   CI_SCOPES.ACCOUNTS_READ,
   CI_SCOPES.SITE_VISITS_READ,
+  CI_SCOPES.CONTENT_READ,
 ]
 
 // Guardrail caps - deliberately conservative. Raise only with a clear reason;

@@ -3,7 +3,7 @@
  * Claude.ai / Claude Desktop custom connector. See
  * docs/plans/CLAUDE_CI_ASSIGNMENT_MCP.md for the full design.
  *
- * Deliberately exposes ONLY these 28 tools - nothing else exists on this
+ * Deliberately exposes ONLY these 29 tools - nothing else exists on this
  * surface, so Claude/Grok physically cannot call anything beyond this narrow
  * workflow:
  *   1. list_unassigned_messages   (ci:read)
@@ -34,6 +34,14 @@
  *   26. create_news_article       (ci:news_write)
  *   27. update_news_article       (ci:news_write)
  *   28. delete_news_article       (ci:news_write)
+ *   29. search_content            (ci:content_read, or campaigns:read / sms:read)
+ *
+ * Tool 29 is a read-only keyword search across assigned AND unassigned
+ * email (subject, preview, body, sender name) and SMS text, filterable by
+ * date range, type and party. Restricted to the shared "seed" inbox - never
+ * returns client-private personal-subscription messages. Returns paged
+ * results plus totals and per-entity counts so senders can be ranked without
+ * paging. No body text is returned, only subject / SMS text.
  *
  * Tools 9-11 manage the sender email/domain/phone and CTA-domain mappings
  * that assign_messages_to_entity / categorize_messages match against - so
@@ -1043,7 +1051,7 @@ const handler = createMcpHandler(
       },
     )
 
-    // ── Tool 7: delete_messages ──────────────────────────────────────────────
+    // ── Tool 7: delete_messages ─────────────��────────────────────────────────
     server.registerTool(
       "delete_messages",
       {
@@ -1886,6 +1894,242 @@ const handler = createMcpHandler(
           })
 
           return { content: [{ type: "text" as const, text: JSON.stringify(visits, null, 2) }] }
+        } catch (error) {
+          return toolError(error)
+        }
+      },
+    )
+
+    // ── Tool 29: search_content ─────────────────────────────────────────────
+    server.registerTool(
+      "search_content",
+      {
+        title: "Search Content",
+        description:
+          "Read-only keyword search across email (sender name, subject, preview, body) and SMS text in the shared RIP inbox, with optional date range, type (email/sms/both) and party (R/D) filters. Use match=\"any\" (default) for OR across keywords or \"all\" for AND. Returns one page of results (id, entity name/slug, party, state, type, received time, subject or SMS text, from address or short code, share link when one exists) plus totals and per-entity counts across ALL matches, so senders can be ranked without paging. Unassigned messages are included unless a party filter is set. Never returns client-private personal-subscription messages or full email bodies.",
+        inputSchema: {
+          query: z.string().min(1).max(200).describe('Keywords separated by spaces, e.g. "Musk Elon"'),
+          match: z.enum(["any", "all"]).default("any").describe("any = message contains at least one keyword; all = contains every keyword"),
+          startDate: z.string().optional().describe("ISO date/time; window start (inclusive)"),
+          endDate: z.string().optional().describe("ISO date/time; window end (inclusive)"),
+          type: z.enum(["email", "sms", "both"]).default("both"),
+          party: z.enum(["R", "D"]).optional().describe("R = republican, D = democrat; omit for all"),
+          limit: z.number().int().min(1).max(100).default(25),
+          page: z.number().int().min(1).max(100).default(1),
+          entityLimit: z.number().int().min(1).max(200).default(50).describe("Max entities in the byEntity ranking"),
+        },
+      },
+      async ({ query, match, startDate, endDate, type, party, limit, page, entityLimit }, extra) => {
+        try {
+          const scopes = extra.authInfo?.scopes ?? []
+          const hasAll = scopes.includes("*") || scopes.includes(CI_SCOPES.CONTENT_READ)
+          const canEmail = hasAll || scopes.includes("campaigns:read")
+          const canSms = hasAll || scopes.includes("sms:read")
+          const wantEmail = type === "email" || type === "both"
+          const wantSms = type === "sms" || type === "both"
+          if ((wantEmail && !canEmail) || (wantSms && !canSms)) {
+            throw new CiApiError(
+              `This API key does not have the required scope: ${CI_SCOPES.CONTENT_READ} (or campaigns:read for email / sms:read for SMS)`,
+              403,
+            )
+          }
+
+          const from = startDate ? new Date(startDate) : undefined
+          const to = endDate ? new Date(endDate) : undefined
+          if ((from && Number.isNaN(from.getTime())) || (to && Number.isNaN(to.getTime()))) {
+            throw new CiApiError("startDate/endDate must be valid ISO date strings", 400)
+          }
+          const dateRange = from || to ? { ...(from ? { gte: from } : {}), ...(to ? { lte: to } : {}) } : undefined
+
+          const terms = Array.from(new Set(query.split(/\s+/).map((t) => t.trim()).filter(Boolean))).slice(0, 10)
+          if (terms.length === 0) throw new CiApiError("query must contain at least one keyword", 400)
+          const termMode = match === "all" ? "AND" : "OR"
+
+          const partyFilter = party
+            ? { entity: { is: { party: { equals: party === "R" ? "republican" : "democrat", mode: "insensitive" as const } } } }
+            : {}
+
+          const emailWhere = {
+            isDeleted: false,
+            isHidden: false,
+            source: "seed",
+            ...(dateRange ? { dateReceived: dateRange } : {}),
+            ...partyFilter,
+            [termMode]: terms.map((term) => ({
+              OR: [
+                { senderName: { contains: term, mode: "insensitive" as const } },
+                { subject: { contains: term, mode: "insensitive" as const } },
+                { emailPreview: { contains: term, mode: "insensitive" as const } },
+                { emailContent: { contains: term, mode: "insensitive" as const } },
+              ],
+            })),
+          }
+
+          const smsWhere = {
+            isDeleted: false,
+            isHidden: false,
+            source: "seed",
+            ...(dateRange ? { createdAt: dateRange } : {}),
+            ...partyFilter,
+            [termMode]: terms.map((term) => ({ message: { contains: term, mode: "insensitive" as const } })),
+          }
+
+          // Page across both types by date: take the newest page*limit rows from each, merge, slice.
+          const fetchCount = page * limit
+          const entitySelect = { select: { name: true, party: true, state: true } }
+
+          const [emails, sms, emailTotal, smsTotal, emailByEntity, smsByEntity] = await Promise.all([
+            wantEmail
+              ? prisma.competitiveInsightCampaign.findMany({
+                  where: emailWhere,
+                  orderBy: { dateReceived: "desc" },
+                  take: fetchCount,
+                  select: {
+                    id: true,
+                    senderEmail: true,
+                    subject: true,
+                    dateReceived: true,
+                    shareToken: true,
+                    entityId: true,
+                    entity: entitySelect,
+                  },
+                })
+              : Promise.resolve([]),
+            wantSms
+              ? prisma.smsQueue.findMany({
+                  where: smsWhere,
+                  orderBy: { createdAt: "desc" },
+                  take: fetchCount,
+                  select: {
+                    id: true,
+                    phoneNumber: true,
+                    message: true,
+                    createdAt: true,
+                    shareToken: true,
+                    entityId: true,
+                    entity: entitySelect,
+                  },
+                })
+              : Promise.resolve([]),
+            wantEmail ? prisma.competitiveInsightCampaign.count({ where: emailWhere }) : Promise.resolve(0),
+            wantSms ? prisma.smsQueue.count({ where: smsWhere }) : Promise.resolve(0),
+            wantEmail
+              ? prisma.competitiveInsightCampaign.groupBy({ by: ["entityId"], where: emailWhere, _count: { _all: true } })
+              : Promise.resolve([]),
+            wantSms
+              ? prisma.smsQueue.groupBy({ by: ["entityId"], where: smsWhere, _count: { _all: true } })
+              : Promise.resolve([]),
+          ])
+
+          const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+          const toResult = (
+            kind: "email" | "sms",
+            row: {
+              id: string
+              receivedAt: Date
+              text: string | null
+              from: string | null
+              shareToken: string | null
+              entity: { name: string; party: string | null; state: string | null } | null
+            },
+          ) => ({
+            id: row.id,
+            type: kind,
+            entityName: row.entity?.name ?? null,
+            entitySlug: row.entity ? nameToSlug(row.entity.name) : null,
+            party: row.entity?.party ?? null,
+            state: row.entity?.state ?? null,
+            receivedAt: row.receivedAt.toISOString(),
+            [kind === "email" ? "subject" : "text"]: row.text,
+            from: row.from,
+            link: row.shareToken ? `${appUrl}/share/${row.shareToken}` : null,
+          })
+
+          const merged = [
+            ...(emails as any[]).map((e) =>
+              toResult("email", {
+                id: e.id,
+                receivedAt: e.dateReceived,
+                text: e.subject,
+                from: e.senderEmail,
+                shareToken: e.shareToken,
+                entity: e.entity,
+              }),
+            ),
+            ...(sms as any[]).map((s) =>
+              toResult("sms", {
+                id: s.id,
+                receivedAt: s.createdAt,
+                text: s.message,
+                from: s.phoneNumber,
+                shareToken: s.shareToken,
+                entity: s.entity,
+              }),
+            ),
+          ]
+            .sort((a, b) => (a.receivedAt < b.receivedAt ? 1 : -1))
+            .slice((page - 1) * limit, page * limit)
+
+          const counts = new Map<string | null, { emailCount: number; smsCount: number }>()
+          for (const row of emailByEntity) {
+            counts.set(row.entityId, { emailCount: row._count._all, smsCount: 0 })
+          }
+          for (const row of smsByEntity) {
+            const existing = counts.get(row.entityId) ?? { emailCount: 0, smsCount: 0 }
+            existing.smsCount = row._count._all
+            counts.set(row.entityId, existing)
+          }
+
+          const entityIds = Array.from(counts.keys()).filter((id): id is string => id !== null)
+          const entities = entityIds.length
+            ? await prisma.ciEntity.findMany({
+                where: { id: { in: entityIds } },
+                select: { id: true, name: true, party: true, state: true },
+              })
+            : []
+          type EntityInfo = { id: string; name: string; party: string | null; state: string | null }
+          const entityById = new Map<string, EntityInfo>(
+            (entities as EntityInfo[]).map((e) => [e.id, e] as [string, EntityInfo]),
+          )
+
+          const byEntity = Array.from(counts.entries())
+            .filter(([id]) => id !== null)
+            .map(([id, c]) => {
+              const e = entityById.get(id as string)
+              return {
+                entityName: e?.name ?? null,
+                entitySlug: e ? nameToSlug(e.name) : null,
+                party: e?.party ?? null,
+                state: e?.state ?? null,
+                emailCount: c.emailCount,
+                smsCount: c.smsCount,
+                total: c.emailCount + c.smsCount,
+              }
+            })
+            .sort((a, b) => b.total - a.total)
+            .slice(0, entityLimit)
+
+          const unassigned = counts.get(null)
+          const total = emailTotal + smsTotal
+
+          return {
+            content: [
+              {
+                type: "text" as const,
+                text: JSON.stringify(
+                  {
+                    query: { terms, match, startDate: from?.toISOString() ?? null, endDate: to?.toISOString() ?? null, type, party: party ?? null },
+                    totals: { total, emails: emailTotal, sms: smsTotal, unassigned: (unassigned?.emailCount ?? 0) + (unassigned?.smsCount ?? 0) },
+                    pagination: { page, limit, hasMore: page * limit < total },
+                    byEntity,
+                    results: merged,
+                  },
+                  null,
+                  2,
+                ),
+              },
+            ],
+          }
         } catch (error) {
           return toolError(error)
         }
