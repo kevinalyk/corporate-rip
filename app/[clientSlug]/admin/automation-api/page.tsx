@@ -46,6 +46,7 @@ const ALL_SCOPES = [
   { value: "ci:news_write", label: "Write, edit & delete /news articles" },
   { value: "ci:accounts_read", label: "Read client accounts, contacts & Stripe billing status" },
   { value: "ci:site_visits_read", label: "Read raw site traffic log (SiteVisit: IPs, paths, referers, geo)" },
+  { value: "ci:content_read", label: "Search email & SMS content by keyword (search_content, read-only)" },
 ]
 
 interface ApiKeyRow {
