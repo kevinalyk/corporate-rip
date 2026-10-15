@@ -3,6 +3,7 @@ import { getServerSettings } from "./email-connection"
 import { shouldUseGraphAPI, moveOutlookMessageToInbox } from "./microsoft-graph"
 import { getValidAccessToken } from "./microsoft-oauth"
 import { decrypt } from "./encryption"
+import { decodeRawEmail, loadTrackingPixelsFromHtml, type PixelResult } from "./tracking-pixel"
 import * as Imap from "node-imap"
 import { PrismaClient } from "@prisma/client"
 
@@ -404,8 +405,13 @@ export class EngagementSimulator {
       console.log(`\n🎬 Engaging with email ${i + 1}/${selectedEmails.length}: "${email.subject}"`)
 
       try {
-        await this.engageWithEmail(account, email)
+        const pixelResults = await this.engageWithEmail(account, email, forceFullEngagement)
         await this.logEngagement(account.id, "open", email)
+
+        if (forceFullEngagement) {
+          await this.logPixelResults(account.id, email, pixelResults)
+        }
+
         await this.updateSenderFamiliarity(account.id, email.sender)
 
         console.log(`✅ Successfully engaged with: "${email.subject}"`)
@@ -832,19 +838,73 @@ export class EngagementSimulator {
     return decision
   }
 
-  private async engageWithEmail(account: SeedAccount, email: EmailToProcess): Promise<void> {
+  private async engageWithEmail(
+    account: SeedAccount,
+    email: EmailToProcess,
+    isDomainHealth = false,
+  ): Promise<PixelResult[]> {
     console.log(`🎬 Actually engaging with email: ${account.email} -> "${email.subject}" from ${email.sender}`)
 
     if (shouldUseGraphAPI(account.provider)) {
       console.log(`📊 Using Graph API to mark as read`)
-      await this.markOutlookEmailAsRead(account, email)
-    } else {
-      console.log(`📨 Using IMAP to mark as read`)
-      await this.markImapEmailAsRead(account, email)
+      return await this.markOutlookEmailAsRead(account, email, isDomainHealth)
+    }
+
+    console.log(`📨 Using IMAP to mark as read`)
+    return await this.markImapEmailAsRead(account, email, isDomainHealth)
+  }
+
+  /**
+   * Looks up the message in the Inbox by Message-ID. After a Junk -> Inbox move the Graph id
+   * changes, so the id captured before the move can no longer be trusted.
+   */
+  private async lookupOutlookInboxMessage(
+    accessToken: string,
+    email: EmailToProcess,
+  ): Promise<{ id: string; html: string } | null> {
+    if (!email.messageId) return null
+
+    const filter = `internetMessageId eq '${email.messageId.replace(/'/g, "''")}'`
+    const url =
+      `https://graph.microsoft.com/v1.0/me/mailFolders/inbox/messages` +
+      `?$filter=${encodeURIComponent(filter)}&$select=id,body&$top=1`
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Prefer: 'outlook.body-content-type="html"',
+      },
+    })
+    if (!response.ok) return null
+
+    const data = await response.json()
+    const message = data.value?.[0]
+    if (!message?.id) return null
+
+    return {
+      id: message.id,
+      html: message.body?.contentType === "html" ? message.body.content || "" : "",
     }
   }
 
-  private async markOutlookEmailAsRead(account: SeedAccount, email: EmailToProcess): Promise<void> {
+  private async fetchOutlookMessageHtml(accessToken: string, graphId: string): Promise<string> {
+    const response = await fetch(`https://graph.microsoft.com/v1.0/me/messages/${graphId}?$select=body`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Prefer: 'outlook.body-content-type="html"',
+      },
+    })
+    if (!response.ok) return ""
+
+    const data = await response.json()
+    return data.body?.contentType === "html" ? data.body.content || "" : ""
+  }
+
+  private async markOutlookEmailAsRead(
+    account: SeedAccount,
+    email: EmailToProcess,
+    isDomainHealth = false,
+  ): Promise<PixelResult[]> {
     try {
       console.log(`🔑 Getting access token for Outlook engagement`)
       const accessToken = await getValidAccessToken(account.id)
@@ -852,7 +912,20 @@ export class EngagementSimulator {
         throw new Error("No access token or graph ID available")
       }
 
-      const url = `https://graph.microsoft.com/v1.0/me/messages/${email.graphId}`
+      let graphId = email.graphId
+      let html = ""
+
+      if (isDomainHealth) {
+        const inboxMessage = await this.lookupOutlookInboxMessage(accessToken, email)
+        if (inboxMessage) {
+          graphId = inboxMessage.id
+          html = inboxMessage.html
+        } else {
+          console.log(`⚠️ Could not find "${email.subject}" in Inbox by Message-ID, using original Graph id`)
+        }
+      }
+
+      const url = `https://graph.microsoft.com/v1.0/me/messages/${graphId}`
       console.log(`🌐 Making PATCH request to mark email as read`)
 
       const response = await fetch(url, {
@@ -871,13 +944,49 @@ export class EngagementSimulator {
       }
 
       console.log(`✅ Successfully marked Outlook email as read: "${email.subject}"`)
+
+      if (!isDomainHealth) return []
+
+      try {
+        if (!html) html = await this.fetchOutlookMessageHtml(accessToken, graphId)
+        return await loadTrackingPixelsFromHtml(html)
+      } catch (pixelError) {
+        console.error(`⚠️ Tracking pixel step failed for "${email.subject}":`, pixelError)
+        return []
+      }
     } catch (error) {
       console.error(`❌ Failed to mark Outlook email as read:`, error)
       throw error
     }
   }
 
-  private async markImapEmailAsRead(account: SeedAccount, email: EmailToProcess): Promise<void> {
+  private async logPixelResults(seedEmailId: string, email: EmailToProcess, pixels: PixelResult[]): Promise<void> {
+    if (pixels.length === 0) {
+      console.log(`⚠️ No tracking pixel loaded for "${email.subject}"`)
+      await sql`
+        INSERT INTO "EngagementLog" ("seedEmailId", "action", "emailSubject", "emailSender", "emailReceivedAt", "success", "errorMessage")
+        VALUES (${seedEmailId}, 'pixel', ${email.subject}, ${email.sender}, ${email.receivedAt.toISOString()}, false, 'No tracking pixel found or message body unavailable')
+      `
+      return
+    }
+
+    for (const pixel of pixels) {
+      console.log(`🖼️ Pixel ${pixel.success ? "loaded" : "failed"} (${pixel.statusCode}): ${pixel.url}`)
+      await sql`
+        INSERT INTO "EngagementLog" ("seedEmailId", "action", "emailSubject", "emailSender", "emailReceivedAt", "success", "errorMessage", "clickedUrl")
+        VALUES (
+          ${seedEmailId}, 'pixel', ${email.subject}, ${email.sender}, ${email.receivedAt.toISOString()},
+          ${pixel.success}, ${pixel.success ? null : pixel.error || `HTTP ${pixel.statusCode}`}, ${pixel.url}
+        )
+      `
+    }
+  }
+
+  private async markImapEmailAsRead(
+    account: SeedAccount,
+    email: EmailToProcess,
+    isDomainHealth = false,
+  ): Promise<PixelResult[]> {
     return new Promise((resolve, reject) => {
       try {
         console.log(`🔐 Decrypting password for IMAP engagement`)
@@ -916,7 +1025,7 @@ export class EngagementSimulator {
             } catch (e) {}
             reject(new Error("Connection timeout"))
           }
-        }, 15000)
+        }, 30000)
 
         imap.once("error", (err) => {
           if (!resolved) {
@@ -941,33 +1050,94 @@ export class EngagementSimulator {
               return
             }
 
-            if (!email.uid) {
-              if (!resolved) {
+            const fail = (error: Error) => {
+              if (resolved) return
+              resolved = true
+              clearTimeout(timeout)
+              console.error(`❌ ${error.message} for email: "${email.subject}"`)
+              try {
+                imap.end()
+              } catch (e) {}
+              reject(error)
+            }
+
+            const markSeenAndFinish = (uid: number, source: Buffer | null) => {
+              console.log(`🏷️ Marking email UID ${uid} as read`)
+              imap.addFlags(uid, ["\\Seen"], async (flagErr) => {
+                if (resolved) return
                 resolved = true
                 clearTimeout(timeout)
-                console.error(`❌ No UID available for email: "${email.subject}"`)
                 imap.end()
-                reject(new Error("No UID available for email"))
+
+                if (flagErr) {
+                  console.error(`❌ Failed to mark email as read:`, flagErr.message)
+                  reject(flagErr)
+                  return
+                }
+
+                console.log(`✅ Successfully marked IMAP email as read: "${email.subject}"`)
+
+                if (!isDomainHealth || !source) {
+                  resolve([])
+                  return
+                }
+
+                try {
+                  const { html } = await decodeRawEmail(source)
+                  resolve(await loadTrackingPixelsFromHtml(html))
+                } catch (pixelError) {
+                  console.error(`⚠️ Tracking pixel step failed for "${email.subject}":`, pixelError)
+                  resolve([])
+                }
+              })
+            }
+
+            if (!isDomainHealth) {
+              if (!email.uid) {
+                fail(new Error("No UID available"))
+                return
               }
+              markSeenAndFinish(email.uid, null)
               return
             }
 
-            console.log(`🏷️ Marking email UID ${email.uid} as read`)
-            // Mark the email as read using the UID
-            imap.addFlags(email.uid, ["\\Seen"], (err) => {
-              if (!resolved) {
-                resolved = true
-                clearTimeout(timeout)
-                imap.end()
+            // Domain health: a message moved out of Junk gets a new UID in the Inbox,
+            // so resolve the Inbox UID by Message-ID instead of trusting the old one.
+            const fetchSource = (uid: number, done: (source: Buffer | null) => void) => {
+              const chunks: Buffer[] = []
+              const fetchReq = imap.fetch([uid], { bodies: "" })
+              fetchReq.on("message", (msg) => {
+                msg.on("body", (stream) => {
+                  stream.on("data", (chunk: Buffer) => chunks.push(chunk))
+                })
+              })
+              fetchReq.once("error", (fetchErr: Error) => {
+                console.error(`⚠️ Failed to fetch message source for UID ${uid}:`, fetchErr.message)
+                done(null)
+              })
+              fetchReq.once("end", () => done(chunks.length > 0 ? Buffer.concat(chunks) : null))
+            }
 
-                if (err) {
-                  console.error(`❌ Failed to mark email as read:`, err.message)
-                  reject(err)
-                } else {
-                  console.log(`✅ Successfully marked IMAP email as read: "${email.subject}"`)
-                  resolve()
-                }
+            const processUid = (uid: number | undefined) => {
+              if (!uid) {
+                fail(new Error("Message not found in INBOX"))
+                return
               }
+              fetchSource(uid, (source) => markSeenAndFinish(uid, source))
+            }
+
+            if (!email.messageId) {
+              processUid(email.uid)
+              return
+            }
+
+            imap.search([["HEADER", "MESSAGE-ID", email.messageId]], (searchErr, results) => {
+              if (searchErr || !results || results.length === 0) {
+                console.log(`⚠️ Message-ID lookup found nothing in INBOX, falling back to UID ${email.uid}`)
+                processUid(email.uid)
+                return
+              }
+              processUid(results[results.length - 1])
             })
           })
         })
