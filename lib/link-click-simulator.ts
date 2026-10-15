@@ -16,6 +16,7 @@ import { getValidAccessToken } from "./microsoft-oauth"
 import { decrypt } from "./encryption"
 import * as Imap from "node-imap"
 import * as cheerio from "cheerio"
+import { simpleParser } from "mailparser"
 
 const sql = neon(process.env.DATABASE_URL!)
 
@@ -391,6 +392,24 @@ function shouldClickForAccount(account: DomainHealthSeedAccount): boolean {
 // IMAP body fetcher
 // ---------------------------------------------------------------------------
 
+async function parseRawMessage(source: Buffer, uid: number): Promise<EmailWithBody | null> {
+  try {
+    const parsed = await simpleParser(source)
+    return {
+      subject: parsed.subject || "",
+      sender: parsed.from?.value?.[0]?.address || "",
+      receivedAt: parsed.date || new Date(),
+      messageId: parsed.messageId || "",
+      uid,
+      htmlBody: typeof parsed.html === "string" ? parsed.html : undefined,
+      textBody: parsed.text || undefined,
+    }
+  } catch (err) {
+    console.error(`  Failed to decode message UID ${uid}:`, err)
+    return null
+  }
+}
+
 function fetchImapEmailsWithBody(account: DomainHealthSeedAccount): Promise<EmailWithBody[]> {
   return new Promise((resolve) => {
     try {
@@ -425,7 +444,7 @@ function fetchImapEmailsWithBody(account: DomainHealthSeedAccount): Promise<Emai
           try { imap.end() } catch {}
           resolve([])
         }
-      }, 25000)
+      }, 45000)
 
       imap.once("error", (err) => {
         if (!resolved) {
@@ -470,65 +489,34 @@ function fetchImapEmailsWithBody(account: DomainHealthSeedAccount): Promise<Emai
               const uids = results.slice(0, 10)
               console.log(`  Found ${results.length} recent emails in ${folder}, checking ${uids.length}`)
 
-              // Fetch full message body (TEXT) plus headers
-              const fetchReq = imap.fetch(uids, {
-                bodies: ["HEADER.FIELDS (FROM SUBJECT DATE MESSAGE-ID)", "TEXT"],
-                struct: true,
-              })
+              // Fetch the full raw message so mailparser can decode quoted-printable / base64 / multipart
+              const fetchReq = imap.fetch(uids, { bodies: "" })
 
-              const emailMap: Record<number, EmailWithBody> = {}
+              const parsePromises: Promise<void>[] = []
 
-              fetchReq.on("message", (msg, seqno) => {
-                let headerBuf = ""
-                let bodyBuf = ""
+              fetchReq.on("message", (msg) => {
+                const chunks: Buffer[] = []
                 let uid = 0
-                let which = ""
 
-                msg.on("body", (stream, info) => {
-                  which = info.which
-                  let buf = ""
-                  stream.on("data", (chunk) => { buf += chunk.toString("utf8") })
-                  stream.once("end", () => {
-                    if (which.startsWith("HEADER")) headerBuf = buf
-                    else bodyBuf = buf
-                  })
+                msg.on("body", (stream) => {
+                  stream.on("data", (chunk: Buffer) => chunks.push(chunk))
                 })
 
                 msg.once("attributes", (attrs) => { uid = attrs.uid })
 
                 msg.once("end", () => {
-                  if (!emailMap[uid]) {
-                    // Parse headers
-                    const lines = headerBuf.split(/\r?\n/)
-                    let subject = ""
-                    let from = ""
-                    let date = new Date()
-                    let messageId = ""
-
-                    for (const line of lines) {
-                      const lower = line.toLowerCase()
-                      if (lower.startsWith("subject:")) subject = line.substring(8).trim()
-                      else if (lower.startsWith("from:")) {
-                        from = line.substring(5).trim()
-                        const m = from.match(/<([^>]+)>/)
-                        if (m) from = m[1]
-                      } else if (lower.startsWith("date:")) date = new Date(line.substring(5).trim())
-                      else if (lower.startsWith("message-id:")) messageId = line.substring(11).trim()
-                    }
-
-                    emailMap[uid] = { subject, sender: from, receivedAt: date, messageId, uid }
-                  }
-
-                  // Accumulate body parts (TEXT part arrives as a separate message event)
-                  if (!which.startsWith("HEADER") && bodyBuf) {
-                    emailMap[uid].htmlBody = bodyBuf
-                  }
+                  const source = Buffer.concat(chunks)
+                  parsePromises.push(
+                    parseRawMessage(source, uid).then((parsed) => {
+                      if (parsed) allEmails.push(parsed)
+                    }),
+                  )
                 })
               })
 
               fetchReq.once("error", () => checkNextFolder(idx + 1))
-              fetchReq.once("end", () => {
-                allEmails.push(...Object.values(emailMap))
+              fetchReq.once("end", async () => {
+                await Promise.all(parsePromises)
 
                 // Domain health only: move every email we're about to click through from a
                 // spam-like folder into the Inbox first, so the click reflects inbox engagement.
@@ -668,7 +656,9 @@ async function processAccountLinkClicks(account: DomainHealthSeedAccount): Promi
     const linksToClick = selectLinksToClick(hrefs)
 
     if (linksToClick.length === 0) {
-      console.log(`  No clickable links in "${email.subject}" — skipping`)
+      console.log(
+        `  No clickable links in "${email.subject}" — skipping (${hrefs.length} link(s) found, html: ${email.htmlBody ? "yes" : "no"})`,
+      )
       continue
     }
 
