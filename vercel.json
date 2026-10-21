@@ -95,7 +95,7 @@
     },
     {
       "path": "/api/cron/click-domain-health-emails",
-      "schedule": "0 10,15,21 * * *"
+      "schedule": "7 10,15,21 * * *"
     },
     {
       "path": "/api/cron/simulate-domain-health-engagement",

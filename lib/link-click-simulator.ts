@@ -17,6 +17,7 @@ import { decrypt } from "./encryption"
 import * as Imap from "node-imap"
 import * as cheerio from "cheerio"
 import { simpleParser } from "mailparser"
+import { createHash } from "crypto"
 
 const sql = neon(process.env.DATABASE_URL!)
 
@@ -60,28 +61,10 @@ const PERSONALITY_CLICK_CONFIGS: Record<string, { baseClickRate: number }> = {
   selective: { baseClickRate: 0.2 },
 }
 
-// ---------------------------------------------------------------------------
-// Reading schedule patterns (reuse same logic as EngagementSimulator)
-// ---------------------------------------------------------------------------
-
-const SCHEDULE_PATTERNS: Record<string, { peakHours: number[]; offHours: number[] }> = {
-  business_hours: {
-    peakHours: [9, 10, 11, 14, 15, 16],
-    offHours: [0, 1, 2, 3, 4, 5, 6, 22, 23],
-  },
-  night_owl: {
-    peakHours: [19, 20, 21, 22, 23, 0],
-    offHours: [6, 7, 8, 9, 10, 11],
-  },
-  early_bird: {
-    peakHours: [6, 7, 8, 9, 10],
-    offHours: [20, 21, 22, 23, 0, 1],
-  },
-  flexible: {
-    peakHours: [8, 12, 16, 20],
-    offHours: [2, 3, 4, 5],
-  },
-}
+const MAX_MESSAGE_BYTES = 1_500_000
+const MAX_EMAILS_PER_FOLDER = 6
+const MAX_EMAILS_CLICKED_PER_ACCOUNT = 3
+const RUN_BUDGET_MS = 240_000
 
 // ---------------------------------------------------------------------------
 // URL filtering helpers
@@ -212,16 +195,12 @@ function randomUserAgent(): string {
   return BROWSER_USER_AGENTS[Math.floor(Math.random() * BROWSER_USER_AGENTS.length)]
 }
 
-/**
- * Makes a realistic HTTP GET request to a URL to simulate a click.
- * Times out after 15 seconds. Follows redirects (default fetch behavior).
- */
-async function performClick(url: string): Promise<{ success: boolean; finalUrl: string; statusCode: number }> {
+async function fetchAsBrowser(url: string, redirect: "manual" | "follow", timeoutMs: number): Promise<Response> {
   const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 15000)
+  const timeout = setTimeout(() => controller.abort(), timeoutMs)
 
   try {
-    const response = await fetch(url, {
+    return await fetch(url, {
       method: "GET",
       signal: controller.signal,
       headers: {
@@ -235,22 +214,63 @@ async function performClick(url: string): Promise<{ success: boolean; finalUrl: 
         "Sec-Fetch-Mode": "navigate",
         "Sec-Fetch-Site": "cross-site",
       },
-      redirect: "follow",
+      redirect,
     })
-
-    return {
-      success: response.ok || response.status < 400,
-      finalUrl: response.url,
-      statusCode: response.status,
-    }
-  } catch (err: any) {
-    if (err?.name === "AbortError") {
-      console.log(`  Click timed out for: ${url}`)
-      return { success: false, finalUrl: url, statusCode: 0 }
-    }
-    return { success: false, finalUrl: url, statusCode: 0 }
   } finally {
     clearTimeout(timeout)
+  }
+}
+
+/**
+ * Simulates a click on an ESP tracking link.
+ *
+ * The ESP registers the click when its tracker receives the request, so success is scored on that
+ * first hop. The redirect is not auto-followed; the destination is then requested best-effort, and
+ * a bot-blocked destination (e.g. a WinRed 403) does not turn a delivered click into a failure.
+ */
+async function performClick(
+  url: string,
+): Promise<{ success: boolean; finalUrl: string; statusCode: number; note?: string }> {
+  let tracker: Response
+  try {
+    tracker = await fetchAsBrowser(url, "manual", 15000)
+  } catch (err: any) {
+    const reason = err?.name === "AbortError" ? "tracker request timed out" : "tracker request failed"
+    console.log(`  ${reason}: ${url}`)
+    return { success: false, finalUrl: url, statusCode: 0, note: reason }
+  }
+
+  const trackerStatus = tracker.status
+  const location = tracker.headers.get("location")
+  await tracker.body?.cancel().catch(() => {})
+
+  if (trackerStatus >= 400) {
+    return { success: false, finalUrl: url, statusCode: trackerStatus, note: `tracker returned ${trackerStatus}` }
+  }
+
+  const isRedirect = trackerStatus >= 300 && trackerStatus < 400 && !!location
+  if (!isRedirect) {
+    return { success: true, finalUrl: url, statusCode: trackerStatus }
+  }
+
+  let destination = url
+  try {
+    destination = new URL(location, url).toString()
+    const response = await fetchAsBrowser(destination, "follow", 10000)
+    await response.body?.cancel().catch(() => {})
+    return {
+      success: true,
+      finalUrl: response.url || destination,
+      statusCode: response.status,
+      note: response.status >= 400 ? `tracker hop ok (${trackerStatus}); destination returned ${response.status}` : undefined,
+    }
+  } catch {
+    return {
+      success: true,
+      finalUrl: destination,
+      statusCode: trackerStatus,
+      note: `tracker hop ok (${trackerStatus}); destination request failed`,
+    }
   }
 }
 
@@ -353,39 +373,37 @@ async function getDomainHealthAccounts(): Promise<DomainHealthSeedAccount[]> {
 }
 
 // ---------------------------------------------------------------------------
-// Schedule gate (same logic as EngagementSimulator)
+// Per-email click decision
 // ---------------------------------------------------------------------------
 
-function isGoodTimeForAccount(account: DomainHealthSeedAccount): boolean {
-  const hour = new Date().getHours()
-  const schedule = SCHEDULE_PATTERNS[account.readingSchedule] ?? SCHEDULE_PATTERNS.business_hours
-  const isPeakHour = schedule.peakHours.includes(hour)
-  const isOffHour = schedule.offHours.includes(hour)
-  const random = Math.random()
-  if (isPeakHour) return random < 0.8
-  if (isOffHour) return random < 0.1
-  return random < 0.4
+function getClickRate(account: DomainHealthSeedAccount): number {
+  const config = PERSONALITY_CLICK_CONFIGS[account.personalityType] ?? PERSONALITY_CLICK_CONFIGS.moderate
+  return account.clickRateTarget > 0 ? account.clickRateTarget / 100 : config.baseClickRate
 }
 
-// ---------------------------------------------------------------------------
-// Decide whether to click for this account on this run
-// ---------------------------------------------------------------------------
+/**
+ * Deterministic 0-1 value for a (seed, email) pair, so each email gets one stable
+ * click/no-click decision instead of being re-rolled on every cron run.
+ */
+function stableRoll(seedEmailId: string, emailKey: string): number {
+  const digest = createHash("sha256").update(`${seedEmailId}:${emailKey}`).digest()
+  return digest.readUInt32BE(0) / 0x100000000
+}
 
-function shouldClickForAccount(account: DomainHealthSeedAccount): boolean {
-  const config = PERSONALITY_CLICK_CONFIGS[account.personalityType] ?? PERSONALITY_CLICK_CONFIGS.moderate
-  const baseRate = config.baseClickRate
+function emailKeyOf(email: EmailWithBody): string {
+  return `${email.subject}|${email.sender}`
+}
 
-  // If a per-seed click_rate_target is set (non-zero), use it; otherwise fall back to personality default
-  const targetRate =
-    account.clickRateTarget > 0
-      ? account.clickRateTarget / 100
-      : baseRate
-
-  // Random factor ±5%
-  const withVariance = targetRate + (Math.random() - 0.5) * 0.1
-  const finalRate = Math.max(0, Math.min(1, withVariance))
-
-  return Math.random() < finalRate
+async function getClickedEmailKeys(seedEmailId: string): Promise<Set<string>> {
+  const rows = await sql`
+    SELECT "emailSubject", "emailSender"
+    FROM "EngagementLog"
+    WHERE "seedEmailId" = ${seedEmailId}
+    AND action = 'click'
+    AND success = true
+    AND "performedAt" > NOW() - INTERVAL '14 days'
+  `
+  return new Set(rows.map((r) => `${r.emailSubject}|${r.emailSender}`))
 }
 
 // ---------------------------------------------------------------------------
@@ -485,8 +503,8 @@ function fetchImapEmailsWithBody(account: DomainHealthSeedAccount): Promise<Emai
                 return
               }
 
-              // Limit to 10 per folder — we only need a few to click
-              const uids = results.slice(0, 10)
+              // Most recent few per folder — we only need a handful to click
+              const uids = results.slice(-MAX_EMAILS_PER_FOLDER)
               console.log(`  Found ${results.length} recent emails in ${folder}, checking ${uids.length}`)
 
               // Fetch the full raw message so mailparser can decode quoted-printable / base64 / multipart
@@ -498,13 +516,24 @@ function fetchImapEmailsWithBody(account: DomainHealthSeedAccount): Promise<Emai
                 const chunks: Buffer[] = []
                 let uid = 0
 
-                msg.on("body", (stream) => {
+                let oversized = false
+
+                msg.on("body", (stream, info) => {
+                  if (info?.size > MAX_MESSAGE_BYTES) {
+                    oversized = true
+                    stream.resume()
+                    return
+                  }
                   stream.on("data", (chunk: Buffer) => chunks.push(chunk))
                 })
 
                 msg.once("attributes", (attrs) => { uid = attrs.uid })
 
                 msg.once("end", () => {
+                  if (oversized) {
+                    console.log(`  Skipping UID ${uid} in ${folder} — message larger than ${MAX_MESSAGE_BYTES} bytes`)
+                    return
+                  }
                   const source = Buffer.concat(chunks)
                   parsePromises.push(
                     parseRawMessage(source, uid).then((parsed) => {
@@ -617,18 +646,8 @@ async function fetchOutlookEmailsWithBody(account: DomainHealthSeedAccount): Pro
 // Per-account processing
 // ---------------------------------------------------------------------------
 
-async function processAccountLinkClicks(account: DomainHealthSeedAccount): Promise<void> {
+async function processAccountLinkClicks(account: DomainHealthSeedAccount, deadline: number): Promise<void> {
   console.log(`\nProcessing ${account.email} (personality: ${account.personalityType}, clickRate: ${account.clickRateTarget}%)`)
-
-  if (!isGoodTimeForAccount(account)) {
-    console.log(`  Skipping ${account.email} — not in active time window`)
-    return
-  }
-
-  if (!shouldClickForAccount(account)) {
-    console.log(`  Skipping ${account.email} — click rate check did not pass this run`)
-    return
-  }
 
   // Fetch recent emails (already-opened ones — we click after reading)
   let emails: EmailWithBody[] = []
@@ -643,14 +662,24 @@ async function processAccountLinkClicks(account: DomainHealthSeedAccount): Promi
     return
   }
 
-  // Shuffle so we don't always click the same email
-  const shuffled = emails.sort(() => Math.random() - 0.5)
+  // Each email gets one stable click decision at the seed's click rate, and is never clicked twice.
+  const clickRate = getClickRate(account)
+  const alreadyClicked = await getClickedEmailKeys(account.id)
+  const eligible = emails
+    .filter((e) => !alreadyClicked.has(emailKeyOf(e)) && stableRoll(account.id, emailKeyOf(e)) < clickRate)
+    .sort(() => Math.random() - 0.5)
+
+  console.log(
+    `  ${eligible.length}/${emails.length} email(s) selected for clicking (rate ${Math.round(clickRate * 100)}%, ${alreadyClicked.size} already clicked)`,
+  )
+
+  if (eligible.length === 0) return
 
   let clicksPerformed = 0
-  const maxClicksPerAccount = 1 + Math.floor(Math.random() * 2) // 1-2 click sessions per account per run
+  let emailsClicked = 0
 
-  for (const email of shuffled) {
-    if (clicksPerformed >= maxClicksPerAccount) break
+  for (const email of eligible) {
+    if (emailsClicked >= MAX_EMAILS_CLICKED_PER_ACCOUNT || Date.now() > deadline) break
 
     const hrefs = extractLinksFromBody(email.htmlBody, email.textBody)
     const linksToClick = selectLinksToClick(hrefs)
@@ -663,25 +692,29 @@ async function processAccountLinkClicks(account: DomainHealthSeedAccount): Promi
     }
 
     console.log(`  Clicking ${linksToClick.length} link(s) in "${email.subject}" from ${email.sender}`)
+    emailsClicked++
 
     for (const url of linksToClick) {
       console.log(`    -> ${url}`)
 
-      // Simulate reading time before clicking (5-45 seconds)
-      const readDelay = 5000 + Math.random() * 40000
-      await new Promise((r) => setTimeout(r, readDelay))
+      // Short reading pause before clicking (2-8 seconds)
+      await new Promise((r) => setTimeout(r, 2000 + Math.random() * 6000))
 
       const result = await performClick(url)
-      console.log(`    Status: ${result.statusCode} | Final URL: ${result.finalUrl}`)
+      console.log(
+        `    Success: ${result.success} | Status: ${result.statusCode} | Final URL: ${result.finalUrl}${result.note ? ` | ${result.note}` : ""}`,
+      )
 
-      await logClickEngagement(account.id, email, url, result.success)
-      await updateSenderFamiliarity(account.id, email.sender)
+      await logClickEngagement(account.id, email, url, result.success, result.note)
+      if (result.success) {
+        await updateSenderFamiliarity(account.id, email.sender)
+      }
 
       clicksPerformed++
 
-      // Brief gap between multiple clicks in same session (3-15 seconds)
+      // Brief gap between multiple clicks in same session (2-6 seconds)
       if (linksToClick.indexOf(url) < linksToClick.length - 1) {
-        await new Promise((r) => setTimeout(r, 3000 + Math.random() * 12000))
+        await new Promise((r) => setTimeout(r, 2000 + Math.random() * 4000))
       }
     }
   }
@@ -712,17 +745,23 @@ export async function simulateDomainHealthLinkClicks(): Promise<{
     return { accountsProcessed: 0, accountsClicked: 0, totalClicks: 0 }
   }
 
-  // Randomly activate 40-70% of accounts per run (natural variance)
-  const activeFraction = 0.4 + Math.random() * 0.3
-  const activeCount = Math.max(1, Math.floor(accounts.length * activeFraction))
-  const activeAccounts = accounts.sort(() => Math.random() - 0.5).slice(0, activeCount)
+  // Every account is processed each run; shuffled so none is consistently starved if the time budget runs out.
+  const activeAccounts = accounts.sort(() => Math.random() - 0.5)
+  const deadline = Date.now() + RUN_BUDGET_MS
 
-  console.log(`Activating ${activeAccounts.length}/${accounts.length} domain health accounts this run`)
+  console.log(`Processing ${activeAccounts.length} domain health accounts this run`)
 
   let accountsClicked = 0
   let totalClicks = 0
+  let accountsAttempted = 0
 
   for (const account of activeAccounts) {
+    if (Date.now() > deadline) {
+      console.log("Run time budget exhausted — remaining accounts will be handled next run")
+      break
+    }
+    accountsAttempted++
+
     try {
       // Count clicks before processing
       const beforeCount = await sql`
@@ -733,7 +772,7 @@ export async function simulateDomainHealthLinkClicks(): Promise<{
       `
       const before = Number(beforeCount[0]?.cnt ?? 0)
 
-      await processAccountLinkClicks(account)
+      await processAccountLinkClicks(account, deadline)
 
       const afterCount = await sql`
         SELECT COUNT(*) AS cnt FROM "EngagementLog"
@@ -752,16 +791,16 @@ export async function simulateDomainHealthLinkClicks(): Promise<{
       console.error(`Error processing ${account.email}:`, err)
     }
 
-    // Realistic gap between accounts (2-12 seconds)
-    await new Promise((r) => setTimeout(r, 2000 + Math.random() * 10000))
+    // Gap between accounts (1-3 seconds)
+    await new Promise((r) => setTimeout(r, 1000 + Math.random() * 2000))
   }
 
   console.log(
-    `Link click simulation complete. Processed: ${activeAccounts.length}, clicked: ${accountsClicked}, total clicks: ${totalClicks}`,
+    `Link click simulation complete. Processed: ${accountsAttempted}, clicked: ${accountsClicked}, total clicks: ${totalClicks}`,
   )
 
   return {
-    accountsProcessed: activeAccounts.length,
+    accountsProcessed: accountsAttempted,
     accountsClicked,
     totalClicks,
   }
