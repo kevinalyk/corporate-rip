@@ -52,17 +52,6 @@ const EXPECTED_ENTITLEMENTS: Record<SubscriptionPlan, MobileClientEntitlements> 
     clientPlanCoversMobile: true,
     shouldPromptAppleCancellation: false,
   },
-  basic_inboxing: {
-    canSearchAndFilterFeed: true,
-    canUseAlerts: true,
-    feedHistoryHours: null,
-    feedDelayHours: 0,
-    followedEntityLimit: null,
-    isAdFree: true,
-    accessSource: "client_plan",
-    clientPlanCoversMobile: true,
-    shouldPromptAppleCancellation: false,
-  },
   enterprise: {
     canSearchAndFilterFeed: true,
     canUseAlerts: true,
@@ -77,7 +66,7 @@ const EXPECTED_ENTITLEMENTS: Record<SubscriptionPlan, MobileClientEntitlements> 
 }
 
 function authContext(plan: string): MobileAuthContext {
-  const supportedPlans: readonly string[] = ["free", "all", "basic_inboxing", "enterprise"]
+  const supportedPlans: readonly string[] = ["free", "all", "enterprise"]
   const effectiveMobilePlan: SubscriptionPlan = plan === "paid"
     ? "all"
     : supportedPlans.includes(plan)
@@ -117,7 +106,7 @@ test("free feed bounds are exactly now minus 25 hours through now minus 24 hours
 
 test("paid feed bounds retain real-time upper-bound behavior", () => {
   const now = new Date("2026-09-14T20:30:00.000Z")
-  for (const plan of ["paid", "all", "basic_inboxing", "enterprise"] as const) {
+  for (const plan of ["paid", "all", "enterprise"] as const) {
     const bounds = getMobileFeedPlanDateBounds(plan, now)
     assert.equal(bounds.lte, null)
   }
@@ -240,7 +229,7 @@ test("Starter can paginate an unfiltered feed but cannot apply any filter", () =
 })
 
 test("paid plans retain search/filter access", () => {
-  for (const plan of ["paid", "all", "basic_inboxing", "enterprise"] as const) {
+  for (const plan of ["paid", "all", "enterprise"] as const) {
     assert.doesNotThrow(() => assertMobileFeedFiltersAllowed(plan, { search: "fundraising", state: "TX" }))
     assert.equal(requireFeedSearchAndFilters(authContext(plan)).plan, plan === "paid" ? "all" : plan)
   }

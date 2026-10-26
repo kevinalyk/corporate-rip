@@ -259,8 +259,7 @@ export async function POST(req: NextRequest) {
             if (
               productName === "Basic" ||
               productName === "Professional" ||
-              productName === "Advanced" ||
-              productName === "Enterprise" ||
+                          productName === "Enterprise" ||
               productName === "Starter"
             ) {
               hasPlanItem = true
@@ -273,8 +272,7 @@ export async function POST(req: NextRequest) {
                 Starter: "free",
                 Basic: "paid",
                 Professional: "all",
-                Advanced: "basic_inboxing",
-                Enterprise: "enterprise",
+                              Enterprise: "enterprise",
               }
               updateData.subscriptionPlan = planMap[productName] || plan
 
@@ -476,8 +474,7 @@ export async function POST(req: NextRequest) {
           if (
             productName === "Basic" ||
             productName === "Professional" ||
-            productName === "Advanced" ||
-            productName === "Enterprise" ||
+                      productName === "Enterprise" ||
             productName === "Starter"
           ) {
             hasPlanItem = true
@@ -490,8 +487,7 @@ export async function POST(req: NextRequest) {
               Starter: "free",
               Basic: "paid",
               Professional: "all",
-              Advanced: "basic_inboxing",
-              Enterprise: "enterprise",
+                          Enterprise: "enterprise",
             }
             const newPlan = planMap[productName]
             if (newPlan) {
@@ -652,8 +648,7 @@ export async function POST(req: NextRequest) {
             if (
               productName === "Basic" ||
               productName === "Professional" ||
-              productName === "Advanced" ||
-              productName === "Enterprise" ||
+                          productName === "Enterprise" ||
               productName === "Starter"
             ) {
               hasPlanItem = true
@@ -666,8 +661,7 @@ export async function POST(req: NextRequest) {
                 Starter: "free",
                 Basic: "paid",
                 Professional: "all",
-                Advanced: "basic_inboxing",
-                Enterprise: "enterprise",
+                              Enterprise: "enterprise",
               }
               const newPlan = planMap[productName]
               if (newPlan) {

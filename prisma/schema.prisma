@@ -173,7 +173,7 @@ model Client {
   dataRetentionDays Int        @default(90)
   slug              String     @unique // e.g., "redsparkstrategy"
   
-  subscriptionPlan       String    @default("free") // "free", "paid", "all", "basic_inboxing", "enterprise"
+  subscriptionPlan       String    @default("free") // "free", "paid", "all", "enterprise"
   subscriptionStatus     String    @default("active") // "active", "cancelled", "past_due"
   hasCompetitiveInsights Boolean   @default(false) // CI add-on
   emailVolumeLimit       Int       @default(20000) // Based on plan
@@ -1441,4 +1441,39 @@ model BlockedIp {
   createdAt    DateTime @default(now())
 
   @@index([sourceUserId])
+}
+
+// Records that a client's user accepted the Client MCP terms of use (no bulk
+// extraction / redistribution of the CI feed). One row per acceptance; the
+// latest row per client+version is what gates key creation and MCP calls.
+model ClientMcpTermsAcceptance {
+  id           String   @id @default(cuid())
+  clientId     String
+  userId       String
+  userEmail    String
+  termsVersion String
+  ipAddress    String?
+  acceptedAt   DateTime @default(now())
+
+  @@index([clientId, termsVersion])
+  @@index([userId])
+}
+
+// One row per client-facing MCP tool call. Doubles as the audit trail
+// (what was queried, how many rows came back) and the source of truth for
+// per-minute throttling and monthly result quotas, so limits hold across
+// serverless instances.
+model ClientMcpUsageLog {
+  id          String   @id @default(cuid())
+  apiKeyId    String
+  clientId    String
+  tool        String
+  params      Json?
+  resultCount Int      @default(0)
+  messageIds  Json?
+  status      String   @default("ok") // "ok" | "error" | "denied"
+  createdAt   DateTime @default(now())
+
+  @@index([apiKeyId, createdAt])
+  @@index([clientId, createdAt])
 }

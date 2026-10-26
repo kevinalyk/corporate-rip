@@ -47,7 +47,9 @@ import {
   Type,
   Tags,
   MessageSquareOff,
+  Bot,
 } from "lucide-react"
+import useSWR from "swr"
 import { Logo } from "@/components/logo"
 import { useTheme } from "next-themes"
 import { Separator } from "@/components/ui/separator"
@@ -95,6 +97,17 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
   const [selectedClientSlug, setSelectedClientSlug] = useState<string>("")
 
   const [reportProblemOpen, setReportProblemOpen] = useState(false)
+
+  // Developers section is a pilot: visible to super admins and to users of the
+  // pilot clients (RIP, Red Spark Strategy) while those clients are selected.
+  // The MCP Access item additionally requires a qualifying plan (Professional / Enterprise).
+  const showDevelopersNav =
+    userRole !== null && (selectedClientSlug === "rip" || selectedClientSlug === "redsparkstrategy")
+  const { data: mcpStatus } = useSWR<{ eligible: boolean } | null>(
+    showDevelopersNav ? `/api/client-mcp/status?clientSlug=${selectedClientSlug}` : null,
+    (url: string) => fetch(url, { credentials: "include" }).then((res) => (res.ok ? res.json() : null)),
+    { revalidateOnFocus: false },
+  )
 
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     ci: false,
@@ -682,7 +695,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
               </>
             )}
 
-            {(selectedClientSlug === "rip" || selectedClientSlug === "m2x") && (
+            {showDevelopersNav && (
               <>
                 <NavSection
                   icon={<Code size={20} />}
@@ -693,13 +706,24 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
                 />
                 {expandedSections.developers && !collapsed && (
                   <div className="ml-4 space-y-1">
-                    <NavItem
-                      icon={<Key size={18} />}
-                      label="API Keys"
-                      active={pathname === `/${selectedClientSlug}/developers/api-keys`}
-                      collapsed={false}
-                      onClick={() => navigate(`/${selectedClientSlug}/developers/api-keys`)}
-                    />
+                    {userRole === "super_admin" && (
+                      <NavItem
+                        icon={<Key size={18} />}
+                        label="API Keys"
+                        active={pathname === `/${selectedClientSlug}/developers/api-keys`}
+                        collapsed={false}
+                        onClick={() => navigate(`/${selectedClientSlug}/developers/api-keys`)}
+                      />
+                    )}
+                    {mcpStatus?.eligible && (
+                      <NavItem
+                        icon={<Bot size={18} />}
+                        label="MCP Access"
+                        active={pathname === `/${selectedClientSlug}/developers/mcp`}
+                        collapsed={false}
+                        onClick={() => navigate(`/${selectedClientSlug}/developers/mcp`)}
+                      />
+                    )}
                   </div>
                 )}
               </>
