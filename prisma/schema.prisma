@@ -173,7 +173,7 @@ model Client {
   dataRetentionDays Int        @default(90)
   slug              String     @unique // e.g., "redsparkstrategy"
   
-  subscriptionPlan       String    @default("free") // "free", "paid", "all", "basic_inboxing", "enterprise"
+  subscriptionPlan       String    @default("free") // "free", "paid", "all", "enterprise"
   subscriptionStatus     String    @default("active") // "active", "cancelled", "past_due"
   hasCompetitiveInsights Boolean   @default(false) // CI add-on
   emailVolumeLimit       Int       @default(20000) // Based on plan

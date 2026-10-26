@@ -155,7 +155,7 @@ The mobile feed intentionally mirrors the existing web Competitive Insights feed
   An active Apple Personal subscription unlocks the complete, ad-free native
   experience while leaving the web workspace on Starter. Basic (`paid`) includes
   the same complete native experience for its one covered user. Professional
-  (`all`), Advanced (`basic_inboxing`), and Enterprise cover their organization
+  (`all`) and Enterprise cover their organization
   users. Unknown plans and inactive subscription states fail closed.
 - Starter may paginate the unfiltered feed, but any substantive search/filter passed
   to `getFeedPage` is rejected before database work with `403

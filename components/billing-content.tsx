@@ -108,22 +108,6 @@ const getPlanFeatures = (plan: string) => {
           { text: "5 seed tests per month", available: false },
         ],
       }
-    case "basic_inboxing":
-    case "advanced":
-      return {
-        name: "Advanced",
-        price: "$1,000",
-        ciHistory: "Unlimited",
-        followEntities: "Unlimited",
-        analytics: true,
-        inboxTools: true,
-        seedTests: "5 per month",
-        tier: "advanced",
-        nextTierFeatures: [
-          { text: "Unlimited seed tests", available: false },
-          { text: "Custom integrations", available: false },
-        ],
-      }
     case "enterprise":
       return {
         name: "Enterprise",

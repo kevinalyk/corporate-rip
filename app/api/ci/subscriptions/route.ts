@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
       dateFilter = { gte: thirtyDaysAgo }
     }
-    // For 'all', 'basic_inboxing', 'enterprise': no date filter (full history)
+    // For 'all', 'enterprise': no date filter (full history)
 
     // Get all subscribed entity IDs
     const subscriptions = await prisma.ciEntitySubscription.findMany({

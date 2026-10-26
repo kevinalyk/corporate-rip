@@ -175,8 +175,7 @@ const PLAN_LEVEL: Record<SubscriptionPlan, number> = {
   free: 0,
   paid: 1,
   all: 2,
-  basic_inboxing: 3,
-  enterprise: 4,
+  enterprise: 3,
 }
 
 function CellDisplay({ value }: { value: CellValue }) {

@@ -5,7 +5,7 @@ import { verifyAuth } from "@/lib/auth"
 // Normalize the messy subscription plan values into clean display tiers
 // Based on actual DB values:
 //   "free" / "starter"                   → Free
-//   "basic" / "basic_inboxing" / "paid"  → Basic        (Stripe writes "paid" for Basic)
+//   "basic" / "paid"                     → Basic        (Stripe writes "paid" for Basic)
 //   "all" / "professional" / "pro"       → Professional (Stripe writes "all" for Pro)
 //   "enterprise"                         → Enterprise   (manually provisioned top-tier)
 function normalizeTier(plan: string): { label: string; color: string } {
@@ -13,7 +13,7 @@ function normalizeTier(plan: string): { label: string; color: string } {
   if (p === "free" || p === "starter" || p === "") {
     return { label: "Free", color: "secondary" }
   }
-  if (p === "basic" || p === "basic_inboxing" || p === "paid") {
+  if (p === "basic" || p === "paid") {
     return { label: "Basic", color: "default" }
   }
   if (p === "all" || p === "professional" || p === "pro") {

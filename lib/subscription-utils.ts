@@ -1,4 +1,4 @@
-export type SubscriptionPlan = "free" | "paid" | "all" | "basic_inboxing" | "enterprise"
+export type SubscriptionPlan = "free" | "paid" | "all" | "enterprise"
 export type SubscriptionStatus = "active" | "cancelled" | "past_due"
 
 export interface PlanLimits {
@@ -80,18 +80,6 @@ export const PLAN_LIMITS: Record<SubscriptionPlan, PlanLimits> = {
     canAddOwnSeeds: false,
     emailVolumeLimit: 20000,
   },
-  basic_inboxing: {
-    ciHistoryDays: null, // Full history
-    ciFollowLimit: null, // Unlimited follows
-    canSearchCI: true,
-    hasPersonalEmail: true,
-    hasPersonalNumbers: true,
-    hasReports: true,
-    hasInboxTools: true,
-    seedTestsPerMonth: 5,
-    canAddOwnSeeds: false,
-    emailVolumeLimit: 20000,
-  },
   enterprise: {
     ciHistoryDays: null, // Full history
     ciFollowLimit: null, // Unlimited follows
@@ -110,7 +98,6 @@ export const PLAN_PRICES: Record<SubscriptionPlan, number> = {
   free: 0,
   paid: 50,
   all: 300, // Updated from 250 to 300 to match website pricing
-  basic_inboxing: 1000,
   enterprise: 0, // Custom pricing
 }
 
@@ -167,8 +154,7 @@ export function formatPlanName(plan: SubscriptionPlan): string {
     free: "Starter",
     paid: "Basic",
     all: "Professional",
-    basic_inboxing: "Advanced",
-    enterprise: "Enterprise",
+      enterprise: "Enterprise",
   }
   return names[plan]
 }
@@ -186,8 +172,7 @@ export function getUserSeatsIncluded(plan: SubscriptionPlan): number {
     free: 1,
     paid: 1,
     all: 3, // Professional: 3 users included
-    basic_inboxing: 1,
-    enterprise: 999, // Effectively unlimited
+      enterprise: 999, // Effectively unlimited
   }
   return userLimits[plan]
 }

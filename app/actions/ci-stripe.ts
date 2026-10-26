@@ -11,7 +11,6 @@ const PLAN_DISPLAY_NAMES: Record<string, string> = {
   free: "Starter",
   paid: "Basic",
   all: "Professional",
-  basic_inboxing: "Advanced",
   enterprise: "Enterprise",
 }
 
@@ -19,8 +18,7 @@ const PLAN_TIER_ORDER: Record<string, number> = {
   free: 0,
   paid: 1,
   all: 2,
-  basic_inboxing: 3,
-  enterprise: 4,
+  enterprise: 3,
 }
 
 export async function createCICheckoutSession(data: {
