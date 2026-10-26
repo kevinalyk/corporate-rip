@@ -47,7 +47,9 @@ import {
   Type,
   Tags,
   MessageSquareOff,
+  Bot,
 } from "lucide-react"
+import useSWR from "swr"
 import { Logo } from "@/components/logo"
 import { useTheme } from "next-themes"
 import { Separator } from "@/components/ui/separator"
@@ -95,6 +97,15 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
   const [selectedClientSlug, setSelectedClientSlug] = useState<string>("")
 
   const [reportProblemOpen, setReportProblemOpen] = useState(false)
+
+  // MCP Access nav item: only for plans that qualify (Professional / Enterprise).
+  // The page itself is still super-admin only for now.
+  const showMcpNav = userRole === "super_admin" && (selectedClientSlug === "rip" || selectedClientSlug === "m2x")
+  const { data: mcpStatus } = useSWR<{ eligible: boolean } | null>(
+    showMcpNav ? `/api/client-mcp/status?clientSlug=${selectedClientSlug}` : null,
+    (url: string) => fetch(url, { credentials: "include" }).then((res) => (res.ok ? res.json() : null)),
+    { revalidateOnFocus: false },
+  )
 
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     ci: false,
@@ -700,6 +711,15 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
                       collapsed={false}
                       onClick={() => navigate(`/${selectedClientSlug}/developers/api-keys`)}
                     />
+                    {mcpStatus?.eligible && (
+                      <NavItem
+                        icon={<Bot size={18} />}
+                        label="MCP Access"
+                        active={pathname === `/${selectedClientSlug}/developers/mcp`}
+                        collapsed={false}
+                        onClick={() => navigate(`/${selectedClientSlug}/developers/mcp`)}
+                      />
+                    )}
                   </div>
                 )}
               </>

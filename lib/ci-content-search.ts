@@ -318,7 +318,7 @@ export async function listEntities(params: {
   return {
     totals: { total },
     pagination: { page, limit, hasMore: page * limit < total },
-    results: rows.map((e) => ({
+    results: (rows as { name: string; type: string | null; party: string | null; state: string | null; office: string | null }[]).map((e) => ({
       name: e.name,
       slug: nameToSlug(e.name),
       type: e.type,
