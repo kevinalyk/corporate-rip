@@ -12,9 +12,9 @@ export default function ClientMcpPage() {
   const clientSlug = params.clientSlug as string
   const { user, loading } = useCurrentUser()
 
-  // Super-admin only for now, same as the other Developers pages. The plan gate
-  // (Professional / Enterprise) is enforced server-side and shown in the content.
-  const allowed = !loading && user?.role === "super_admin" && (clientSlug === "rip" || clientSlug === "m2x")
+  // Pilot: super admins plus users of RIP and Red Spark Strategy. The plan gate
+  // and pilot allowlist are enforced server-side and surfaced in the content.
+  const allowed = !loading && !!user && (clientSlug === "rip" || clientSlug === "redsparkstrategy")
 
   useEffect(() => {
     if (loading) return

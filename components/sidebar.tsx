@@ -98,11 +98,13 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
 
   const [reportProblemOpen, setReportProblemOpen] = useState(false)
 
-  // MCP Access nav item: only for plans that qualify (Professional / Enterprise).
-  // The page itself is still super-admin only for now.
-  const showMcpNav = userRole === "super_admin" && (selectedClientSlug === "rip" || selectedClientSlug === "m2x")
+  // Developers section is a pilot: visible to super admins and to users of the
+  // pilot clients (RIP, Red Spark Strategy) while those clients are selected.
+  // The MCP Access item additionally requires a qualifying plan (Professional / Enterprise).
+  const showDevelopersNav =
+    userRole !== null && (selectedClientSlug === "rip" || selectedClientSlug === "redsparkstrategy")
   const { data: mcpStatus } = useSWR<{ eligible: boolean } | null>(
-    showMcpNav ? `/api/client-mcp/status?clientSlug=${selectedClientSlug}` : null,
+    showDevelopersNav ? `/api/client-mcp/status?clientSlug=${selectedClientSlug}` : null,
     (url: string) => fetch(url, { credentials: "include" }).then((res) => (res.ok ? res.json() : null)),
     { revalidateOnFocus: false },
   )
@@ -693,7 +695,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
               </>
             )}
 
-            {(selectedClientSlug === "rip" || selectedClientSlug === "m2x") && (
+            {showDevelopersNav && (
               <>
                 <NavSection
                   icon={<Code size={20} />}
@@ -704,13 +706,15 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
                 />
                 {expandedSections.developers && !collapsed && (
                   <div className="ml-4 space-y-1">
-                    <NavItem
-                      icon={<Key size={18} />}
-                      label="API Keys"
-                      active={pathname === `/${selectedClientSlug}/developers/api-keys`}
-                      collapsed={false}
-                      onClick={() => navigate(`/${selectedClientSlug}/developers/api-keys`)}
-                    />
+                    {userRole === "super_admin" && (
+                      <NavItem
+                        icon={<Key size={18} />}
+                        label="API Keys"
+                        active={pathname === `/${selectedClientSlug}/developers/api-keys`}
+                        collapsed={false}
+                        onClick={() => navigate(`/${selectedClientSlug}/developers/api-keys`)}
+                      />
+                    )}
                     {mcpStatus?.eligible && (
                       <NavItem
                         icon={<Bot size={18} />}

@@ -24,6 +24,11 @@ export const CLIENT_MCP_TERMS_VERSION = "2026-10-26"
 // Only the plans listed as "all" (Professional) and "enterprise" qualify.
 export const CLIENT_MCP_ALLOWED_PLANS = ["all", "enterprise"] as const
 
+// Pilot rollout: only these clients can use Client MCP, enforced server-side on
+// every call (status, key creation, MCP requests). Remove the check in
+// getClientMcpEligibility to open it to all Professional / Enterprise clients.
+export const CLIENT_MCP_PILOT_SLUGS = ["rip", "redsparkstrategy"] as const
+
 export const CLIENT_MCP_LIMITS = {
   MAX_ACTIVE_KEYS_PER_CLIENT: 5,
   REQUESTS_PER_MINUTE_PER_KEY: 30,
@@ -66,11 +71,14 @@ export interface ClientMcpEligibility {
 export async function getClientMcpEligibility(clientId: string): Promise<ClientMcpEligibility> {
   const client = await prisma.client.findUnique({
     where: { id: clientId },
-    select: { subscriptionPlan: true, subscriptionStatus: true, trialExpiresAt: true },
+    select: { slug: true, subscriptionPlan: true, subscriptionStatus: true, trialExpiresAt: true },
   })
   if (!client) return { eligible: false, reason: "Client not found", plan: "unknown" }
 
   const plan = client.subscriptionPlan
+  if (!(CLIENT_MCP_PILOT_SLUGS as readonly string[]).includes(client.slug)) {
+    return { eligible: false, reason: "MCP access is currently limited to pilot clients.", plan }
+  }
   if (!(CLIENT_MCP_ALLOWED_PLANS as readonly string[]).includes(plan)) {
     return { eligible: false, reason: "MCP access requires a Professional or Enterprise plan.", plan }
   }
