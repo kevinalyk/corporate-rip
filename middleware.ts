@@ -43,6 +43,9 @@ export async function middleware(request: NextRequest) {
     // app/api/mcp/ci-assignment/route.ts), not the cookie-based session used
     // by the rest of the app.
     request.nextUrl.pathname.startsWith("/api/mcp/ci-assignment") ||
+    // Client-facing read-only MCP server — same Bearer-token model, but keys are
+    // verified against the client's plan/terms inside the route (lib/client-mcp.ts).
+    request.nextUrl.pathname.startsWith("/api/mcp/client") ||
     // Mobile API login/refresh — the only two /api/mobile/v1 endpoints reachable
     // without a bearer access token (see lib/mobile-auth.ts). Every other
     // /api/mobile/v1/* path is handled by the dedicated branch below, which requires
