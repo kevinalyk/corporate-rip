@@ -724,6 +724,15 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
                         onClick={() => navigate(`/${selectedClientSlug}/developers/mcp`)}
                       />
                     )}
+                    {userRole === "super_admin" && (
+                      <NavItem
+                        icon={<BarChart3 size={18} />}
+                        label="MCP Usage"
+                        active={pathname === `/${selectedClientSlug}/developers/mcp-usage`}
+                        collapsed={false}
+                        onClick={() => navigate(`/${selectedClientSlug}/developers/mcp-usage`)}
+                      />
+                    )}
                   </div>
                 )}
               </>
