@@ -784,6 +784,7 @@ model CiEntity {
   office             String?  // Office/title scraped from Ballotpedia infobox e.g. "Candidate, U.S. House New York District 23"
   ballotpediaUrl     String?  // The Ballotpedia URL that was scraped
   ballotpediaFetchedAt DateTime? // When the Ballotpedia data was last fetched
+  isCorporate        Boolean  @default(false) // Derived from type: true for "media" and "retail". Used to filter the corporate side of RIP; not shown in the UI.
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
@@ -798,6 +799,7 @@ model CiEntity {
   
   @@index([party])
   @@index([state])
+  @@index([isCorporate])
 }
 
 model CiEntityMapping {
@@ -1375,7 +1377,7 @@ model AutomationSetting {
   updatedBy             String?
 }
 
-// ─── Mobile API (app/api/mobile/v1) ────────────────────────────────────────────
+// ─── Mobile API (app/api/mobile/v1) ───────────────────���────────────────────────
 // Entirely separate from the browser cookie session (lib/auth.ts) and the
 // developer API-key namespace (lib/api-auth.ts, ApiKey model). See
 // lib/mobile-auth.ts and docs/mobile-api.md.
