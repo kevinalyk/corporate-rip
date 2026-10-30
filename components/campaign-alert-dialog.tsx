@@ -134,7 +134,7 @@ export default function CampaignAlertDialog() {
         <DialogContent className="max-w-md w-full">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Bell className="h-4 w-4 text-[#EB3847]" />
+              <Bell className="h-4 w-4 text-rip-red" />
               Campaign Launch Alerts
             </DialogTitle>
             <DialogDescription>
@@ -189,7 +189,7 @@ export default function CampaignAlertDialog() {
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">New alert</p>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="alert-name" className="text-xs">Alert name <span className="text-[#EB3847]">*</span></Label>
+                  <Label htmlFor="alert-name" className="text-xs">Alert name <span className="text-rip-red">*</span></Label>
                   <Input
                     id="alert-name"
                     placeholder="e.g. Republican Senate in Alabama"
@@ -254,7 +254,7 @@ export default function CampaignAlertDialog() {
                     size="sm"
                     onClick={handleSave}
                     disabled={saving}
-                    className="h-8 text-xs bg-[#EB3847] hover:bg-[#EB3847]/90 text-white"
+                    className="h-8 text-xs bg-rip-red hover:bg-rip-red/90 text-white"
                   >
                     {saving
                       ? <><Loader2 className="h-3 w-3 animate-spin mr-1.5" />Saving…</>

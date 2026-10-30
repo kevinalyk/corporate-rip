@@ -55,7 +55,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
             left: 0,
             right: 0,
             height: "6px",
-            backgroundColor: "#dc2a28",
+            backgroundColor: "#4f46e5",
           }}
         />
 
@@ -74,7 +74,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <div
               style={{
-                backgroundColor: "#dc2a28",
+                backgroundColor: "#4f46e5",
                 color: "#ffffff",
                 fontSize: "16px",
                 fontWeight: "700",

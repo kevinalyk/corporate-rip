@@ -10,7 +10,7 @@ const GEO_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
 // Dark navy tiles so future RIP red activity dots pop sharply against them
 const FILL_DEFAULT  = "#1c2133"   // dark navy — matches dark sidebar tone
 const FILL_HOVER    = "#2a3150"   // lifted navy on hover
-const FILL_SELECTED = "#EB3847"   // solid RIP red for selected state
+const FILL_SELECTED = "#4f46e5"   // solid RIP red for selected state
 const STROKE_DEFAULT  = "#3d4b6e" // visible blue-grey border between states
 const STROKE_SELECTED = "#ff6472" // lighter red border on selected state
 
@@ -275,7 +275,7 @@ export function USInteractiveMap({ selectedState, onStateSelect, activityData = 
               <circle
                 cx={0} cy={0} r={4}
                 fill="none"
-                stroke="#EB3847"
+                stroke="#4f46e5"
                 strokeWidth={1.2}
                 style={{
                   pointerEvents: "none",
@@ -284,7 +284,7 @@ export function USInteractiveMap({ selectedState, onStateSelect, activityData = 
               />
               <circle
                 cx={0} cy={0} r={4}
-                fill="#EB3847"
+                fill="#4f46e5"
                 fillOpacity={0.85}
                 style={{
                   pointerEvents: "none",
@@ -324,19 +324,19 @@ export function USInteractiveMap({ selectedState, onStateSelect, activityData = 
               <div className="flex gap-2 mt-0.5" style={{ color: "#94a3b8" }}>
                 {matchedActivity.emailCount > 0 && (
                   <span>
-                    <span style={{ color: "#EB3847" }}>{matchedActivity.emailCount}</span>
+                    <span style={{ color: "#4f46e5" }}>{matchedActivity.emailCount}</span>
                     {" "}email{matchedActivity.emailCount !== 1 ? "s" : ""}
                   </span>
                 )}
                 {matchedActivity.smsCount > 0 && (
                   <span>
-                    <span style={{ color: "#EB3847" }}>{matchedActivity.smsCount}</span> SMS
+                    <span style={{ color: "#4f46e5" }}>{matchedActivity.smsCount}</span> SMS
                   </span>
                 )}
               </div>
             )}
             {selectedState === tooltip.name && (
-              <div className="mt-0.5" style={{ color: "#EB3847" }}>selected</div>
+              <div className="mt-0.5" style={{ color: "#4f46e5" }}>selected</div>
             )}
           </div>
         )

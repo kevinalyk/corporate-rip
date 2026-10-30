@@ -206,7 +206,7 @@ export function DirectoryProfileContent({ slug, initialData }: { slug: string; i
   if ((authLoading && !initialData) || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-[#dc2a28]" />
+        <Loader2 className="h-8 w-8 animate-spin text-rip-red" />
       </div>
     )
   }
@@ -507,7 +507,7 @@ export function DirectoryProfileContent({ slug, initialData }: { slug: string; i
                         Free accounts see the last 3 hours of activity. Sign in to access recent messages from {entity.name}.
                       </p>
                       <div className="flex gap-3 mt-1">
-                        <Button asChild size="sm" className="bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white">
+                        <Button asChild size="sm" className="bg-rip-red hover:bg-rip-red/90 text-white">
                           <Link href="/login">Sign In</Link>
                         </Button>
                         <Button asChild size="sm" variant="outline">
@@ -522,8 +522,8 @@ export function DirectoryProfileContent({ slug, initialData }: { slug: string; i
                 {showUpgradeOverlay && (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/70 backdrop-blur-[2px]">
                     <div className="flex flex-col items-center gap-3 text-center px-6">
-                      <div className="w-10 h-10 rounded-full bg-[#dc2a28]/10 flex items-center justify-center">
-                        <Lock className="h-5 w-5 text-[#dc2a28]" />
+                      <div className="w-10 h-10 rounded-full bg-rip-red/10 flex items-center justify-center">
+                        <Lock className="h-5 w-5 text-rip-red" />
                       </div>
                       <p className="font-semibold text-sm">No activity in the last 3 hours</p>
                       <p className="text-xs text-muted-foreground max-w-xs">
@@ -531,7 +531,7 @@ export function DirectoryProfileContent({ slug, initialData }: { slug: string; i
                       </p>
                       <Button
                         size="sm"
-                        className="bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white mt-1"
+                        className="bg-rip-red hover:bg-rip-red/90 text-white mt-1"
                         onClick={() => {
                           window.location.href = clientSlug ? `/${clientSlug}/billing` : "/login"
                         }}
@@ -552,7 +552,7 @@ export function DirectoryProfileContent({ slug, initialData }: { slug: string; i
                   <Button
                     size="sm"
                     variant="outline"
-                    className="text-xs h-7 border-[#dc2a28] text-[#dc2a28] hover:bg-[#dc2a28]/10 flex-shrink-0 ml-4"
+                    className="text-xs h-7 border-rip-red text-rip-red hover:bg-rip-red/10 flex-shrink-0 ml-4"
                     onClick={() => {
                       window.location.href = clientSlug ? `/${clientSlug}/billing` : "/login"
                     }}
@@ -685,7 +685,7 @@ export function DirectoryProfileContent({ slug, initialData }: { slug: string; i
                                   href={displayUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="flex items-start gap-2 text-[#dc2a28] hover:underline break-all text-sm"
+                                  className="flex items-start gap-2 text-rip-red hover:underline break-all text-sm"
                                 >
                                   <ExternalLink className="h-4 w-4 flex-shrink-0 mt-0.5" />
                                   <span>{displayUrl}</span>

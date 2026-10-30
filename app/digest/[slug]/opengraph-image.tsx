@@ -93,7 +93,7 @@ export default async function DigestOGImage({ params }: Props) {
             >
               <span
                 style={{
-                  color: "#dc2a28",
+                  color: "#4f46e5",
                   fontSize: "18px",
                   fontWeight: 800,
                   letterSpacing: "-0.5px",
@@ -128,12 +128,12 @@ export default async function DigestOGImage({ params }: Props) {
             >
               <span
                 style={{
-                  color: "#dc2a28",
+                  color: "#4f46e5",
                   fontSize: "11px",
                   fontWeight: 800,
                   letterSpacing: "3px",
                   textTransform: "uppercase",
-                  border: "1.5px solid #dc2a28",
+                  border: "1.5px solid #4f46e5",
                   borderRadius: "4px",
                   padding: "4px 10px",
                 }}
@@ -191,7 +191,7 @@ export default async function DigestOGImage({ params }: Props) {
             top: 0,
             width: "6px",
             height: "100%",
-            backgroundColor: "#dc2a28",
+            backgroundColor: "#4f46e5",
           }}
         />
       </div>

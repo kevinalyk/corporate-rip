@@ -1560,7 +1560,7 @@ export function CompetitiveInsights({
               <Button
                 size="lg"
                 onClick={() => router.push(`/${clientSlug}/billing?recommended=all`)}
-                style={{ backgroundColor: "#EB3847", color: "white" }}
+                style={{ backgroundColor: "#4f46e5", color: "white" }}
                 className="hover:opacity-90 transition-opacity"
               >
                 View Pricing Plans
@@ -1598,7 +1598,7 @@ export function CompetitiveInsights({
               <Button
                 size="lg"
                 onClick={() => router.push(`/${clientSlug}/billing?recommended=all`)}
-                style={{ backgroundColor: "#EB3847", color: "white" }}
+                style={{ backgroundColor: "#4f46e5", color: "white" }}
                 className="hover:opacity-90 transition-opacity"
               >
                 Upgrade My Plan

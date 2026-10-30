@@ -290,7 +290,7 @@ export default function NewsPageClient({ initialAnnouncements }: NewsPageClientP
     <>
       {isSuperAdmin && (
         <div className="fixed bottom-6 right-6 z-50">
-          <Button onClick={openCreate} className="bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white gap-2 shadow-lg">
+          <Button onClick={openCreate} className="bg-rip-red hover:bg-rip-red/90 text-white gap-2 shadow-lg">
             <Plus size={15} />
             New Post
           </Button>
@@ -424,7 +424,7 @@ export default function NewsPageClient({ initialAnnouncements }: NewsPageClientP
                 </div>
               ) : (
                 <div
-                  className="flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border p-6 cursor-pointer hover:border-[#dc2a28]/50 transition-colors"
+                  className="flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border p-6 cursor-pointer hover:border-rip-red/50 transition-colors"
                   onClick={() => fileInputRef.current?.click()}
                 >
                   {imageUploading
@@ -451,7 +451,7 @@ export default function NewsPageClient({ initialAnnouncements }: NewsPageClientP
             <Button
               onClick={handleSave}
               disabled={saving || imageUploading}
-              className="bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white gap-2"
+              className="bg-rip-red hover:bg-rip-red/90 text-white gap-2"
             >
               {saving && <Loader2 size={14} className="animate-spin" />}
               {editTarget ? "Save Changes" : "Publish"}

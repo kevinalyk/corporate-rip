@@ -4,86 +4,85 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --background: #ffffff;
+  --foreground: #1e1b4b;
+  --card: #ffffff;
+  --card-foreground: #1e1b4b;
+  --popover: #ffffff;
+  --popover-foreground: #1e1b4b;
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+  --secondary: #f7f6ff;
+  --secondary-foreground: #1e1b4b;
+  --muted: #f7f6ff;
+  --muted-foreground: #5b5b7a;
+  --accent: #eeecff;
+  --accent-foreground: #1e1b4b;
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  /* RIP brand colors - kept as the exact hex used across marketing/auth pages
-     so the design-token version matches, rather than an approximated OKLCH
-     conversion that drifted slightly off-brand. */
-  --rip-red: #eb3847;
-  --rip-blue: #37627f;
+  --border: #e6e4f5;
+  --input: #e6e4f5;
+  --ring: #4f46e5;
+  --chart-1: #4f46e5;
+  --chart-2: #7c3aed;
+  --chart-3: #1e1b4b;
+  --chart-4: #a78bfa;
+  --chart-5: #818cf8;
+  --radius: 0.75rem;
+  --sidebar: #f7f6ff;
+  --sidebar-foreground: #1e1b4b;
+  --sidebar-primary: #4f46e5;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eeecff;
+  --sidebar-accent-foreground: #1e1b4b;
+  --sidebar-border: #e6e4f5;
+  --sidebar-ring: #4f46e5;
+  /* Brand accents. The token names are legacy (used across the app); values
+     are now the BrandInbox indigo and violet. */
+  --rip-red: #4f46e5;
+  --rip-blue: #7c3aed;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: #0f0d24;
+  --foreground: #f1f0ff;
+  --card: #1e1b4b;
+  --card-foreground: #f1f0ff;
+  --popover: #1e1b4b;
+  --popover-foreground: #f1f0ff;
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #26225a;
+  --secondary-foreground: #f1f0ff;
+  --muted: #26225a;
+  --muted-foreground: #a5a3c9;
+  --accent: #2d2968;
+  --accent-foreground: #f1f0ff;
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
-  /* Same brand colors for dark mode */
-  --rip-red: #eb3847;
-  --rip-blue: #5b8bab;
+  --border: #2f2b6b;
+  --input: #2f2b6b;
+  --ring: #818cf8;
+  --chart-1: #818cf8;
+  --chart-2: #a78bfa;
+  --chart-3: #c4b5fd;
+  --chart-4: #6366f1;
+  --chart-5: #7c3aed;
+  --sidebar: #17143a;
+  --sidebar-foreground: #f1f0ff;
+  --sidebar-primary: #6366f1;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #2d2968;
+  --sidebar-accent-foreground: #f1f0ff;
+  --sidebar-border: #2f2b6b;
+  --sidebar-ring: #818cf8;
+  /* Lighter variants for contrast on dark surfaces */
+  --rip-red: #6366f1;
+  --rip-blue: #a78bfa;
 }
 
 @theme inline {
-  --font-sans: var(--font-hanken-grotesk), "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback";
   --color-background: var(--background);
   --color-foreground: var(--foreground);

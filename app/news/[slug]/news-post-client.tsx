@@ -253,7 +253,7 @@ export default function NewsPostClient({ slug, initialPost }: { slug: string; in
   if ((authLoading && !initialPost) || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-[#dc2a28]" />
+        <Loader2 className="h-8 w-8 animate-spin text-rip-red" />
       </div>
     )
   }
@@ -293,7 +293,7 @@ export default function NewsPostClient({ slug, initialPost }: { slug: string; in
             {format(new Date(post.publishedAt), "MMMM d, yyyy")}
           </time>
           {isNew(post.publishedAt) && (
-            <Badge className="bg-[#dc2a28] text-white text-[10px] px-1.5 py-0">New!</Badge>
+            <Badge className="bg-rip-red text-white text-[10px] px-1.5 py-0">New!</Badge>
           )}
         </div>
 
@@ -455,7 +455,7 @@ export default function NewsPostClient({ slug, initialPost }: { slug: string; in
 
           <DialogFooter className="shrink-0 pt-2">
             <Button variant="outline" onClick={() => setEditOpen(false)} disabled={saving}>Cancel</Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white">
+            <Button onClick={handleSave} disabled={saving} className="bg-rip-red hover:bg-rip-red/90 text-white">
               {saving && <Loader2 size={14} className="animate-spin mr-1" />}
               Save Changes
             </Button>

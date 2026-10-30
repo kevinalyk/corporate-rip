@@ -72,9 +72,9 @@ export default function ComplianceReportPage() {
 
           {/* Paywall overlay */}
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/70 backdrop-blur-sm">
-            <div className="max-w-md w-full mx-4 rounded-xl border-2 border-[#dc2a28]/20 bg-card shadow-2xl p-8 text-center space-y-6">
-              <div className="mx-auto w-14 h-14 rounded-full bg-[#dc2a28]/10 flex items-center justify-center">
-                <Lock className="h-7 w-7 text-[#dc2a28]" />
+            <div className="max-w-md w-full mx-4 rounded-xl border-2 border-rip-red/20 bg-card shadow-2xl p-8 text-center space-y-6">
+              <div className="mx-auto w-14 h-14 rounded-full bg-rip-red/10 flex items-center justify-center">
+                <Lock className="h-7 w-7 text-rip-red" />
               </div>
 
               <div className="space-y-2">
@@ -93,7 +93,7 @@ export default function ComplianceReportPage() {
                   "Aggregated Republican vs. Democrat breakdown",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">
-                    <ShieldCheck className="h-4 w-4 text-[#dc2a28] shrink-0 mt-0.5" />
+                    <ShieldCheck className="h-4 w-4 text-rip-red shrink-0 mt-0.5" />
                     <span>{f}</span>
                   </li>
                 ))}
@@ -101,7 +101,7 @@ export default function ComplianceReportPage() {
 
               <Button
                 size="lg"
-                className="w-full bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white"
+                className="w-full bg-rip-red hover:bg-rip-red/90 text-white"
                 onClick={() => router.push(`/${clientSlug}/billing`)}
               >
                 <TrendingUp className="mr-2 h-4 w-4" />

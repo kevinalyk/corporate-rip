@@ -115,7 +115,7 @@ export default function CIMapPage() {
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-border">
           <div className="flex items-center gap-3">
-            <MapPin className="h-5 w-5 text-[#EB3847]" />
+            <MapPin className="h-5 w-5 text-rip-red" />
             <div>
               <h1 className="text-xl font-semibold tracking-tight">Interactive Map</h1>
               <p className="text-sm text-muted-foreground">
@@ -128,7 +128,7 @@ export default function CIMapPage() {
             {!isLoading && totalActive > 0 && (
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="flex items-center gap-1.5 text-xs">
-                  <Activity className="h-3 w-3 text-[#EB3847]" />
+                  <Activity className="h-3 w-3 text-rip-red" />
                   {totalActive} active state{totalActive !== 1 ? "s" : ""}
                 </Badge>
                 {totalEmails > 0 && (
@@ -148,7 +148,7 @@ export default function CIMapPage() {
             {selectedState && (
               <div className="flex items-center gap-2">
                 <Badge variant="secondary" className="flex items-center gap-1.5 px-3 py-1 text-sm">
-                  <MapPin className="h-3 w-3 text-[#EB3847]" />
+                  <MapPin className="h-3 w-3 text-rip-red" />
                   {selectedState}
                 </Badge>
                 <Button
@@ -189,7 +189,7 @@ export default function CIMapPage() {
                 <CardHeader className="pb-3 border-b border-border">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 min-w-0">
-                      <MapPin className="h-4 w-4 text-[#EB3847] shrink-0" />
+                      <MapPin className="h-4 w-4 text-rip-red shrink-0" />
                       <CardTitle className="text-sm font-semibold truncate">{selectedState}</CardTitle>
                     </div>
                     <Button
@@ -234,8 +234,8 @@ export default function CIMapPage() {
                                   {email.entity?.imageUrl ? (
                                     <img src={email.entity.imageUrl} alt={email.entity.name} className="h-6 w-6 rounded-full object-cover shrink-0 mt-0.5" />
                                   ) : (
-                                    <div className="h-6 w-6 rounded-full bg-[#EB3847]/15 flex items-center justify-center shrink-0 mt-0.5">
-                                      <Mail className="h-3 w-3 text-[#EB3847]" />
+                                    <div className="h-6 w-6 rounded-full bg-rip-red/15 flex items-center justify-center shrink-0 mt-0.5">
+                                      <Mail className="h-3 w-3 text-rip-red" />
                                     </div>
                                   )}
                                   <div className="min-w-0">
@@ -272,8 +272,8 @@ export default function CIMapPage() {
                                   {sms.entity?.imageUrl ? (
                                     <img src={sms.entity.imageUrl} alt={sms.entity.name} className="h-6 w-6 rounded-full object-cover shrink-0 mt-0.5" />
                                   ) : (
-                                    <div className="h-6 w-6 rounded-full bg-[#EB3847]/15 flex items-center justify-center shrink-0 mt-0.5">
-                                      <MessageSquare className="h-3 w-3 text-[#EB3847]" />
+                                    <div className="h-6 w-6 rounded-full bg-rip-red/15 flex items-center justify-center shrink-0 mt-0.5">
+                                      <MessageSquare className="h-3 w-3 text-rip-red" />
                                     </div>
                                   )}
                                   <div className="min-w-0">
@@ -315,7 +315,7 @@ export default function CIMapPage() {
                         .map((item) => (
                           <div key={item.state} className="flex items-center justify-between text-sm">
                             <button
-                              className="text-left hover:text-[#EB3847] transition-colors font-medium"
+                              className="text-left hover:text-rip-red transition-colors font-medium"
                               onClick={() => setSelectedState(ABBREV_TO_FULL[item.state] ?? item.state)}
                             >
                               {ABBREV_TO_FULL[item.state] ?? item.state}
@@ -346,11 +346,11 @@ export default function CIMapPage() {
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#EB3847] animate-pulse shrink-0" />
+                      <span className="inline-block w-2.5 h-2.5 rounded-full bg-rip-red animate-pulse shrink-0" />
                       Pulsing dot = activity in last 3h
                     </div>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <span className="inline-block w-2.5 h-2.5 rounded bg-[#EB3847] shrink-0" />
+                      <span className="inline-block w-2.5 h-2.5 rounded bg-rip-red shrink-0" />
                       Solid red fill = selected state
                     </div>
                     <p className="text-xs text-muted-foreground pt-1">

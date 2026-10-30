@@ -636,7 +636,7 @@ function HistoryPanel({
                               className="w-8 h-8 rounded object-cover flex-shrink-0"
                             />
                           ) : (
-                            <div className="w-8 h-8 rounded bg-[#2a2d3e] flex items-center justify-center flex-shrink-0">
+                            <div className="w-8 h-8 rounded bg-[#2f2b6b] flex items-center justify-center flex-shrink-0">
                               <Users className="w-4 h-4 text-gray-400" />
                             </div>
                           )}

@@ -162,7 +162,7 @@ export default async function NewCampaignsPage({
               Back to Directory
             </Link>
             <h1 className="text-xl font-semibold tracking-tight flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-[#EB3847]" />
+              <Sparkles className="h-5 w-5 text-rip-red" />
               Recently Launched Campaigns
             </h1>
             <p className="text-sm text-muted-foreground mt-0.5 max-w-2xl">
@@ -197,8 +197,8 @@ export default async function NewCampaignsPage({
             <div className="flex items-center justify-center py-24">
               <Card className="max-w-xl w-full border-border/60">
                 <CardContent className="flex flex-col items-center gap-4 py-12 px-6 text-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#EB3847]/10 border border-[#EB3847]/30">
-                    <Megaphone className="h-6 w-6 text-[#EB3847]" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-rip-red/10 border border-rip-red/30">
+                    <Megaphone className="h-6 w-6 text-rip-red" />
                   </div>
                   <h2 className="text-lg font-semibold">
                     {party || state || office ? "No matching campaigns" : "No new launches this week"}
@@ -210,7 +210,7 @@ export default async function NewCampaignsPage({
                   </p>
                   <Link
                     href="/directory"
-                    className="inline-flex items-center gap-1.5 mt-2 text-sm font-medium text-[#EB3847] hover:text-[#EB3847]/80 transition-colors"
+                    className="inline-flex items-center gap-1.5 mt-2 text-sm font-medium text-rip-red hover:text-rip-red/80 transition-colors"
                   >
                     Browse the full directory
                     <ArrowRight className="h-4 w-4" />
@@ -295,7 +295,7 @@ export default async function NewCampaignsPage({
                           {formatRelativeDate(launch.launchedAt || launch.firstSeenAt)}
                         </span>
                         {profileUrl ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-[#EB3847]">
+                          <span className="inline-flex items-center gap-1 text-xs text-rip-red">
                             View profile
                             <ArrowRight className="h-3 w-3" />
                           </span>
