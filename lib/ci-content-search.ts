@@ -19,6 +19,8 @@ export interface SearchContentParams {
   limit: number
   page: number
   entityLimit: number
+  // Internal MCP only: adds per-email inbox/spam placement counts to email results.
+  includePlacement?: boolean
 }
 
 function appUrl(): string {
@@ -35,8 +37,19 @@ function parseDateRange(startDate?: string, endDate?: string) {
   return { from, to, range }
 }
 
+function placementSummary(inbox: number, spam: number, notDelivered: number) {
+  const total = inbox + spam + notDelivered
+  return {
+    inbox,
+    spam,
+    notDelivered,
+    inboxRatePct: total > 0 ? Math.round((inbox / total) * 1000) / 10 : null,
+    spamRatePct: total > 0 ? Math.round((spam / total) * 1000) / 10 : null,
+  }
+}
+
 export async function searchContent(params: SearchContentParams) {
-  const { query, match, startDate, endDate, type, party, limit, page, entityLimit } = params
+  const { query, match, startDate, endDate, type, party, limit, page, entityLimit, includePlacement } = params
   const wantEmail = type === "email" || type === "both"
   const wantSms = type === "sms" || type === "both"
 
@@ -93,6 +106,7 @@ export async function searchContent(params: SearchContentParams) {
             shareToken: true,
             entityId: true,
             entity: entitySelect,
+            ...(includePlacement ? { inboxCount: true, spamCount: true, notDeliveredCount: true } : {}),
           },
         })
       : Promise.resolve([]),
@@ -145,8 +159,8 @@ export async function searchContent(params: SearchContentParams) {
   })
 
   const merged = [
-    ...(emails as any[]).map((e) =>
-      toResult("email", {
+    ...(emails as any[]).map((e) => ({
+      ...toResult("email", {
         id: e.id,
         receivedAt: e.dateReceived,
         text: e.subject,
@@ -154,7 +168,8 @@ export async function searchContent(params: SearchContentParams) {
         shareToken: e.shareToken,
         entity: e.entity,
       }),
-    ),
+      ...(includePlacement ? { placement: placementSummary(e.inboxCount, e.spamCount, e.notDeliveredCount) } : {}),
+    })),
     ...(sms as any[]).map((s) =>
       toResult("sms", {
         id: s.id,
@@ -369,5 +384,90 @@ export async function getEntityBySlug(slug: string) {
     emailCount,
     smsCount,
     lastMessageAt,
+  }
+}
+
+export type PlacementGroupBy = "none" | "entity" | "sender" | "sender_domain" | "party" | "day"
+
+// Whitelisted SQL expressions - groupBy never reaches the query as user text.
+const PLACEMENT_GROUP_SQL: Record<PlacementGroupBy, string> = {
+  none: `'all'`,
+  entity: `COALESCE(e."name", 'Unassigned')`,
+  sender: `c."senderEmail"`,
+  sender_domain: `lower(split_part(c."senderEmail", '@', 2))`,
+  party: `COALESCE(lower(e."party"), 'unassigned')`,
+  day: `to_char(c."dateReceived" AT TIME ZONE 'UTC', 'YYYY-MM-DD')`,
+}
+
+/**
+ * Inbox vs spam placement for seed-inbox email, aggregated from the per-campaign
+ * counts of how many seed inboxes delivered it to inbox / spam / not at all.
+ * Internal MCP only. Counts are seed-inbox placements, so one campaign can
+ * contribute to several. Aggregates only; no message bodies.
+ */
+export async function getInboxPlacement(params: {
+  startDate?: string
+  endDate?: string
+  party?: "R" | "D"
+  entityName?: string
+  senderContains?: string
+  groupBy: PlacementGroupBy
+  limit: number
+}) {
+  const { startDate, endDate, party, entityName, senderContains, groupBy, limit } = params
+  const { from, to } = parseDateRange(startDate, endDate)
+
+  const conditions = [`c."source" = 'seed'`, `c."isDeleted" = false`, `c."isHidden" = false`]
+  const values: unknown[] = []
+  const bind = (value: unknown) => {
+    values.push(value)
+    return `$${values.length}`
+  }
+
+  if (from) conditions.push(`c."dateReceived" >= ${bind(from)}::timestamptz`)
+  if (to) conditions.push(`c."dateReceived" <= ${bind(to)}::timestamptz`)
+  if (party) conditions.push(`lower(e."party") = ${bind(party === "R" ? "republican" : "democrat")}`)
+  if (entityName) conditions.push(`e."name" ILIKE '%' || ${bind(entityName)} || '%'`)
+  if (senderContains) {
+    const p = bind(senderContains)
+    conditions.push(`(c."senderEmail" ILIKE '%' || ${p} || '%' OR c."senderName" ILIKE '%' || ${p} || '%')`)
+  }
+
+  const fromClause = `FROM "CompetitiveInsightCampaign" c LEFT JOIN "CiEntity" e ON e."id" = c."entityId" WHERE ${conditions.join(" AND ")}`
+  const sums = `count(*)::int AS "campaigns",
+    COALESCE(sum(c."inboxCount"), 0)::int AS "inbox",
+    COALESCE(sum(c."spamCount"), 0)::int AS "spam",
+    COALESCE(sum(c."notDeliveredCount"), 0)::int AS "notDelivered"`
+  const groupExpr = PLACEMENT_GROUP_SQL[groupBy]
+  const orderBy =
+    groupBy === "day"
+      ? `"group" ASC`
+      : `COALESCE(sum(c."inboxCount"), 0) + COALESCE(sum(c."spamCount"), 0) + COALESCE(sum(c."notDeliveredCount"), 0) DESC`
+
+  type Row = { group: string; campaigns: number; inbox: number; spam: number; notDelivered: number }
+  const [groupRows, totalRows] = await Promise.all([
+    prisma.$queryRawUnsafe(
+      `SELECT ${groupExpr} AS "group", ${sums} ${fromClause} GROUP BY 1 ORDER BY ${orderBy} LIMIT ${Math.floor(limit)}`,
+      ...values,
+    ) as Promise<Row[]>,
+    prisma.$queryRawUnsafe(`SELECT ${sums} ${fromClause}`, ...values) as Promise<Omit<Row, "group">[]>,
+  ])
+
+  const withRates = <T extends { inbox: number; spam: number; notDelivered: number }>(row: T) => ({
+    ...row,
+    ...placementSummary(row.inbox, row.spam, row.notDelivered),
+  })
+
+  return {
+    query: {
+      startDate: from?.toISOString() ?? null,
+      endDate: to?.toISOString() ?? null,
+      party: party ?? null,
+      entityName: entityName ?? null,
+      senderContains: senderContains ?? null,
+      groupBy,
+    },
+    totals: withRates(totalRows[0] ?? { campaigns: 0, inbox: 0, spam: 0, notDelivered: 0 }),
+    groups: groupRows.map(withRates),
   }
 }

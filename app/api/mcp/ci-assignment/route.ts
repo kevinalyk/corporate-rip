@@ -3,7 +3,7 @@
  * Claude.ai / Claude Desktop custom connector. See
  * docs/plans/CLAUDE_CI_ASSIGNMENT_MCP.md for the full design.
  *
- * Deliberately exposes ONLY these 29 tools - nothing else exists on this
+ * Deliberately exposes ONLY these 30 tools - nothing else exists on this
  * surface, so Claude/Grok physically cannot call anything beyond this narrow
  * workflow:
  *   1. list_unassigned_messages   (ci:read)
@@ -35,6 +35,13 @@
  *   27. update_news_article       (ci:news_write)
  *   28. delete_news_article       (ci:news_write)
  *   29. search_content            (ci:content_read, or campaigns:read / sms:read)
+ *   30. get_inbox_placement       (ci:content_read, or campaigns:read)
+ *
+ * Tool 30 reports where seed-inbox email is landing (inbox vs spam vs not
+ * delivered), aggregated by overall / entity / sender / sender domain / party /
+ * day over an optional date range. Same scope as search_content, aggregates
+ * only. search_content's email results also carry a per-email placement block
+ * on this internal surface only; the client-facing MCP never exposes placement.
  *
  * Tool 29 is a read-only keyword search across assigned AND unassigned
  * email (subject, preview, body, sender name) and SMS text, filterable by
@@ -170,7 +177,7 @@ import {
 } from "@/lib/ci-entity-utils"
 import { sendCiEntityCreatedByApiNotification } from "@/lib/ci-api-notifications"
 import { nameToSlug } from "@/lib/directory-utils"
-import { searchContent } from "@/lib/ci-content-search"
+import { searchContent, getInboxPlacement } from "@/lib/ci-content-search"
 import { SUBJECT_PATTERNS } from "@/lib/subject-line-classifier"
 import { MESSAGE_TYPE_LABELS } from "@/lib/message-classifier"
 
@@ -1376,7 +1383,7 @@ const handler = createMcpHandler(
       toDate: z.string().optional().describe("ISO date/time; window end. Defaults to now."),
     }
 
-    // ── Tool 14: get_digest_inbox_pulse ─────────────────────────────────────
+    // ── Tool 14: get_digest_inbox_pulse ─────���───────────────────────────────
     server.registerTool(
       "get_digest_inbox_pulse",
       {
@@ -1935,7 +1942,71 @@ const handler = createMcpHandler(
             )
           }
 
-          const result = await searchContent({ query, match, startDate, endDate, type, party, limit, page, entityLimit })
+          const result = await searchContent({
+            query,
+            match,
+            startDate,
+            endDate,
+            type,
+            party,
+            limit,
+            page,
+            entityLimit,
+            includePlacement: true,
+          })
+          return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] }
+        } catch (error) {
+          return toolError(error)
+        }
+      },
+    )
+
+    // ── Tool 30: get_inbox_placement ────────────────────────────────────────
+    server.registerTool(
+      "get_inbox_placement",
+      {
+        title: "Get Inbox Placement",
+        description:
+          "Read-only report on where email is landing across the RIP seed inboxes: inbox vs spam (and not delivered). Counts are seed-inbox placements summed across campaigns, so one campaign can count in several inboxes; inboxRatePct = inbox / (inbox + spam + notDelivered). Filter by date range, party (R/D), entity name (substring) or sender email/name (substring), and break results out with groupBy: none (one overall total), entity, sender, sender_domain, party or day. Returns overall totals plus one row per group (campaigns, inbox, spam, notDelivered, rates). Aggregates only - no message bodies. To see placement on individual emails, use search_content, whose email results include a placement block.",
+        inputSchema: {
+          startDate: z.string().optional().describe("ISO date/time; window start (inclusive)"),
+          endDate: z.string().optional().describe("ISO date/time; window end (inclusive)"),
+          party: z.enum(["R", "D"]).optional().describe("R = republican, D = democrat; omit for all"),
+          entityName: z.string().min(1).max(200).optional().describe("Case-insensitive substring match on entity name"),
+          senderContains: z
+            .string()
+            .min(1)
+            .max(200)
+            .optional()
+            .describe("Case-insensitive substring match on sender email address or sender name"),
+          groupBy: z
+            .enum(["none", "entity", "sender", "sender_domain", "party", "day"])
+            .default("none")
+            .describe("How to break the results out; day is UTC and sorted oldest first, others sorted by volume"),
+          limit: z.number().int().min(1).max(200).default(50).describe("Max group rows returned"),
+        },
+      },
+      async ({ startDate, endDate, party, entityName, senderContains, groupBy, limit }, extra) => {
+        try {
+          const scopes = extra.authInfo?.scopes ?? []
+          const allowed =
+            scopes.includes("*") || scopes.includes(CI_SCOPES.CONTENT_READ) || scopes.includes("campaigns:read")
+          if (!allowed) {
+            throw new CiApiError(
+              `This API key does not have the required scope: ${CI_SCOPES.CONTENT_READ} (or campaigns:read)`,
+              403,
+            )
+          }
+
+          const result = await getInboxPlacement({
+            startDate,
+            endDate,
+            party,
+            entityName,
+            senderContains,
+            groupBy,
+            limit,
+          })
           return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] }
         } catch (error) {
           return toolError(error)
