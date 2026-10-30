@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react"
 import { CIPricingContent } from "@/components/ci-pricing-content"
 import { Loader2 } from "lucide-react"
 import Image from "next/image"
+import { BrandWordmark } from "@/components/brand-wordmark"
 import Link from "next/link"
 
 export default function PublicBillingPage() {
@@ -37,13 +38,13 @@ export default function PublicBillingPage() {
             <div className="relative w-8 h-8">
               <Image
                 src="/images/IconOnly_Transparent_NoBuffer.png"
-                alt="Inbox.GOP"
+                alt="brandinbox.ai"
                 fill
                 style={{ objectFit: "contain" }}
                 priority
               />
             </div>
-            <span className="font-bold text-base">Inbox.GOP</span>
+            <BrandWordmark className="text-base" />
           </Link>
 
           {/* Auth-aware nav — null while loading to avoid flash */}

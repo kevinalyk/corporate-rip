@@ -8,7 +8,7 @@ export function Footer() {
         <div className="flex items-center gap-2">
           <Image
             src="/images/IconOnly_Transparent_NoBuffer.png"
-            alt="RIP Logo"
+            alt="brandinbox.ai"
             width={24}
             height={24}
             className="h-6 w-6"

@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { RefreshCw } from "lucide-react"
 import Image from "next/image"
+import { BrandWordmark } from "@/components/brand-wordmark"
 import Link from "next/link"
 import { ForgotPasswordDialog } from "@/components/forgot-password-dialog"
 import { toast } from "sonner"
@@ -121,14 +122,15 @@ function LoginForm({ successMessage = "", redirectUrl = "" }) {
         <div className="relative w-40 h-40 mx-auto mb-4">
           <Image
             src="/images/IconOnly_Transparent_NoBuffer.png"
-            alt="Inbox.GOP"
+            alt="brandinbox.ai"
             fill
             style={{ objectFit: "contain" }}
             priority
           />
         </div>
-        <h1 className="text-4xl font-bold text-rip-blue mt-2">Inbox.GOP</h1>
-        <p className="mt-2 text-muted-foreground max-w-md">Inbox.GOP</p>
+        <h1 className="mt-2 text-4xl">
+          <BrandWordmark />
+        </h1>
       </div>
 
       <Card className="w-full max-w-md">

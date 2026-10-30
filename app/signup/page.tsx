@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Eye, EyeOff } from "lucide-react"
 import Image from "next/image"
+import { BrandWordmark } from "@/components/brand-wordmark"
 import Link from "next/link"
 import { Checkbox } from "@/components/ui/checkbox"
 import { createTrialCheckoutSession } from "@/app/actions/stripe"
@@ -161,14 +162,15 @@ export default function SignupPage() {
         <div className="relative w-32 h-32 mx-auto mb-4">
           <Image
             src="/images/IconOnly_Transparent_NoBuffer.png"
-            alt="Inbox.GOP"
+            alt="brandinbox.ai"
             fill
             style={{ objectFit: "contain" }}
             priority
           />
         </div>
-        <h1 className="text-4xl font-bold text-rip-blue">Inbox.GOP</h1>
-        <p className="mt-2 text-muted-foreground">Inbox.GOP</p>
+        <h1 className="text-4xl">
+          <BrandWordmark />
+        </h1>
       </div>
 
       <Card className="w-full max-w-md">

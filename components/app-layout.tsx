@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react"
 import { Sidebar } from "@/components/sidebar"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
+import { BrandWordmark } from "@/components/brand-wordmark"
 import { TrialStatusBanner } from "@/components/trial-status-banner"
 
 interface AppLayoutProps {
@@ -79,7 +80,7 @@ function AppLayout({ children, clientSlug, isAdminView = false, defaultCollapsed
         >
           <Logo collapsed={false} variant="icon" />
           <div className="flex-1 flex items-center justify-center min-w-0">
-            <span className="text-foreground font-bold text-xl tracking-tight">Inbox.GOP</span>
+            <BrandWordmark className="text-xl" />
           </div>
           <Button
             variant="ghost"
