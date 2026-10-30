@@ -183,7 +183,7 @@ function CellDisplay({ value }: { value: CellValue }) {
     if (value) {
       return (
         <div className="flex justify-center">
-          <Check className="h-5 w-5 text-[#dc2a28]" />
+          <Check className="h-5 w-5 text-rip-red" />
         </div>
       )
     }
@@ -500,7 +500,7 @@ export function CIPricingContent() {
                       {isCurrentPlan(plan.key) && (
                         <Badge
                           className="text-[10px] py-0 px-1.5 h-4"
-                          style={{ backgroundColor: "#dc2a28", color: "white" }}
+                          style={{ backgroundColor: "#4f46e5", color: "white" }}
                         >
                           Current
                         </Badge>
@@ -579,7 +579,7 @@ export function CIPricingContent() {
                       <Button
                         size="sm"
                         className="w-full max-w-[140px]"
-                        style={{ backgroundColor: "#dc2a28", color: "white" }}
+                        style={{ backgroundColor: "#4f46e5", color: "white" }}
                         onClick={() => handleSelectPlan("enterprise")}
                         disabled={checkingOutPlan !== null}
                       >
@@ -601,7 +601,7 @@ export function CIPricingContent() {
                         className="w-full max-w-[140px]"
                         style={
                           checkingOutPlan !== plan.key
-                            ? { backgroundColor: "#dc2a28", color: "white" }
+                            ? { backgroundColor: "#4f46e5", color: "white" }
                             : undefined
                         }
                         onClick={() => handleSelectPlan(plan.key)}
@@ -629,7 +629,7 @@ export function CIPricingContent() {
         <p>All plans include access to our comprehensive political campaign database.</p>
         <p className="mt-1">
           Questions?{" "}
-          <a href="mailto:kevin@rip-tool.com,ryan@rip-tool.com" className="text-[#dc2a28] hover:underline">
+          <a href="mailto:kevin@rip-tool.com,ryan@rip-tool.com" className="text-rip-red hover:underline">
             Contact support
           </a>
         </p>

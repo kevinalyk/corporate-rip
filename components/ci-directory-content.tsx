@@ -440,7 +440,7 @@ export function CiDirectoryContent({
           {!mapLoading && totalActive > 0 && (
             <>
               <Badge variant="outline" className="flex items-center gap-1.5 text-xs">
-                <Activity className="h-3 w-3 text-[#EB3847]" />
+                <Activity className="h-3 w-3 text-rip-red" />
                 {totalActive} active state{totalActive !== 1 ? "s" : ""}
               </Badge>
               {totalEmails > 0 && (
@@ -461,7 +461,7 @@ export function CiDirectoryContent({
           {selectedMapState && (
             <div className="flex items-center gap-1.5 md:ml-2">
               <Badge variant="secondary" className="flex items-center gap-1.5 px-3 py-1 text-sm">
-                <MapPin className="h-3 w-3 text-[#EB3847]" />
+                <MapPin className="h-3 w-3 text-rip-red" />
                 {selectedMapState}
               </Badge>
               <Button
@@ -504,7 +504,7 @@ export function CiDirectoryContent({
               <CardHeader className="pb-2 pt-3 px-3 border-b border-border">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 min-w-0">
-                    <MapPin className="h-4 w-4 text-[#EB3847] shrink-0" />
+                    <MapPin className="h-4 w-4 text-rip-red shrink-0" />
                     <CardTitle className="text-sm font-semibold truncate">{selectedMapState}</CardTitle>
                   </div>
                   <Button
@@ -568,8 +568,8 @@ export function CiDirectoryContent({
                                 {email.entity?.imageUrl ? (
                                   <img src={email.entity.imageUrl} alt={email.entity.name} className="h-6 w-6 rounded-full object-cover shrink-0 mt-0.5" />
                                 ) : (
-                                  <div className="h-6 w-6 rounded-full bg-[#EB3847]/15 flex items-center justify-center shrink-0 mt-0.5">
-                                    <Mail className="h-3 w-3 text-[#EB3847]" />
+                                  <div className="h-6 w-6 rounded-full bg-rip-red/15 flex items-center justify-center shrink-0 mt-0.5">
+                                    <Mail className="h-3 w-3 text-rip-red" />
                                   </div>
                                 )}
                                 <div className="min-w-0">
@@ -626,8 +626,8 @@ export function CiDirectoryContent({
                                 {sms.entity?.imageUrl ? (
                                   <img src={sms.entity.imageUrl} alt={sms.entity.name} className="h-6 w-6 rounded-full object-cover shrink-0 mt-0.5" />
                                 ) : (
-                                  <div className="h-6 w-6 rounded-full bg-[#EB3847]/15 flex items-center justify-center shrink-0 mt-0.5">
-                                    <MessageSquare className="h-3 w-3 text-[#EB3847]" />
+                                  <div className="h-6 w-6 rounded-full bg-rip-red/15 flex items-center justify-center shrink-0 mt-0.5">
+                                    <MessageSquare className="h-3 w-3 text-rip-red" />
                                   </div>
                                 )}
                                 <div className="min-w-0">
@@ -669,7 +669,7 @@ export function CiDirectoryContent({
                       .map((item) => (
                         <div key={item.state} className="flex items-center justify-between text-sm">
                           <button
-                            className="text-left hover:text-[#EB3847] transition-colors font-medium text-xs"
+                            className="text-left hover:text-rip-red transition-colors font-medium text-xs"
                             onClick={() => setSelectedMapState(ABBREV_TO_FULL[item.state] ?? item.state)}
                           >
                             {ABBREV_TO_FULL[item.state] ?? item.state}
@@ -699,11 +699,11 @@ export function CiDirectoryContent({
                 </CardHeader>
                 <CardContent className="px-3 pb-3 space-y-1.5">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span className="inline-block w-2 h-2 rounded-full bg-[#EB3847] animate-pulse shrink-0" />
+                    <span className="inline-block w-2 h-2 rounded-full bg-rip-red animate-pulse shrink-0" />
                     Pulsing = activity in last 3h
                   </div>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span className="inline-block w-2 h-2 rounded bg-[#EB3847] shrink-0" />
+                    <span className="inline-block w-2 h-2 rounded bg-rip-red shrink-0" />
                     Red fill = selected state
                   </div>
                   <p className="text-xs text-muted-foreground">

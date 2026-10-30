@@ -176,7 +176,7 @@ export function PlanSelectionContent() {
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <Card
           className={`relative cursor-pointer transition-all ${
-            selectedPlan === "starter" ? "ring-2 ring-[#dc2a28] shadow-lg" : "hover:shadow-md"
+            selectedPlan === "starter" ? "ring-2 ring-rip-red shadow-lg" : "hover:shadow-md"
           }`}
           onClick={() => setSelectedPlan("starter")}
         >
@@ -195,7 +195,7 @@ export function PlanSelectionContent() {
             <ul className="space-y-3">
               {PLAN_FEATURES.starter.map((feature, index) => (
                 <li key={index} className="flex items-start gap-2">
-                  <Check className="h-5 w-5 text-[#dc2a28] shrink-0 mt-0.5" />
+                  <Check className="h-5 w-5 text-rip-red shrink-0 mt-0.5" />
                   <span className="text-sm">{feature}</span>
                 </li>
               ))}
@@ -203,7 +203,7 @@ export function PlanSelectionContent() {
           </CardContent>
           <CardFooter>
             <Button
-              className={`w-full ${selectedPlan === "starter" ? "bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white" : ""}`}
+              className={`w-full ${selectedPlan === "starter" ? "bg-rip-red hover:bg-rip-red/90 text-white" : ""}`}
               variant={selectedPlan === "starter" ? "default" : "outline"}
               onClick={() => setSelectedPlan("starter")}
             >
@@ -214,7 +214,7 @@ export function PlanSelectionContent() {
 
         <Card
           className={`relative cursor-pointer transition-all ${
-            selectedPlan === "professional" ? "ring-2 ring-[#dc2a28] shadow-lg" : "hover:shadow-md"
+            selectedPlan === "professional" ? "ring-2 ring-rip-red shadow-lg" : "hover:shadow-md"
           }`}
           onClick={() => setSelectedPlan("professional")}
         >
@@ -233,7 +233,7 @@ export function PlanSelectionContent() {
             <ul className="space-y-3">
               {PLAN_FEATURES.professional.map((feature, index) => (
                 <li key={index} className="flex items-start gap-2">
-                  <Check className="h-5 w-5 text-[#dc2a28] shrink-0 mt-0.5" />
+                  <Check className="h-5 w-5 text-rip-red shrink-0 mt-0.5" />
                   <span className="text-sm">{feature}</span>
                 </li>
               ))}
@@ -241,7 +241,7 @@ export function PlanSelectionContent() {
           </CardContent>
           <CardFooter>
             <Button
-              className={`w-full ${selectedPlan === "professional" ? "bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white" : ""}`}
+              className={`w-full ${selectedPlan === "professional" ? "bg-rip-red hover:bg-rip-red/90 text-white" : ""}`}
               variant={selectedPlan === "professional" ? "default" : "outline"}
               onClick={() => setSelectedPlan("professional")}
             >
@@ -252,7 +252,7 @@ export function PlanSelectionContent() {
 
         <Card
           className={`relative cursor-pointer transition-all ${
-            selectedPlan === "enterprise" ? "ring-2 ring-[#dc2a28] shadow-lg" : "hover:shadow-md"
+            selectedPlan === "enterprise" ? "ring-2 ring-rip-red shadow-lg" : "hover:shadow-md"
           }`}
           onClick={() => setSelectedPlan("enterprise")}
         >
@@ -270,7 +270,7 @@ export function PlanSelectionContent() {
             <ul className="space-y-3">
               {PLAN_FEATURES.enterprise.map((feature, index) => (
                 <li key={index} className="flex items-start gap-2">
-                  <Check className="h-5 w-5 text-[#dc2a28] shrink-0 mt-0.5" />
+                  <Check className="h-5 w-5 text-rip-red shrink-0 mt-0.5" />
                   <span className="text-sm">{feature}</span>
                 </li>
               ))}
@@ -278,7 +278,7 @@ export function PlanSelectionContent() {
           </CardContent>
           <CardFooter>
             <Button
-              className={`w-full ${selectedPlan === "enterprise" ? "bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white" : ""}`}
+              className={`w-full ${selectedPlan === "enterprise" ? "bg-rip-red hover:bg-rip-red/90 text-white" : ""}`}
               variant={selectedPlan === "enterprise" ? "default" : "outline"}
               onClick={() => setSelectedPlan("enterprise")}
             >
@@ -290,7 +290,7 @@ export function PlanSelectionContent() {
 
       {selectedPlan !== "enterprise" && (
         <div className="flex justify-center mb-8">
-          <Card className="w-full max-w-2xl ring-2 ring-[#dc2a28]">
+          <Card className="w-full max-w-2xl ring-2 ring-rip-red">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
@@ -307,7 +307,7 @@ export function PlanSelectionContent() {
               <ul className="space-y-3">
                 {CI_ADDON_FEATURES.map((feature, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <Check className="h-5 w-5 text-[#dc2a28] shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-rip-red shrink-0 mt-0.5" />
                     <span className="text-sm">{feature}</span>
                   </li>
                 ))}
@@ -318,7 +318,7 @@ export function PlanSelectionContent() {
             </CardContent>
             <CardFooter>
               <Button
-                className={`w-full ${selectedHasCI ? "bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white" : ""}`}
+                className={`w-full ${selectedHasCI ? "bg-rip-red hover:bg-rip-red/90 text-white" : ""}`}
                 variant={selectedHasCI ? "default" : "outline"}
                 onClick={() => setSelectedHasCI(!selectedHasCI)}
               >

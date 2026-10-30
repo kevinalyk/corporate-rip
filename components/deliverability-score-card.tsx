@@ -206,11 +206,11 @@ export function DeliverabilityScoreCard({ slug, clientSlug, isAuthenticated, ent
       {/* Header */}
       <div className="px-4 py-3 border-b border-border flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="h-4 w-4 text-[#dc2a28]" />
+          <ShieldCheck className="h-4 w-4 text-rip-red" />
           <h2 className="font-semibold text-sm">Deliverability Score</h2>
         </div>
         {displayData.locked && (
-          <span className="text-xs font-medium text-[#dc2a28] flex items-center gap-1">
+          <span className="text-xs font-medium text-rip-red flex items-center gap-1">
             <Lock className="h-3 w-3" />
             Professional Plan
           </span>
@@ -277,14 +277,14 @@ export function DeliverabilityScoreCard({ slug, clientSlug, isAuthenticated, ent
         {displayData.locked && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-card/60 backdrop-blur-[2px] rounded-b-none z-10 gap-3 px-4">
             <div className="flex flex-col items-center gap-2 text-center">
-              <ShieldAlert className="h-7 w-7 text-[#dc2a28]" />
+              <ShieldAlert className="h-7 w-7 text-rip-red" />
               <p className="text-sm font-semibold">Deliverability report locked</p>
               <p className="text-xs text-muted-foreground max-w-xs">
                 Upgrade to Professional to see full authentication scores, inbox placement rates, and compliance checks.
               </p>
             </div>
             <Link href={upgradeHref}>
-              <Button size="sm" className="bg-[#dc2a28] hover:bg-[#c02422] text-white text-xs px-4">
+              <Button size="sm" className="bg-rip-red hover:bg-rip-red/90 text-white text-xs px-4">
                 {upgradeCta}
               </Button>
             </Link>

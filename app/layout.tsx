@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Hanken_Grotesk } from "next/font/google"
+import { Inter } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -8,9 +8,9 @@ import { Toaster } from "sonner"
 import { DomainProvider } from "@/lib/domain-context"
 import { CookieConsentBanner } from "@/components/cookie-consent-banner"
 
-const hankenGrotesk = Hanken_Grotesk({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-hanken-grotesk",
+  variable: "--font-inter",
   weight: ["400", "500", "600", "700", "800"],
 })
 
@@ -54,7 +54,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className={`${hankenGrotesk.variable} font-sans`}>
+      <body className={`${inter.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <DomainProvider>
             {children}

@@ -83,7 +83,7 @@ export default function DigestPageClient({ initialArticles: _ }: DigestPageClien
       {/* Floating "New Article" button — super admins only, articles are published via API */}
       <div className="fixed bottom-6 right-6 z-50">
         <Button
-          className="bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white gap-2 shadow-lg"
+          className="bg-rip-red hover:bg-rip-red/90 text-white gap-2 shadow-lg"
           onClick={() => toast({ title: "Use the Claude API to publish articles", description: "POST /api/v1/digest with your DIGEST_API_KEY" })}
         >
           <Plus size={15} />

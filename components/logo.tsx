@@ -15,7 +15,7 @@ export function Logo({ collapsed = false, variant = "full", className }: LogoPro
       <div className="relative overflow-hidden">
         <Image
           src={logoSrc || "/placeholder.svg"}
-          alt="RIP Logo"
+          alt="brandinbox.ai"
           width={collapsed ? 40 : 40}
           height={collapsed ? 40 : 40}
           className="object-contain"

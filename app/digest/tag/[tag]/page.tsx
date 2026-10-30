@@ -193,7 +193,7 @@ export default async function DigestTagPage({ params }: Props) {
           </a>
 
           <div className="flex items-center gap-3 mb-2">
-            <Newspaper size={22} className="text-[#dc2a28]" />
+            <Newspaper size={22} className="text-rip-red" />
             <h1 className="text-2xl font-bold tracking-tight">{label}</h1>
           </div>
           <p className="text-sm text-muted-foreground mb-10">
@@ -215,7 +215,7 @@ export default async function DigestTagPage({ params }: Props) {
                 return (
                   <article
                     key={a.id}
-                    className="rounded-xl border border-border bg-card overflow-hidden hover:border-[#dc2a28]/40 hover:shadow-md transition-all"
+                    className="rounded-xl border border-border bg-card overflow-hidden hover:border-rip-red/40 hover:shadow-md transition-all"
                   >
                     {a.imageUrl && (
                       <div className="w-full aspect-[16/5] overflow-hidden bg-muted">
@@ -224,7 +224,7 @@ export default async function DigestTagPage({ params }: Props) {
                     )}
                     <div className="px-5 pt-4 pb-5">
                       <div className="flex items-center gap-2 flex-wrap mb-2">
-                        <span className="text-[10px] font-bold tracking-widest text-[#dc2a28] uppercase border border-[#dc2a28]/40 rounded px-2 py-0.5">
+                        <span className="text-[10px] font-bold tracking-widest text-rip-red uppercase border border-rip-red/40 rounded px-2 py-0.5">
                           Daily Digest
                         </span>
                         <span className="text-muted-foreground text-xs">·</span>
@@ -239,7 +239,7 @@ export default async function DigestTagPage({ params }: Props) {
                       <h2 className="text-lg font-bold leading-snug mb-2 text-balance">
                         <a
                           href={`/digest/${a.slug}`}
-                          className="hover:text-[#dc2a28] transition-colors"
+                          className="hover:text-rip-red transition-colors"
                         >
                           {a.title}
                         </a>
@@ -257,8 +257,8 @@ export default async function DigestTagPage({ params }: Props) {
                               href={`/digest/tag/${t}`}
                               className={`text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors ${
                                 t === tag
-                                  ? "bg-[#dc2a28]/10 text-[#dc2a28] border-[#dc2a28]/40"
-                                  : "bg-muted text-muted-foreground border-border hover:border-[#dc2a28]/40 hover:text-foreground"
+                                  ? "bg-rip-red/10 text-rip-red border-rip-red/40"
+                                  : "bg-muted text-muted-foreground border-border hover:border-rip-red/40 hover:text-foreground"
                               }`}
                             >
                               {t}
@@ -268,7 +268,7 @@ export default async function DigestTagPage({ params }: Props) {
                         <a
                           href={`/digest/${a.slug}`}
                           aria-label={`Continue reading ${a.title}`}
-                          className="inline-flex items-center gap-1.5 text-[#dc2a28] text-sm font-medium hover:underline transition-colors flex-shrink-0"
+                          className="inline-flex items-center gap-1.5 text-rip-red text-sm font-medium hover:underline transition-colors flex-shrink-0"
                         >
                           Read Digest
                           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>

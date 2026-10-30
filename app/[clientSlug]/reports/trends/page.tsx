@@ -65,13 +65,13 @@ function StaticCharts() {
           <AreaChart data={staticVolumeData}>
             <defs>
               <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#dc2a28" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#dc2a28" stopOpacity={0} />
+                <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#4f46e5" stopOpacity={0} />
               </linearGradient>
             </defs>
             <XAxis dataKey="day" tick={{ fontSize: 10 }} />
             <YAxis tick={{ fontSize: 10 }} />
-            <Area type="monotone" dataKey="value" stroke="#dc2a28" fill="url(#colorValue)" strokeWidth={2} dot={false} />
+            <Area type="monotone" dataKey="value" stroke="#4f46e5" fill="url(#colorValue)" strokeWidth={2} dot={false} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -83,7 +83,7 @@ function StaticCharts() {
           <BarChart data={staticBarData}>
             <XAxis dataKey="name" tick={{ fontSize: 10 }} />
             <YAxis tick={{ fontSize: 10 }} />
-            <Bar dataKey="value" fill="#dc2a28" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="value" fill="#4f46e5" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -143,9 +143,9 @@ export default function ReportsReportingPage() {
 
           {/* Full-page paywall overlay */}
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/70 backdrop-blur-sm">
-            <div className="max-w-md w-full mx-4 rounded-xl border-2 border-[#dc2a28]/20 bg-card shadow-2xl p-8 text-center space-y-6">
-              <div className="mx-auto w-14 h-14 rounded-full bg-[#dc2a28]/10 flex items-center justify-center">
-                <Lock className="h-7 w-7 text-[#dc2a28]" />
+            <div className="max-w-md w-full mx-4 rounded-xl border-2 border-rip-red/20 bg-card shadow-2xl p-8 text-center space-y-6">
+              <div className="mx-auto w-14 h-14 rounded-full bg-rip-red/10 flex items-center justify-center">
+                <Lock className="h-7 w-7 text-rip-red" />
               </div>
 
               <div className="space-y-2">
@@ -164,7 +164,7 @@ export default function ReportsReportingPage() {
                   "Third-party vs. house file analysis",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">
-                    <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#dc2a28]" />
+                    <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-rip-red" />
                     <span>{f}</span>
                   </li>
                 ))}
@@ -172,7 +172,7 @@ export default function ReportsReportingPage() {
 
               <Button
                 size="lg"
-                className="w-full bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white"
+                className="w-full bg-rip-red hover:bg-rip-red/90 text-white"
                 onClick={() => router.push(`/${clientSlug}/billing`)}
               >
                 <TrendingUp className="mr-2 h-4 w-4" />

@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import { Menu, X } from "lucide-react"
 import { Sidebar } from "@/components/sidebar"
 import { MainContent } from "@/components/main-content"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
+import { BrandWordmark } from "@/components/brand-wordmark"
 
 interface DashboardProps {
   clientSlug?: string
@@ -61,14 +61,7 @@ export function Dashboard({ clientSlug, isAdminView = false }: DashboardProps) {
         <header className="flex md:hidden items-center gap-3 px-4 py-3 border-b border-border bg-background sticky top-0 z-30">
           <Logo collapsed={false} variant="icon" />
           <div className="flex-1 flex items-center justify-center min-w-0">
-            <Image
-              src="/images/rip-wordmark.png"
-              alt="Republican Inboxing Protocol"
-              width={420}
-              height={84}
-              priority
-              className="h-8 w-auto max-w-full object-contain"
-            />
+            <BrandWordmark className="text-xl" />
           </div>
           <Button
             variant="ghost"

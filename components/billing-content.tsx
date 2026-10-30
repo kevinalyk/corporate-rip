@@ -421,7 +421,7 @@ export function BillingContent({ clientSlug }: BillingContentProps) {
                   <Button
                     className="w-full"
                     variant="default"
-                    style={{ backgroundColor: "#EB3847", color: "white" }}
+                    style={{ backgroundColor: "#4f46e5", color: "white" }}
                     onClick={handleReactivateSubscription}
                     disabled={canceling}
                   >
@@ -439,7 +439,7 @@ export function BillingContent({ clientSlug }: BillingContentProps) {
                     <Button
                       className="w-full"
                       variant="default"
-                      style={{ backgroundColor: "#EB3847", color: "white" }}
+                      style={{ backgroundColor: "#4f46e5", color: "white" }}
                       onClick={handleManageSubscription}
                     >
                       Manage Subscription

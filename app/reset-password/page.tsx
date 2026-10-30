@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import Image from "next/image"
+import { BrandWordmark } from "@/components/brand-wordmark"
 
 // Create a client component that uses useSearchParams
 function ResetPasswordForm({ emailParam = "", tokenParam = "" }) {
@@ -131,13 +132,15 @@ function ResetPasswordForm({ emailParam = "", tokenParam = "" }) {
         <div className="relative w-40 h-40 mx-auto mb-4">
           <Image
             src="/images/IconOnly_Transparent_NoBuffer.png"
-            alt="Inbox.GOP"
+            alt="brandinbox.ai"
             fill
             style={{ objectFit: "contain" }}
             priority
           />
         </div>
-        <h1 className="text-4xl font-bold text-rip-blue mt-2">Inbox.GOP</h1>
+        <h1 className="mt-2 text-4xl">
+          <BrandWordmark />
+        </h1>
       </div>
 
       <Card className="w-full max-w-md">

@@ -80,7 +80,7 @@ export default function ClientPage() {
           Payment successful! Your subscription has been updated.
         </div>
       )}
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#dc2a28]"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rip-red"></div>
     </div>
   )
 }

@@ -87,7 +87,7 @@ export default async function NewsPage() {
         <div className="flex items-center justify-between mb-10">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <Megaphone size={22} className="text-[#dc2a28]" />
+              <Megaphone size={22} className="text-rip-red" />
               <h1 className="text-2xl font-bold tracking-tight">{"What's New"}</h1>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -108,7 +108,7 @@ export default async function NewsPage() {
               return (
                 <article
                   key={a.id}
-                  className="rounded-xl border border-border bg-card overflow-hidden hover:border-[#dc2a28]/40 hover:shadow-md transition-all"
+                  className="rounded-xl border border-border bg-card overflow-hidden hover:border-rip-red/40 hover:shadow-md transition-all"
                 >
                   {a.imageUrl && (
                     <NewsArticleImage
@@ -125,7 +125,7 @@ export default async function NewsPage() {
                       {format(new Date(a.publishedAt), "MMMM d, yyyy")}
                     </time>
                     <h2 className="text-lg font-bold leading-snug mb-2 text-balance">
-                      <a href={`/news/${a.slug}`} className="hover:underline hover:text-[#dc2a28] transition-colors">
+                      <a href={`/news/${a.slug}`} className="hover:underline hover:text-rip-red transition-colors">
                         {a.title}
                       </a>
                     </h2>
@@ -135,7 +135,7 @@ export default async function NewsPage() {
                     <a
                       href={`/news/${a.slug}`}
                       aria-label={`Continue reading ${a.title}`}
-                      className="inline-flex items-center gap-2 bg-[#dc2a28] hover:bg-[#dc2a28]/90 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                      className="inline-flex items-center gap-2 bg-rip-red hover:bg-rip-red/90 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
                     >
                       Continue Reading
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>

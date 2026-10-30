@@ -8,7 +8,7 @@ export function Footer() {
         <div className="flex items-center gap-2">
           <Image
             src="/images/IconOnly_Transparent_NoBuffer.png"
-            alt="RIP Logo"
+            alt="brandinbox.ai"
             width={24}
             height={24}
             className="h-6 w-6"
@@ -18,13 +18,13 @@ export function Footer() {
           </span>
         </div>
         <div className="flex items-center gap-6">
-          <Link href="#" className="text-sm text-muted-foreground hover:text-[#dc2a28] transition-colors">
+          <Link href="#" className="text-sm text-muted-foreground hover:text-rip-red transition-colors">
             Privacy Policy
           </Link>
-          <Link href="#" className="text-sm text-muted-foreground hover:text-[#dc2a28] transition-colors">
+          <Link href="#" className="text-sm text-muted-foreground hover:text-rip-red transition-colors">
             Terms and Conditions
           </Link>
-          <Link href="#" className="text-sm text-muted-foreground hover:text-[#dc2a28] transition-colors">
+          <Link href="#" className="text-sm text-muted-foreground hover:text-rip-red transition-colors">
             Contact
           </Link>
         </div>
