@@ -33,7 +33,7 @@ export default function LoginPage() {
       if (!response.ok) {
         throw new Error(data.error || "Login failed")
       }
-      window.location.href = "/account"
+      window.location.href = data.redirectTo || "/account"
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to sign in. Please try again.")
       setLoading(false)

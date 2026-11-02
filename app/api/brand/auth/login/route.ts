@@ -2,7 +2,13 @@ import { NextResponse } from "next/server"
 import bcryptjs from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 import { checkMobileRateLimit } from "@/lib/mobile-auth"
-import { createBrandToken, getRequestIp, setBrandCookie, toPublicBrandUser } from "@/lib/brand-auth"
+import {
+  createBrandToken,
+  getBrandHomePath,
+  getRequestIp,
+  setBrandCookie,
+  toPublicBrandUser,
+} from "@/lib/brand-auth"
 
 const MAX_ATTEMPTS = 10
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000
@@ -28,7 +34,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: INVALID }, { status: 401 })
     }
 
-    const user = await prisma.brandUser.findUnique({ where: { email } })
+    const user = await prisma.brandUser.findUnique({
+      where: { email },
+      include: { client: { select: { slug: true } } },
+    })
     if (!user || !(await bcryptjs.compare(password, user.password))) {
       return NextResponse.json({ error: INVALID }, { status: 401 })
     }
@@ -38,8 +47,8 @@ export async function POST(request: Request) {
 
     await prisma.brandUser.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } })
 
-    const response = NextResponse.json({ user: toPublicBrandUser(user) })
-    setBrandCookie(response, await createBrandToken(user.id))
+    const response = NextResponse.json({ user: toPublicBrandUser(user), redirectTo: getBrandHomePath(user) })
+    setBrandCookie(response, await createBrandToken(user))
     return response
   } catch (error) {
     console.error("[Brand] Login failed:", error)

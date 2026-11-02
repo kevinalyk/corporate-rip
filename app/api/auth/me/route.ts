@@ -101,6 +101,33 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
     }
 
+    if (currentUser.brand) {
+      const brandUser = await prisma.brandUser.findUnique({
+        where: { id: currentUser.userId },
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          role: true,
+          blocked: true,
+          client: {
+            select: { id: true, name: true, slug: true, trialExpiresAt: true, trialEndedNoticeSeen: true },
+          },
+        },
+      })
+      if (!brandUser) {
+        return NextResponse.json({ error: "User not found" }, { status: 404 })
+      }
+      if (brandUser.blocked || (await isIpBlocked(ip))) {
+        const response = blockedResponse("This account has been suspended.")
+        response.cookies.set({ name: "brand_token", value: "", httpOnly: true, path: "/", maxAge: 0 })
+        return response
+      }
+      const { blocked: _blocked, ...rest } = brandUser
+      return NextResponse.json({ ...rest, firstLogin: false, isBrandUser: true, iat: currentUser.iat })
+    }
+
     const user = await prisma.user.findUnique({
       where: { id: currentUser.userId },
       select: {

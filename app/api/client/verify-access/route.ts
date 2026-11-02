@@ -21,18 +21,18 @@ export async function GET(request: Request) {
     }
 
     // Get user with client info
-    const user = await prisma.user.findUnique({
-      where: { id: currentUser.userId },
-      select: {
-        role: true,
-        clientId: true,
-        client: {
-          select: {
-            slug: true,
-          },
+    const accessSelect = {
+      role: true,
+      clientId: true,
+      client: {
+        select: {
+          slug: true,
         },
       },
-    })
+    } as const
+    const user = currentUser.brand
+      ? await prisma.brandUser.findUnique({ where: { id: currentUser.userId }, select: accessSelect })
+      : await prisma.user.findUnique({ where: { id: currentUser.userId }, select: accessSelect })
 
     console.log("[v0] User found:", { role: user?.role, clientId: user?.clientId, clientSlug: user?.client?.slug })
 

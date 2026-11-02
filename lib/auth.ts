@@ -1,6 +1,7 @@
 import { jwtVerify, SignJWT } from "jose"
 import { cookies } from "next/headers"
 import { prisma } from "@/lib/prisma" // Declare the prisma variable
+import { BRAND_COOKIE, verifyBrandSession } from "@/lib/brand-token"
 
 // Get JWT secret from environment variable
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-this-in-production"
@@ -34,15 +35,20 @@ export async function getCurrentUser() {
   const cookieStore = await cookies()
   const token = cookieStore.get("auth_token")?.value
 
-  if (!token) {
-    return null
+  if (token) {
+    try {
+      const payload = await verifyToken(token)
+      if (payload) return payload
+    } catch {
+      // fall through to the brand session
+    }
   }
 
-  try {
-    return await verifyToken(token)
-  } catch {
-    return null
-  }
+  // brandinbox.ai accounts (BrandUser) carry the same claims (userId, role, clientId,
+  // clientSlug) plus `brand: true` so shared code can tell the two user tables apart.
+  const brandToken = cookieStore.get(BRAND_COOKIE)?.value
+  if (!brandToken) return null
+  return await verifyBrandSession(brandToken)
 }
 
 // Function to get the session (alias for getCurrentUser for compatibility)
