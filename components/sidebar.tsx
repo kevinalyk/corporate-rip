@@ -237,8 +237,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
 
   const isPublicPath =
     pathname === "/news" || pathname.startsWith("/news/") ||
-    pathname === "/directory" || pathname.startsWith("/directory/") ||
-    pathname === "/digest" || pathname.startsWith("/digest/")
+    pathname === "/directory" || pathname.startsWith("/directory/")
   const isUnauthenticated = authLoaded && !userRole
 
   // Minimal sidebar for unauthenticated visitors on public pages
