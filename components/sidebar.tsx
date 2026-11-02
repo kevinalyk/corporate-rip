@@ -34,8 +34,6 @@ import {
   Code,
   Key,
   Smartphone,
-  Rocket,
-  Newspaper,
   TrendingUp,
   Type,
   Tags,
@@ -401,37 +399,27 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
               </div>
             )}
 
-            <NavSection
-              icon={<ScanSearch size={20} />}
-              label="Radar"
-              collapsed={collapsed}
-              expanded={expandedSections.radar}
-              onToggle={() => toggleSection("radar")}
-            />
-            {expandedSections.radar && !collapsed && (
-              <div className="ml-4 space-y-1">
-                <NavItem
-                  icon={<Building2 size={18} />}
-                  label="Directory"
-                  active={pathname === "/directory" || (pathname.startsWith("/directory/") && !pathname.includes("/directory/new-campaigns"))}
-                  collapsed={false}
-                  onClick={() => navigate("/directory")}
+            {userRole === "super_admin" && (
+              <>
+                <NavSection
+                  icon={<ScanSearch size={20} />}
+                  label="Radar"
+                  collapsed={collapsed}
+                  expanded={expandedSections.radar}
+                  onToggle={() => toggleSection("radar")}
                 />
-                <NavItem
-                  icon={<Rocket size={18} />}
-                  label="Launch Tracker"
-                  active={pathname.includes("/directory/new-campaigns")}
-                  collapsed={false}
-                  onClick={() => navigate("/directory/new-campaigns")}
-                />
-                <NavItem
-                  icon={<Newspaper size={18} />}
-                  label="Intelligence Digest"
-                  active={pathname === "/digest" || pathname.startsWith("/digest/")}
-                  collapsed={false}
-                  onClick={() => navigate("/digest")}
-                />
-              </div>
+                {expandedSections.radar && !collapsed && (
+                  <div className="ml-4 space-y-1">
+                    <NavItem
+                      icon={<Building2 size={18} />}
+                      label="Directory"
+                      active={pathname === "/directory" || pathname.startsWith("/directory/")}
+                      collapsed={false}
+                      onClick={() => navigate("/directory")}
+                    />
+                  </div>
+                )}
+              </>
             )}
 
             <>
