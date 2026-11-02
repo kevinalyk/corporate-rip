@@ -15,6 +15,9 @@ export async function middleware(request: NextRequest) {
     /^\/google[a-f0-9]+\.html$/.test(request.nextUrl.pathname) ||
     /^\/login\/google[a-f0-9]+\.html$/.test(request.nextUrl.pathname) ||
     request.nextUrl.pathname === "/api/health" ||
+    // brandinbox.ai accounts (UserBrand) — separate cookie, each route checks its own session
+    request.nextUrl.pathname.startsWith("/api/brand/") ||
+    request.nextUrl.pathname === "/account" ||
     request.nextUrl.pathname === "/api/auth/me" ||
     request.nextUrl.pathname.startsWith("/api/auth/login") ||
     request.nextUrl.pathname.startsWith("/api/auth/signup") ||
