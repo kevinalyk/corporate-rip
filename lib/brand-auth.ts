@@ -86,7 +86,7 @@ export async function getCurrentBrandUser() {
   const userId = await verifyBrandToken(token)
   if (!userId) return null
 
-  const user = await prisma.userBrand.findUnique({ where: { id: userId } })
+  const user = await prisma.brandUser.findUnique({ where: { id: userId } })
   if (!user || user.blocked) return null
 
   return user

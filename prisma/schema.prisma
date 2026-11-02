@@ -1483,7 +1483,7 @@ model ClientMcpUsageLog {
 // Accounts created on brandinbox.ai. Deliberately separate from `User`
 // (the RIP team / client accounts) so the two products never share logins.
 // Brand only reads RIP's data; this table is the only thing Brand writes.
-model UserBrand {
+model BrandUser {
   id              String    @id @default(cuid())
   email           String    @unique // always stored lowercased
   firstName       String

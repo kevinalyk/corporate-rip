@@ -59,12 +59,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "You must agree to the Terms of Service and Privacy Policy" }, { status: 400 })
     }
 
-    const existing = await prisma.userBrand.findUnique({ where: { email }, select: { id: true } })
+    const existing = await prisma.brandUser.findUnique({ where: { email }, select: { id: true } })
     if (existing) {
       return NextResponse.json({ error: "An account with this email already exists" }, { status: 400 })
     }
 
-    const user = await prisma.userBrand.create({
+    const user = await prisma.brandUser.create({
       data: {
         email,
         firstName,

@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: INVALID }, { status: 401 })
     }
 
-    const user = await prisma.userBrand.findUnique({ where: { email } })
+    const user = await prisma.brandUser.findUnique({ where: { email } })
     if (!user || !(await bcryptjs.compare(password, user.password))) {
       return NextResponse.json({ error: INVALID }, { status: 401 })
     }
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "This account has been suspended." }, { status: 403 })
     }
 
-    await prisma.userBrand.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } })
+    await prisma.brandUser.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } })
 
     const response = NextResponse.json({ user: toPublicBrandUser(user) })
     setBrandCookie(response, await createBrandToken(user.id))
