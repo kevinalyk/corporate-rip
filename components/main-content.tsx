@@ -85,7 +85,6 @@ import { toast } from "sonner"
 import { CheckCircle2, Wifi, Eye, FolderOpen, CheckCircle } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox" // Added for random assignment
 import { useToast } from "@/components/ui/use-toast" // Added for BlockedDomainsContent
-import { ReportingContent } from "@/components/reporting-content"
 import { Footer } from "@/components/footer"
 import { Alert, AlertDescription } from "@/components/ui/alert" // Added for UserSettingsContent
 
@@ -199,8 +198,7 @@ export function MainContent({ collapsed, activeTab, clientSlug, isAdminView = fa
         <div className="rounded-lg border border-border p-6 h-full overflow-auto">
           {activeTab === "overview" && <OverviewContent />}
           {activeTab === "campaigns" && <CampaignsContent isAdminView={isAdminView} clientSlug={clientSlug} />}
-          {activeTab === "reporting" && <ReportingContent isAdminView={isAdminView} clientSlug={clientSlug} />}
-          {activeTab === "analytics" && <AnalyticsContent />}
+                  {activeTab === "analytics" && <AnalyticsContent />}
           {activeTab === "reports" && <ReportsContent />}
           {activeTab === "seedlist" && (
             <SeedListContent isAdminView={isAdminView} clientSlug={clientSlug} currentUser={currentUser} />

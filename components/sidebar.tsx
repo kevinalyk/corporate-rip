@@ -16,7 +16,6 @@ import {
   Moon,
   Sun,
   UserCog,
-  ShieldCheck,
   BarChart3,
   Lightbulb,
   CreditCard,
@@ -34,9 +33,6 @@ import {
   Code,
   Key,
   Smartphone,
-  TrendingUp,
-  Type,
-  Tags,
   Bot,
 } from "lucide-react"
 import useSWR from "swr"
@@ -99,7 +95,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     ci: false,
     radar: false,
-    reports: false,
     inbox: false,
     developers: false,
     account: false,
@@ -165,8 +160,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
       setExpandedSections((prev) => ({ ...prev, ci: true }))
     } else if (pathname === "/directory" || pathname.startsWith("/directory/")) {
       setExpandedSections((prev) => ({ ...prev, radar: true }))
-    } else if (pathname.includes("/reports/")) {
-      setExpandedSections((prev) => ({ ...prev, reports: true }))
     } else if (pathname.includes("/inbox/")) {
       setExpandedSections((prev) => ({ ...prev, inbox: true }))
     } else if (pathname.includes("/developers/")) {
@@ -420,73 +413,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
                 )}
               </>
             )}
-
-            <>
-              <NavSection
-                icon={<BarChart3 size={20} />}
-                label="Reports"
-                collapsed={collapsed}
-                expanded={expandedSections.reports}
-                onToggle={() => toggleSection("reports")}
-              />
-              {expandedSections.reports && !collapsed && (
-                <div className="ml-4 space-y-1">
-                  <NavItem
-                    icon={<BarChart3 size={18} />}
-                    label="Trends"
-                    active={pathname.includes("/reports/trends")}
-                    collapsed={false}
-                    onClick={() => navigate(`/${getClientSlug()}/reports/trends`)}
-                  />
-                  <NavItem
-                    icon={<MailCheck size={18} />}
-                    label="Inboxing"
-                    active={pathname.includes("/reports/inboxing")}
-                    collapsed={false}
-                    onClick={() => navigate(`/${getClientSlug()}/reports/inboxing`)}
-                  />
-                  <NavItem
-                    icon={<TrendingUp size={18} />}
-                    label="Copy Frequency"
-                    active={pathname.includes("/reports/content")}
-                    collapsed={false}
-                    onClick={() => navigate(`/${getClientSlug()}/reports/content`)}
-                  />
-                  <NavItem
-                    icon={<Type size={18} />}
-                    label="Subject Patterns"
-                    active={pathname.includes("/reports/subject-patterns")}
-                    collapsed={false}
-                    onClick={() => navigate(`/${getClientSlug()}/reports/subject-patterns`)}
-                  />
-                  {userRole === "super_admin" && (
-                    <NavItem
-                      icon={<Tags size={18} />}
-                      label="Message Types"
-                      active={pathname.includes("/reports/message-types")}
-                      collapsed={false}
-                      onClick={() => navigate(`/${getClientSlug()}/reports/message-types`)}
-                    />
-                  )}
-                  {userRole === "super_admin" && (
-                    <NavItem
-                      icon={<BarChart3 size={18} />}
-                      label="Comparisons"
-                      active={pathname.includes("/reports/comparisons")}
-                      collapsed={false}
-                      onClick={() => navigate(`/${getClientSlug()}/reports/comparisons`)}
-                    />
-                  )}
-                  <NavItem
-                    icon={<ShieldCheck size={18} />}
-                    label="Email Compliance Summary"
-                    active={pathname.includes("/reports/compliance")}
-                    collapsed={false}
-                    onClick={() => navigate(`/${getClientSlug()}/reports/compliance`)}
-                  />
-                </div>
-              )}
-            </>
 
             {(selectedClientSlug === "rip" || !selectedClientSlug || selectedClientSlug === "redsparkstrategy") && (
               <>
