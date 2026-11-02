@@ -210,7 +210,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
     if (selectedClientSlug && selectedClientSlug !== "admin") {
       return selectedClientSlug
     }
-    return isAdminView ? "admin" : selectedDomain?.client?.slug || "admin"
+    return isAdminView ? "admin" : selectedDomain?.client?.slug || currentUser?.client?.slug || "admin"
   }
 
   const navigate = (path: string) => {
