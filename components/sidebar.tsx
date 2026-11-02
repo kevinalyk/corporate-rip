@@ -31,7 +31,6 @@ import {
   Star,
   Globe,
   Megaphone,
-  AlertCircle,
   ScanSearch,
   MailCheck,
   Code,
@@ -51,7 +50,6 @@ import { Separator } from "@/components/ui/separator"
 import { useDomain } from "@/lib/domain-context"
 import { useCurrentUser } from "@/lib/hooks/use-current-user"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ReportProblemDialog } from "@/components/report-problem-dialog"
 
 interface Client {
   id: string
@@ -90,8 +88,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
   const [clients, setClients] = useState<Client[]>([])
   const [loadingClients, setLoadingClients] = useState(false)
   const [selectedClientSlug, setSelectedClientSlug] = useState<string>("")
-
-  const [reportProblemOpen, setReportProblemOpen] = useState(false)
 
   // Developers section is a pilot: visible to super admins and to users of the
   // pilot clients (brandinbox.ai, Red Spark Strategy) while those clients are selected.
@@ -661,42 +657,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
               (components/app-layout.tsx) — same reasoning as NavSection/NavItem above;
               md:min-h-0 lets the default size="sm" (32px) govern the denser desktop
               sidebar unchanged. */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className={cn(
-              "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0",
-              pathname.startsWith("/news") && "bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20 hover:text-brand-primary",
-              collapsed && "justify-center",
-            )}
-            onClick={() => navigate("/news")}
-          >
-            <Megaphone size={20} />
-            {!collapsed && <span>{"What's New"}</span>}
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className={cn("w-full justify-start gap-3 px-3 min-h-11 md:min-h-0", collapsed && "justify-center")}
-            onClick={() => window.open("https://directory.gop", "_blank")}
-          >
-            <ExternalLink size={20} />
-            {!collapsed && <span>GOP Directory</span>}
-          </Button>
-          {userRole === "super_admin" && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cn(
-                "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0 text-muted-foreground",
-                collapsed && "justify-center",
-              )}
-              onClick={() => setReportProblemOpen(true)}
-            >
-              <AlertCircle size={20} />
-              {!collapsed && <span>Report a Problem</span>}
-            </Button>
-          )}
           {mounted && (
             <Button
               variant="ghost"
@@ -723,8 +683,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
         </div>
       </div>
     </div>
-
-    <ReportProblemDialog open={reportProblemOpen} onOpenChange={setReportProblemOpen} />
     </>
   )
 }
