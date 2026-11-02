@@ -83,7 +83,7 @@ export function AdminWinRedInboxContent() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">WinRed Inbox</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Internal RIP test seeds used to check WinRed mail deliverability. Scanned automatically once a day.
+            Internal brandinbox.ai test seeds used to check WinRed mail deliverability. Scanned automatically once a day.
           </p>
         </div>
         <Button onClick={runScanNow} disabled={scanning} variant="outline" className="gap-2">

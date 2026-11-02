@@ -513,7 +513,7 @@ export async function runDomainHealthScan(
     let checks: Record<string, boolean> = {}
     try {
       // email.fromAddress is the raw "From:" header line for IMAP/Graph-sourced samples
-      // (e.g. `Jane Doe for Congress <digest@rip-tool.com>`) — extract the bare address first,
+      // (e.g. `Jane Doe for Congress <digest@brandinbox.ai>`) — extract the bare address first,
       // otherwise every regex-based check below silently fails on the display name/brackets.
       const bareEmail = extractBareEmail(email.fromAddress)
       const compliance = checkEmailCompliance({

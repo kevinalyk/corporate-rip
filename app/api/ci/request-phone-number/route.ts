@@ -106,8 +106,8 @@ export async function POST(request: NextRequest) {
     `
 
     const formData = new FormData()
-    formData.append("from", `RIP Tool <hello@${mailgunDomain}>`)
-    formData.append("to", "ryanlyk@gmail.com,kevin@rip-tool.com")
+    formData.append("from", `brandinbox.ai <hello@${mailgunDomain}>`)
+    formData.append("to", "ryanlyk@gmail.com,kevin@brandinbox.ai")
     formData.append("subject", `Phone Number Request: ${clientName} wants ${quantity} number${quantity > 1 ? "s" : ""}`)
     formData.append("html", html)
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 
-const CONSENT_STORAGE_KEY = "rip-cookie-consent"
+const CONSENT_STORAGE_KEY = "brandinbox-cookie-consent"
 
 export function CookieConsentBanner() {
   const [visible, setVisible] = useState(false)
@@ -40,7 +40,7 @@ export function CookieConsentBanner() {
     >
       <div className="mx-auto max-w-5xl px-4 py-4 sm:px-6 flex flex-col sm:flex-row sm:items-center gap-4">
         <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-          We use cookies to operate this site and to support advertising. By continuing to use RIP Tool, you agree to
+          We use cookies to operate this site and to support advertising. By continuing to use brandinbox.ai, you agree to
           our use of cookies as described in our{" "}
           <a href="/privacy" className="underline underline-offset-4 hover:text-foreground transition-colors">
             Privacy Policy

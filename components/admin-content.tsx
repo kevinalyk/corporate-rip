@@ -2060,7 +2060,7 @@ const downloadActBluePatterns = () => {
         <CardHeader>
           <CardTitle>Competitive Insights Detection</CardTitle>
           <CardDescription>
-            Scan RIP-locked seed emails to detect competitor campaigns and build competitive intelligence
+            Scan brandinbox.ai-locked seed emails to detect competitor campaigns and build competitive intelligence
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -2103,7 +2103,7 @@ const downloadActBluePatterns = () => {
             Trigger Following Digest
           </CardTitle>
           <CardDescription>
-            Manually send the daily following digest to all RIP users (or override the recipient for testing).
+            Manually send the daily following digest to all brandinbox.ai users (or override the recipient for testing).
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -2165,7 +2165,7 @@ const downloadActBluePatterns = () => {
             Trigger Weekly Top 10 Digest
           </CardTitle>
           <CardDescription>
-            Manually send the weekly top-10 digest to all RIP users (or override the recipient for testing). Ranks by view count, ties broken alphabetically.
+            Manually send the weekly top-10 digest to all brandinbox.ai users (or override the recipient for testing). Ranks by view count, ties broken alphabetically.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -3107,7 +3107,7 @@ const downloadActBluePatterns = () => {
         <CardContent className="space-y-4">
           <div className="flex gap-2">
             <Input
-              placeholder="Enter campaign/SMS ID or share link (e.g., https://app.rip-tool.com/share/abc123)"
+              placeholder="Enter campaign/SMS ID or share link (e.g., https://brandinbox.ai/share/abc123)"
               value={unwrapCampaignId}
               onChange={(e) => setUnwrapCampaignId(e.target.value)}
               disabled={isUnwrappingSingle}

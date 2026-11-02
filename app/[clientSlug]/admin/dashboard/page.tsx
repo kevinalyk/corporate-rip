@@ -67,7 +67,7 @@ export default function AdminDashboardPage() {
       <div className="container mx-auto py-8 px-4">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-sm text-muted-foreground">RIP-wide insights. More cards coming soon.</p>
+          <p className="text-sm text-muted-foreground">Platform-wide insights. More cards coming soon.</p>
         </div>
 
         <div className="grid gap-6">

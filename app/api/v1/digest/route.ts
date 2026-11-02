@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
       {
         id: article.id,
         slug: article.slug,
-        url: `https://app.rip-tool.com/digest/${article.slug}`,
+        url: `https://brandinbox.ai/digest/${article.slug}`,
         publishedAt: article.publishedAt,
       },
       { status: 201 },

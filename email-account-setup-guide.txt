@@ -1,6 +1,6 @@
 # SEED LIST EMAIL ACCOUNT SETUP GUIDE
 
-This guide provides detailed instructions for creating and configuring email accounts across Gmail, Yahoo, Outlook, and AOL for use in the RIP Email Testing System.
+This guide provides detailed instructions for creating and configuring email accounts across Gmail, Yahoo, Outlook, and AOL for use in the brandinbox.ai Email Testing System.
 
 ## GENERAL RECOMMENDATIONS
 
@@ -28,7 +28,7 @@ This guide provides detailed instructions for creating and configuring email acc
 ### Creation Process:
 1. Go to https://accounts.google.com/signup
 2. Click "Create account" and select "For myself"
-3. Enter first name, last name (use consistent naming like "RIP Test")
+3. Enter first name, last name (use consistent naming like "brandinbox.ai Test")
 4. Choose username (follow your naming convention + number)
 5. Create password (document this)
 6. Enter recovery phone number (optional but recommended)
@@ -54,7 +54,7 @@ This guide provides detailed instructions for creating and configuring email acc
 4. If you need to enable it, also generate an App Password:
    a. After enabling 2-Step Verification, go back to the Security page
    b. Click on "App passwords"
-   c. Select "Mail" and "Other" (Custom name: "RIP Testing")
+   c. Select "Mail" and "Other" (Custom name: "brandinbox.ai Testing")
    d. Copy and document the generated password
 
 ### Additional Settings:
@@ -103,7 +103,7 @@ This guide provides detailed instructions for creating and configuring email acc
 3. If enabled, generate app password:
    a. In Account security, find "Generate app password"
    b. Select "Other app"
-   c. Name it "RIP Testing"
+   c. Name it "brandinbox.ai Testing"
    d. Copy and document the password
 
 ### Additional Settings:
@@ -144,7 +144,7 @@ This guide provides detailed instructions for creating and configuring email acc
 3. For testing accounts, it's recommended to leave this OFF
 4. If you need to enable it, also create an app password:
    a. After enabling two-step verification, go to "App passwords"
-   b. Create a new app password named "RIP Testing"
+   b. Create a new app password named "brandinbox.ai Testing"
    c. Copy and document the password
 
 ### Additional Settings:
@@ -188,7 +188,7 @@ This guide provides detailed instructions for creating and configuring email acc
 4. If enabled, generate app password:
    a. In Account security, find "Generate app password"
    b. Select "Other app"
-   c. Name it "RIP Testing"
+   c. Name it "brandinbox.ai Testing"
    d. Copy and document the password
 
 ### Additional Settings:

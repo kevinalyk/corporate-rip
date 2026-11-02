@@ -745,9 +745,9 @@ const FAQS: { question: string; answer: React.ReactNode }[] = [
     ),
   },
   {
-    question: "What is Inbox.GOP?",
+    question: "What is brandinbox.ai?",
     answer:
-      "Inbox.GOP is the Republican Inboxing Protocol — a platform that tracks political messaging and helps both campaigns reach supporters effectively and citizens understand who is contacting them.",
+      "brandinbox.ai is the brandinbox.ai — a platform that tracks political messaging and helps both campaigns reach supporters effectively and citizens understand who is contacting them.",
   },
 ]
 
@@ -1168,8 +1168,8 @@ export default function LookupClient({ userEmail }: { userEmail: string | null }
         <footer className="bg-white border-t border-gray-200 mt-8 py-5 px-8 flex flex-wrap justify-center gap-6 text-[14px] text-gray-500">
           <span>
             Powered by{" "}
-            <a href="https://inbox.gop" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800 transition-colors">
-              Inbox.GOP
+            <a href="https://brandinbox.ai" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800 transition-colors">
+              brandinbox.ai
             </a>
           </span>
           <a href="/terms" className="hover:text-gray-800 transition-colors">Terms of service</a>

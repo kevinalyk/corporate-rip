@@ -89,7 +89,7 @@ export async function POST(request: Request) {
     }
 
     // Generate a unique verification token
-    const verificationToken = `inboxgop-verify=${crypto.randomBytes(16).toString("hex")}`
+    const verificationToken = `brandinbox-verify=${crypto.randomBytes(16).toString("hex")}`
 
     const clientDomain = await prisma.clientDomain.create({
       data: {

@@ -9,8 +9,8 @@ export function InboxComingSoon() {
       <div className="space-y-8 py-12">
         {/* Header */}
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-rip-red/10 rounded-full mb-4">
-            <Wrench size={40} className="text-rip-red" />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-brand-primary/10 rounded-full mb-4">
+            <Wrench size={40} className="text-brand-primary" />
           </div>
           <h1 className="text-4xl font-bold">Inbox Tools Coming Soon</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

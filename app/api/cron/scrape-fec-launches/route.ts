@@ -456,7 +456,7 @@ export async function GET(request: Request) {
           timeZone: "America/New_York",
         }).format(new Date())
 
-        const APP_URL = "https://app.rip-tool.com"
+        const APP_URL = "https://brandinbox.ai"
 
         for (const [, subs] of subsByUser) {
           const user = subs[0].user
@@ -638,7 +638,7 @@ async function attemptFindBallotpediaUrl(
   try {
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; RIPTool/1.0; +https://app.rip-tool.com)",
+        "User-Agent": "Mozilla/5.0 (compatible; brandinbox/1.0; +https://brandinbox.ai)",
         Accept: "text/html",
       },
     })

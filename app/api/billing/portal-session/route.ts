@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
     // Create Stripe Customer Portal session
     const isDevelopment = process.env.NODE_ENV === "development"
-    const baseUrl = isDevelopment ? "http://localhost:3000" : "https://app.rip-tool.com"
+    const baseUrl = isDevelopment ? "http://localhost:3000" : "https://brandinbox.ai"
     const returnUrl = `${baseUrl}/${client.slug}?tab=billing`
 
     const portalSession = await stripe.billingPortal.sessions.create({

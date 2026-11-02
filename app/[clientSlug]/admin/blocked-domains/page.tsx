@@ -184,7 +184,7 @@ export default function BlockedDomainsPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-rip-red" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
       </div>
     )
   }
@@ -206,7 +206,7 @@ export default function BlockedDomainsPage() {
             </div>
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-rip-red hover:bg-rip-red/90 text-white">
+                <Button className="bg-brand-primary hover:bg-brand-primary/90 text-white">
                   <Plus size={16} className="mr-2" />
                   Block Domain
                 </Button>
@@ -243,7 +243,7 @@ export default function BlockedDomainsPage() {
                   <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
                     Cancel
                   </Button>
-                  <Button onClick={handleAddDomain} className="bg-rip-red hover:bg-rip-red/90 text-white">
+                  <Button onClick={handleAddDomain} className="bg-brand-primary hover:bg-brand-primary/90 text-white">
                     Block Domain
                   </Button>
                 </DialogFooter>
@@ -266,7 +266,7 @@ export default function BlockedDomainsPage() {
                   <TableRow>
                     <TableCell colSpan={4} className="text-center py-12">
                       <div className="flex justify-center">
-                        <Loader2 size={24} className="animate-spin text-rip-red" />
+                        <Loader2 size={24} className="animate-spin text-brand-primary" />
                       </div>
                     </TableCell>
                   </TableRow>

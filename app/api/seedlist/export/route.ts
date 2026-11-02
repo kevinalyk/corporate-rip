@@ -42,7 +42,7 @@ export async function GET(request: Request) {
     return new NextResponse(fileBuffer, {
       headers: {
         "Content-Type": "text/csv",
-        "Content-Disposition": `attachment; filename="rip-seed-emails-${new Date().toISOString().split("T")[0]}.csv"`,
+        "Content-Disposition": `attachment; filename="seed-emails-${new Date().toISOString().split("T")[0]}.csv"`,
       },
     })
   } catch (error) {

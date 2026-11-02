@@ -3,10 +3,10 @@ import Script from "next/script"
 import { getLookupSession } from "@/lib/lookup-auth"
 import LookupClient from "./lookup-client"
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 export const metadata: Metadata = {
-  title: "Who's Contacting Me? | Identify Political Texts & Emails | RIP Tool",
+  title: "Who's Contacting Me? | Identify Political Texts & Emails | brandinbox.ai",
   description:
     "Getting unwanted political texts or emails? Look up any phone number or email address to instantly identify which political campaign, PAC, or advocacy group is contacting you. Free political spam lookup tool.",
   keywords: [
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     description:
       "Look up any phone number or email address to find out which political campaign, PAC, or advocacy group is sending you texts and emails. Free political spam lookup.",
     url: `${APP_URL}/lookup`,
-    siteName: "RIP Tool",
+    siteName: "brandinbox.ai",
     type: "website",
   },
   twitter: {
@@ -63,8 +63,8 @@ const jsonLd = {
   },
   publisher: {
     "@type": "Organization",
-    name: "RIP Tool",
-    url: "https://rip-tool.com",
+    name: "brandinbox.ai",
+    url: "https://brandinbox.ai",
   },
   potentialAction: {
     "@type": "SearchAction",

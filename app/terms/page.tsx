@@ -1,24 +1,24 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Terms of Service - Inbox.GOP",
+  title: "Terms of Service - brandinbox.ai",
   description:
-    "Terms of Service for RIP Tool (Republican Inboxing Protocol). Read the terms governing your access to and use of rip-tool.com.",
+    "Terms of Service for brandinbox.ai (brandinbox.ai). Read the terms governing your access to and use of brandinbox.ai.",
 }
 
 export default function TermsPage() {
   return (
     <main className="min-h-screen bg-white text-gray-900">
       <div className="max-w-3xl mx-auto px-6 py-16">
-        <h1 className="text-3xl font-bold mb-2">RIP Tool Terms of Service</h1>
+        <h1 className="text-3xl font-bold mb-2">brandinbox.ai Terms of Service</h1>
         <p className="text-sm text-gray-500 mb-10">
           Effective Date: October 15, 2025 &nbsp;&mdash;&nbsp; Last Updated: October 15, 2025
         </p>
 
         <p className="mb-8 text-gray-700 leading-relaxed">
-          These Terms of Service (&ldquo;Terms&rdquo;) govern your access to and use of the website at rip-tool.com
+          These Terms of Service (&ldquo;Terms&rdquo;) govern your access to and use of the website at brandinbox.ai
           (&ldquo;Site&rdquo;) and any related tools, services, or products (collectively, the &ldquo;Service&rdquo;)
-          provided by Republican Inboxing Protocol LLC (&ldquo;we,&rdquo; &ldquo;us,&rdquo; &ldquo;our&rdquo;). By
+          provided by brandinbox.ai LLC (&ldquo;we,&rdquo; &ldquo;us,&rdquo; &ldquo;our&rdquo;). By
           accessing or using the Service, you agree to be bound by these Terms and to comply with all applicable laws
           and regulations. If you do not agree, do not use the Service.
         </p>
@@ -65,7 +65,7 @@ export default function TermsPage() {
           <h2 className="text-xl font-semibold mb-3">2. Intellectual Property</h2>
           <p className="text-gray-700 leading-relaxed mb-3">
             The Service, all content, software, functions, materials, and associated intellectual property are owned by
-            or licensed to Republican Inboxing Protocol LLC, and are protected under applicable copyright, trademark,
+            or licensed to brandinbox.ai LLC, and are protected under applicable copyright, trademark,
             patent, trade secret, and other laws.
           </p>
           <p className="text-gray-700 leading-relaxed mb-3">
@@ -85,7 +85,7 @@ export default function TermsPage() {
             Service (&ldquo;User Content&rdquo;), you retain all intellectual property rights in that content.
           </p>
           <p className="text-gray-700 leading-relaxed mb-3">
-            By doing so, you grant Republican Inboxing Protocol LLC a non-exclusive, royalty-free, worldwide,
+            By doing so, you grant brandinbox.ai LLC a non-exclusive, royalty-free, worldwide,
             transferable, sub-licensable license to use, reproduce, distribute, publicly display, prepare derivative
             works of, and perform that content, in connection with the Service (and its marketing/promotional
             activities), subject to your privacy settings and this policy.
@@ -107,7 +107,7 @@ export default function TermsPage() {
             warranties of any kind, express or implied.
           </p>
           <p className="text-gray-700 leading-relaxed mb-3">
-            To the maximum extent permitted by law, Republican Inboxing Protocol LLC disclaims all warranties,
+            To the maximum extent permitted by law, brandinbox.ai LLC disclaims all warranties,
             including implied warranties of merchantability, fitness for a particular purpose, non-infringement, and
             any warranties arising from course of dealing or usage.
           </p>
@@ -124,7 +124,7 @@ export default function TermsPage() {
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-3">5. Limitation of Liability</h2>
           <p className="text-gray-700 leading-relaxed mb-3">
-            To the fullest extent permitted by law, Republican Inboxing Protocol LLC, its officers, employees, agents,
+            To the fullest extent permitted by law, brandinbox.ai LLC, its officers, employees, agents,
             and affiliates will not be liable for any indirect, incidental, special, consequential, or punitive damages
             (including lost profits, lost business, loss of data, or loss of goodwill) arising out of or related to
             your use, inability to use, or performance of the Service, even if we have been advised of the possibility
@@ -218,11 +218,11 @@ export default function TermsPage() {
             For questions, concerns, or notices related to these Terms, please contact us at:
           </p>
           <address className="not-italic mt-3 text-gray-700 leading-relaxed">
-            <strong>Republican Inboxing Protocol LLC</strong>
+            <strong>brandinbox.ai LLC</strong>
             <br />
             Email:{" "}
-            <a href="mailto:legal@rip-tool.com" className="text-blue-600 underline">
-              legal@rip-tool.com
+            <a href="mailto:legal@brandinbox.ai" className="text-blue-600 underline">
+              legal@brandinbox.ai
             </a>
             <br />
             Address: 1209 Mountain Road Place Northeast, STE R, Albuquerque, New Mexico 87110
@@ -230,7 +230,7 @@ export default function TermsPage() {
         </section>
 
         <footer className="border-t pt-6 text-sm text-gray-500">
-          &copy; 2025 Republican Inboxing Protocol LLC. All rights reserved.
+          &copy; 2025 brandinbox.ai LLC. All rights reserved.
         </footer>
       </div>
     </main>

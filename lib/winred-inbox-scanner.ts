@@ -5,7 +5,7 @@ import { simpleParser } from "mailparser"
 import { getServerSettings } from "@/lib/email-connection"
 import { fetchOutlookEmails, shouldUseGraphAPI } from "@/lib/microsoft-graph"
 
-// The 3 internal RIP test seed inboxes used to check how WinRed-related mail lands.
+// The 3 internal brandinbox.ai test seed inboxes used to check how WinRed-related mail lands.
 // This is unrelated to the actual WinRed platform.
 export const WINRED_TEST_EMAILS = [
   "redjohnson2025@outlook.com",

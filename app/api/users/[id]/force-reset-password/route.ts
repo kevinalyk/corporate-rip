@@ -68,13 +68,13 @@ async function sendPasswordResetNotification(email: string, userName: string, te
     return false
   }
 
-  const baseUrl = process.env.NODE_ENV === "production" ? "https://app.rip-tool.com" : "http://localhost:3000"
+  const baseUrl = process.env.NODE_ENV === "production" ? "https://brandinbox.ai" : "http://localhost:3000"
   const loginUrl = `${baseUrl}/login`
 
   const formData = new FormData()
-  formData.append("from", `RIP Tool <hello@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai <hello@${MAILGUN_DOMAIN}>`)
   formData.append("to", email)
-  formData.append("subject", "Your Password Has Been Reset - RIP Tool")
+  formData.append("subject", "Your Password Has Been Reset - brandinbox.ai")
   formData.append(
     "html",
     `
@@ -91,7 +91,7 @@ async function sendPasswordResetNotification(email: string, userName: string, te
             Hi ${userName},
           </p>
           <p style="margin: 0 0 20px 0; font-size: 16px;">
-            An administrator has reset your password for your RIP Tool account.
+            An administrator has reset your password for your brandinbox.ai account.
           </p>
           <div style="background-color: #fff; border-radius: 6px; padding: 20px; margin: 20px 0; border: 2px solid #dc2626;">
             <p style="margin: 0 0 10px 0; font-size: 14px; color: #666; font-weight: 600;">YOUR TEMPORARY PASSWORD:</p>
@@ -112,7 +112,7 @@ async function sendPasswordResetNotification(email: string, userName: string, te
           </p>
         </div>
         <div style="text-align: center; font-size: 12px; color: #999; margin-top: 20px;">
-          <p>Inbox.GOP</p>
+          <p>brandinbox.ai</p>
           <p>Login URL: ${loginUrl}</p>
         </div>
       </body>
@@ -126,7 +126,7 @@ Your Password Was Reset
 
 Hi ${userName},
 
-An administrator has reset your password for your RIP Tool account.
+An administrator has reset your password for your brandinbox.ai account.
 
 YOUR TEMPORARY PASSWORD: ${tempPassword}
 
@@ -137,7 +137,7 @@ Log in here: ${loginUrl}
 If you did not request this password reset, please contact your administrator immediately.
 
 ---
-Inbox.GOP
+brandinbox.ai
   `,
   )
 

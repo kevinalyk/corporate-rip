@@ -9,7 +9,7 @@ const MAILGUN_DOMAIN = process.env.MAILGUN_DOMAIN
  * POST /api/admin/send-test-seed-email
  *
  * Picks a random real CI campaign with HTML/text content and sends it to the
- * specified seed email address from digest@rip-tool.com, preserving the
+ * specified seed email address from digest@brandinbox.ai, preserving the
  * original sender name, subject, and body so it looks like a real send.
  *
  * Body: { seedEmailId: string }
@@ -100,7 +100,7 @@ ${campaign.emailContent}`
       ? `[Domain Health Test Send — sampled from: ${campaign.senderEmail}]\n\n${campaign.emailPreview}`
       : `[Domain Health Test Send — no body content available for campaign ${campaign.id}]`
 
-    // Send via Mailgun from digest@rip-tool.com
+    // Send via Mailgun from digest@brandinbox.ai
     const form = new FormData()
     form.append("from", `${campaign.senderName} <digest@${MAILGUN_DOMAIN}>`)
     form.append("to", seed.email)

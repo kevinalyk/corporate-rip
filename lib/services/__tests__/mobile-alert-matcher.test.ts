@@ -36,7 +36,7 @@ test("announcement pushes deep-link to the native What's New article", () => {
     {
       to: "ExponentPushToken[test-token]",
       sound: "default",
-      title: "What’s New in Inbox.GOP",
+      title: "What’s New in brandinbox.ai",
       body: "Mobile security update",
       data: { announcementSlug: "mobile-security-update" },
     },

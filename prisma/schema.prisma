@@ -1275,7 +1275,7 @@ model SpamTest {
   id            String    @id @default(uuid())
   clientId      String
   clientSlug    String
-  testAddress   String    @unique // e.g. test-abc123@mg.rip-tool.com
+  testAddress   String    @unique // e.g. test-abc123@mg.brandinbox.ai
   status        String    @default("pending") // "pending" | "received" | "expired"
   expiresAt     DateTime
   receivedAt    DateTime?

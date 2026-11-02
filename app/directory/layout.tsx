@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
 
-const TITLE = "Directory - Inbox.GOP"
+const TITLE = "Directory - brandinbox.ai"
 const DESCRIPTION =
-  "Search and explore political candidates, PACs, and organizations tracked by the Republican Inboxing Protocol. Browse campaign emails, fundraising texts, and political messaging across the United States."
+  "Search and explore political candidates, PACs, and organizations tracked by the brandinbox.ai. Browse campaign emails, fundraising texts, and political messaging across the United States."
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -10,9 +10,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    siteName: "Inbox.GOP",
+    siteName: "brandinbox.ai",
     type: "website",
-    url: "https://app.rip-tool.com/directory",
+    url: "https://brandinbox.ai/directory",
     images: [
       {
         url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-NfWjmrBARpThJtdxGKQnSXfC9a1fps.png",

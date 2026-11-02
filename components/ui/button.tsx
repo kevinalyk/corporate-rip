@@ -9,15 +9,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-r from-rip-red to-rip-blue text-primary-foreground hover:opacity-90",
+        default: "bg-gradient-to-r from-brand-primary to-brand-secondary text-primary-foreground hover:opacity-90",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground hover:border-rip-red/30 dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground hover:border-brand-primary/30 dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-rip-red underline-offset-4 hover:underline hover:text-rip-red/80",
-        branded: "bg-rip-red text-white hover:bg-rip-red/90 focus-visible:ring-rip-red/20",
+        link: "text-brand-primary underline-offset-4 hover:underline hover:text-brand-primary/80",
+        branded: "bg-brand-primary text-white hover:bg-brand-primary/90 focus-visible:ring-brand-primary/20",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

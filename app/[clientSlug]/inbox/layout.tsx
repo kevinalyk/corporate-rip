@@ -51,7 +51,7 @@ export default function InboxLayout({ children }: { children: React.ReactNode })
     return (
       <div className="container mx-auto p-6 flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <Loader2 size={32} className="animate-spin mx-auto mb-4 text-rip-red" />
+          <Loader2 size={32} className="animate-spin mx-auto mb-4 text-brand-primary" />
           <p>Loading...</p>
         </div>
       </div>

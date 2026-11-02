@@ -45,7 +45,7 @@ export default function LookupLoginPage() {
       {/* Header */}
       <div className="mb-8 flex flex-col items-center gap-3">
         <div className="flex items-center gap-2">
-          <div className="bg-rip-red rounded-lg p-2">
+          <div className="bg-brand-primary rounded-lg p-2">
             <Search className="w-5 h-5 text-white" />
           </div>
           <span className="text-white font-semibold text-lg leading-tight">
@@ -81,7 +81,7 @@ export default function LookupLoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="bg-[#0f0d24] border border-[#2f2b6b] rounded-lg px-4 py-2.5 text-white placeholder-[#6b6a94] text-sm focus:outline-none focus:border-rip-red focus:ring-1 focus:ring-rip-red transition-colors"
+              className="bg-[#0f0d24] border border-[#2f2b6b] rounded-lg px-4 py-2.5 text-white placeholder-[#6b6a94] text-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-colors"
             />
           </div>
 
@@ -98,7 +98,7 @@ export default function LookupLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-[#0f0d24] border border-[#2f2b6b] rounded-lg px-4 py-2.5 pr-10 text-white placeholder-[#6b6a94] text-sm focus:outline-none focus:border-rip-red focus:ring-1 focus:ring-rip-red transition-colors"
+                className="w-full bg-[#0f0d24] border border-[#2f2b6b] rounded-lg px-4 py-2.5 pr-10 text-white placeholder-[#6b6a94] text-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-colors"
               />
               <button
                 type="button"
@@ -114,7 +114,7 @@ export default function LookupLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 bg-rip-red hover:bg-rip-red/90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg py-2.5 text-sm transition-colors"
+            className="mt-2 bg-brand-primary hover:bg-brand-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg py-2.5 text-sm transition-colors"
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>
@@ -122,7 +122,7 @@ export default function LookupLoginPage() {
 
         <p className="mt-6 text-center text-[#a5a3c9] text-sm">
           Don&apos;t have an account?{" "}
-          <Link href="/lookup/signup" className="text-rip-red hover:text-rip-red/90 font-medium transition-colors">
+          <Link href="/lookup/signup" className="text-brand-primary hover:text-brand-primary/90 font-medium transition-colors">
             Create one free
           </Link>
         </p>
@@ -131,12 +131,12 @@ export default function LookupLoginPage() {
       <p className="mt-8 text-[#6b6a94] text-xs text-center">
         A free tool powered by{" "}
         <a
-          href="https://app.rip-tool.com"
+          href="https://brandinbox.ai"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-[#a5a3c9] transition-colors"
         >
-          RIP Tool
+          brandinbox.ai
         </a>
       </p>
     </div>

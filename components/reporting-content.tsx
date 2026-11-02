@@ -206,7 +206,7 @@ export function ReportingContent({ isAdminView, clientSlug }: ReportingContentPr
   if (loading || loadingSubscription) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-rip-red" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
       </div>
     )
   }

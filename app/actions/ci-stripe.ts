@@ -58,7 +58,7 @@ export async function createCICheckoutSession(data: {
       })
 
       const isDevelopment = process.env.NODE_ENV === "development"
-      const baseUrl = isDevelopment ? "http://localhost:3000" : "https://app.rip-tool.com"
+      const baseUrl = isDevelopment ? "http://localhost:3000" : "https://brandinbox.ai"
       return {
         url: `${baseUrl}/${data.clientSlug}/ci/campaigns?cancellation=scheduled`,
       }
@@ -70,7 +70,7 @@ export async function createCICheckoutSession(data: {
 
     if (data.plan === "enterprise") {
       return {
-        url: `mailto:support@rip-tool.com?subject=Enterprise Plan Inquiry&body=I'm interested in the Enterprise plan for ${client.name}`,
+        url: `mailto:support@brandinbox.ai?subject=Enterprise Plan Inquiry&body=I'm interested in the Enterprise plan for ${client.name}`,
       }
     }
 
@@ -124,7 +124,7 @@ export async function createCICheckoutSession(data: {
         })
 
         const isDevelopment = process.env.NODE_ENV === "development"
-        const baseUrl = isDevelopment ? "http://localhost:3000" : "https://app.rip-tool.com"
+        const baseUrl = isDevelopment ? "http://localhost:3000" : "https://brandinbox.ai"
         return {
           url: `${baseUrl}/${data.clientSlug}/account/billing?downgrade=scheduled`,
         }
@@ -175,7 +175,7 @@ export async function createCICheckoutSession(data: {
         })
 
         const isDevelopment = process.env.NODE_ENV === "development"
-        const baseUrl = isDevelopment ? "http://localhost:3000" : "https://app.rip-tool.com"
+        const baseUrl = isDevelopment ? "http://localhost:3000" : "https://brandinbox.ai"
         return {
           url: `${baseUrl}/${data.clientSlug}/ci/campaigns?upgrade=success`,
         }
@@ -189,7 +189,7 @@ export async function createCICheckoutSession(data: {
     const planName = PLAN_DISPLAY_NAMES[data.plan] || data.plan
 
     const isDevelopment = process.env.NODE_ENV === "development"
-    const baseUrl = isDevelopment ? "http://localhost:3000" : "https://app.rip-tool.com"
+    const baseUrl = isDevelopment ? "http://localhost:3000" : "https://brandinbox.ai"
     // When called from the public /billing page, clientSlug is empty — fall back to /billing
     const slugPrefix = data.clientSlug ? `/${data.clientSlug}` : ""
     const successUrl = slugPrefix

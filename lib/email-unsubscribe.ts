@@ -2,7 +2,7 @@ import { createHmac, timingSafeEqual } from "node:crypto"
 
 // Confirm this remains the sender's valid postal address before deploying.
 export const EMAIL_POSTAL_ADDRESS =
-  "Republican Inboxing Protocol LLC, 1209 Mountain Road Pl NE, Ste R, Albuquerque, NM 87110"
+  "brandinbox.ai LLC, 1209 Mountain Road Pl NE, Ste R, Albuquerque, NM 87110"
 
 export type EmailUnsubscribeScope =
   | "all"

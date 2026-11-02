@@ -90,7 +90,7 @@ export function ForgotPasswordDialog() {
             </Alert>
             <div className="flex items-center justify-center text-center py-4">
               <div className="space-y-2">
-                <Mail className="h-12 w-12 mx-auto text-rip-blue" />
+                <Mail className="h-12 w-12 mx-auto text-brand-secondary" />
                 <p className="text-sm text-muted-foreground">Check your email for the reset link</p>
               </div>
             </div>

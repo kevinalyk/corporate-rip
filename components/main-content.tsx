@@ -143,7 +143,7 @@ export function MainContent({ collapsed, activeTab, clientSlug, isAdminView = fa
   }, [currentUser?.role])
 
   const handleClientSwitch = (client: { id: string; name: string; slug: string | null }) => {
-    // Special case: RIP client goes to /rip
+    // Special case: brandinbox.ai client goes to /rip
     if (client.id === "RIP" || client.slug === "rip") {
       router.push("/rip/ci/campaigns")
     } else if (client.slug) {
@@ -170,16 +170,16 @@ export function MainContent({ collapsed, activeTab, clientSlug, isAdminView = fa
                 ) : (
                   <>
                     <Users size={16} />
-                    {isAdminView ? "RIP" : clients.find((c) => c.slug === clientSlug)?.name || "Switch Client"}
+                    {isAdminView ? "brandinbox.ai" : clients.find((c) => c.slug === clientSlug)?.name || "Switch Client"}
                     <ChevronDown size={16} />
                   </>
                 )}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              {/* RIP option to go back to admin */}
+              {/* brandinbox.ai option to go back to admin */}
               <DropdownMenuItem onClick={() => router.push("/rip/ci/campaigns")} className="flex items-center justify-between">
-                <span>RIP (Admin)</span>
+                <span>brandinbox.ai (Admin)</span>
                 {isAdminView && <Check size={16} />}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -340,7 +340,7 @@ function BlockedDomainsContent() {
         </div>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-rip-red hover:bg-rip-red/90 text-white">
+            <Button className="bg-brand-primary hover:bg-brand-primary/90 text-white">
               <Plus size={16} className="mr-2" />
               Block Domain
             </Button>
@@ -377,7 +377,7 @@ function BlockedDomainsContent() {
               <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleAddDomain} className="bg-rip-red hover:bg-rip-red/90 text-white">
+              <Button onClick={handleAddDomain} className="bg-brand-primary hover:bg-brand-primary/90 text-white">
                 Block Domain
               </Button>
             </DialogFooter>
@@ -400,7 +400,7 @@ function BlockedDomainsContent() {
               <TableRow>
                 <TableCell colSpan={4} className="text-center py-12">
                   <div className="flex justify-center">
-                    <Loader2 size={24} className="animate-spin text-rip-red" />
+                    <Loader2 size={24} className="animate-spin text-brand-primary" />
                   </div>
                 </TableCell>
               </TableRow>
@@ -527,7 +527,7 @@ function SeedListContent({
       // Trigger download using the Blob URL
       const link = document.createElement("a")
       link.href = data.url
-      link.download = "RIP-Seed-Email-Setup-Guide.txt"
+      link.download = "Seed-Email-Setup-Guide.txt"
       link.target = "_blank"
       document.body.appendChild(link)
       link.click()
@@ -1316,7 +1316,7 @@ function SeedListContent({
           <Button
             variant="default"
             size="sm"
-            className="flex items-center gap-2 bg-rip-red hover:bg-rip-red/90 text-white"
+            className="flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white"
             onClick={exportToCSV}
             disabled={seedEmails.length === 0}
           >
@@ -1362,7 +1362,7 @@ function SeedListContent({
               <TableRow>
                 <TableCell colSpan={isAdminView ? 6 : 5} className="text-center py-12">
                   <div className="flex justify-center">
-                    <Loader2 size={24} className="animate-spin text-rip-red" />
+                    <Loader2 size={24} className="animate-spin text-brand-primary" />
                   </div>
                 </TableCell>
               </TableRow>
@@ -1429,7 +1429,7 @@ function SeedListContent({
                             {/* Locked icon */}
                             <Lock
                               size={16}
-                              className={`absolute inset-0 text-rip-red transition-all duration-400 ${
+                              className={`absolute inset-0 text-brand-primary transition-all duration-400 ${
                                 email.locked
                                   ? animatingLockId === email.id
                                     ? "opacity-100 rotate-0 scale-100"
@@ -1632,7 +1632,7 @@ function SeedListContent({
             {testingConnection ? (
               <div className="flex items-center justify-center py-8">
                 <div className="text-center">
-                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-rip-red" />
+                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-brand-primary" />
                   <p>Testing connection...</p>
                 </div>
               </div>
@@ -1686,7 +1686,7 @@ function SeedListContent({
             {debuggingId ? (
               <div className="flex items-center justify-center py-8">
                 <div className="text-center">
-                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-rip-red" />
+                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-brand-primary" />
                   <p>Running debug tests...</p>
                 </div>
               </div>
@@ -1745,7 +1745,7 @@ function SeedListContent({
             {debuggingBoxesId ? (
               <div className="flex items-center justify-center py-8">
                 <div className="text-center">
-                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-rip-red" />
+                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-brand-primary" />
                   <p>Loading email folders...</p>
                 </div>
               </div>
@@ -2057,7 +2057,7 @@ function UsersContent({ clientSlug, currentUser }: { clientSlug?: string; curren
               <Button
                 variant="default"
                 size="sm"
-                className="flex items-center gap-2 bg-rip-red hover:bg-rip-red/90 text-white"
+                className="flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white"
               >
                 <UserPlus size={16} />
                 <span className="hidden sm:inline">Add User</span>
@@ -2123,7 +2123,7 @@ function UsersContent({ clientSlug, currentUser }: { clientSlug?: string; curren
                   Cancel
                 </Button>
                 <Button
-                  className="bg-rip-red hover:bg-rip-red/90 text-white"
+                  className="bg-brand-primary hover:bg-brand-primary/90 text-white"
                   onClick={handleAddUser}
                   disabled={addingUser}
                 >
@@ -2175,7 +2175,7 @@ function UsersContent({ clientSlug, currentUser }: { clientSlug?: string; curren
               <TableRow>
                 <TableCell colSpan={5} className="text-center py-12">
                   <div className="flex justify-center">
-                    <Loader2 size={24} className="animate-spin text-rip-red" />
+                    <Loader2 size={24} className="animate-spin text-brand-primary" />
                   </div>
                 </TableCell>
               </TableRow>
@@ -2191,7 +2191,7 @@ function UsersContent({ clientSlug, currentUser }: { clientSlug?: string; curren
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="h-8 w-8">
-                        <AvatarFallback className="bg-rip-red/10 text-rip-red text-xs">
+                        <AvatarFallback className="bg-brand-primary/10 text-brand-primary text-xs">
                           {/* Updated AvatarFallback to use new name fields */}
                           {user.firstName?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
                           {user.lastName?.[0]?.toUpperCase() || ""}
@@ -2372,7 +2372,7 @@ function UsersContent({ clientSlug, currentUser }: { clientSlug?: string; curren
               Cancel
             </Button>
             <Button
-              className="bg-rip-red hover:bg-rip-red/90 text-white"
+              className="bg-brand-primary hover:bg-brand-primary/90 text-white"
               onClick={handleUpdateRole}
               disabled={updatingRole}
             >
@@ -2518,7 +2518,7 @@ function SettingsContent() {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
-          <Loader2 size={32} className="animate-spin mx-auto mb-4 text-rip-red" />
+          <Loader2 size={32} className="animate-spin mx-auto mb-4 text-brand-primary" />
           <p>Loading settings...</p>
         </div>
       </div>
@@ -2599,7 +2599,7 @@ function SettingsContent() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="bg-rip-red hover:bg-rip-red/90 text-white" onClick={handleSaveSettings} disabled={saving}>
+          <Button className="bg-brand-primary hover:bg-brand-primary/90 text-white" onClick={handleSaveSettings} disabled={saving}>
             {saving ? (
               <>
                 <Loader2 size={16} className="mr-2 animate-spin" />
@@ -2796,7 +2796,7 @@ function UserSettingsContent() {
             <Button
               onClick={handleResetPassword}
               disabled={resetPasswordLoading}
-              className="bg-rip-red hover:bg-rip-red/90 text-white"
+              className="bg-brand-primary hover:bg-brand-primary/90 text-white"
             >
               {resetPasswordLoading ? (
                 <>
@@ -3110,13 +3110,13 @@ function CampaignsContent({ clientSlug, isAdminView }: { clientSlug?: string; is
                   size="sm"
                   className={cn(
                     "flex items-center gap-2",
-                    filtersActive && "bg-rip-red hover:bg-rip-red/90 text-white",
+                    filtersActive && "bg-brand-primary hover:bg-brand-primary/90 text-white",
                   )}
                 >
                   <Filter size={16} />
                   <span className="hidden sm:inline">Filter</span>
                   {filtersActive && (
-                    <Badge className="ml-1 bg-white text-rip-red">
+                    <Badge className="ml-1 bg-white text-brand-primary">
                       {(dateRange.from || dateRange.to ? 1 : 0) +
                         (deliveryRateRange[0] > 0 || deliveryRateRange[1] < 100 ? 1 : 0)}
                     </Badge>
@@ -3206,7 +3206,7 @@ function CampaignsContent({ clientSlug, isAdminView }: { clientSlug?: string; is
                   </div>
 
                   <Button
-                    className="w-full bg-rip-red hover:bg-rip-red/90 text-white"
+                    className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white"
                     onClick={() => setIsFilterOpen(false)}
                   >
                     Apply Filters
@@ -3220,7 +3220,7 @@ function CampaignsContent({ clientSlug, isAdminView }: { clientSlug?: string; is
                 <Button
                   variant="default"
                   size="sm"
-                  className="flex items-center gap-2 bg-rip-red hover:bg-rip-red/90 text-white"
+                  className="flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white"
                   disabled={selectedDomain?.id === "all"}
                   title={selectedDomain?.id === "all" ? "Select a specific domain to create campaigns" : ""}
                 >
@@ -3270,7 +3270,7 @@ function CampaignsContent({ clientSlug, isAdminView }: { clientSlug?: string; is
                     Cancel
                   </Button>
                   <Button
-                    className="bg-rip-red hover:bg-rip-red/90 text-white"
+                    className="bg-brand-primary hover:bg-brand-primary/90 text-white"
                     onClick={handleCreateCampaign}
                     disabled={creatingCampaign}
                   >
@@ -3363,7 +3363,7 @@ function CampaignsContent({ clientSlug, isAdminView }: { clientSlug?: string; is
               <TableRow>
                 <TableCell colSpan={selectedDomain?.id === "all" ? 7 : 6} className="text-center py-12">
                   <div className="flex justify-center">
-                    <Loader2 size={24} className="animate-spin text-rip-red" />
+                    <Loader2 size={24} className="animate-spin text-brand-primary" />
                   </div>
                 </TableCell>
               </TableRow>
@@ -3471,7 +3471,7 @@ function CampaignsContent({ clientSlug, isAdminView }: { clientSlug?: string; is
             {loadingDetails ? (
               <div className="flex items-center justify-center py-8">
                 <div className="text-center">
-                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-rip-red" />
+                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-brand-primary" />
                   <p>Loading campaign details...</p>
                 </div>
               </div>
@@ -3481,7 +3481,7 @@ function CampaignsContent({ clientSlug, isAdminView }: { clientSlug?: string; is
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Card>
                     <CardContent className="p-4">
-                      <div className="text-2xl font-bold text-rip-red">
+                      <div className="text-2xl font-bold text-brand-primary">
                         {Math.round(campaignDetails.deliveryRate * 100)}%
                       </div>
                       <div className="text-sm text-muted-foreground">Overall Delivery Rate</div>

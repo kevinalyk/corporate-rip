@@ -12,7 +12,7 @@ interface Props {
 
 export default async function DigestOGImage({ params }: Props) {
   let title = "Intelligence Digest"
-  let summary = "Political intelligence and analysis from Inbox.GOP"
+  let summary = "Political intelligence and analysis from brandinbox.ai"
   let imageUrl: string | null = null
 
   try {
@@ -99,7 +99,7 @@ export default async function DigestOGImage({ params }: Props) {
                   letterSpacing: "-0.5px",
                 }}
               >
-                Inbox.GOP
+                brandinbox.ai
               </span>
               <span style={{ color: "#555", fontSize: "18px" }}>·</span>
               <span
@@ -179,7 +179,7 @@ export default async function DigestOGImage({ params }: Props) {
               letterSpacing: "0.5px",
             }}
           >
-            app.rip-tool.com/digest
+            brandinbox.ai/digest
           </div>
         </div>
 

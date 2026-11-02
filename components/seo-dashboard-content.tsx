@@ -96,7 +96,7 @@ export function SeoDashboardContent() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-2">
-          <TrendingUp size={20} className="text-rip-red" />
+          <TrendingUp size={20} className="text-brand-primary" />
           <h1 className="text-2xl font-bold text-foreground">SEO Dashboard</h1>
         </div>
         <div className="flex items-center gap-3">
@@ -135,7 +135,7 @@ export function SeoDashboardContent() {
           <button
             onClick={handleRunIndexing}
             disabled={indexing}
-            className="flex items-center gap-1.5 text-sm px-4 py-1.5 rounded-md bg-rip-red text-white hover:bg-[#b82220] transition-colors disabled:opacity-60"
+            className="flex items-center gap-1.5 text-sm px-4 py-1.5 rounded-md bg-brand-primary text-white hover:bg-[#b82220] transition-colors disabled:opacity-60"
           >
             {indexing ? <RefreshCw size={14} className="animate-spin" /> : <Search size={14} />}
             {indexing ? "Running…" : "Run Now"}
@@ -145,7 +145,7 @@ export function SeoDashboardContent() {
 
       {isLoading && (
         <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-rip-red" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary" />
         </div>
       )}
 
@@ -209,7 +209,7 @@ export function SeoDashboardContent() {
                         <TableRow
                           key={i}
                           cols={[
-                            p.page.replace("https://app.rip-tool.com", ""),
+                            p.page.replace("https://brandinbox.ai", ""),
                             p.clicks.toLocaleString(),
                             p.impressions.toLocaleString(),
                           ]}

@@ -15,7 +15,7 @@ export default function ApiKeysPage() {
   useEffect(() => {
     const checkSuperAdmin = async () => {
       try {
-        // Only allow access for RIP client
+        // Only allow access for brandinbox.ai client
         if (clientSlug !== "rip") {
           router.push(`/${clientSlug}/ci/campaigns`)
           return
@@ -62,7 +62,7 @@ export default function ApiKeysPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">
         <div className="text-red-500 mb-4">{error}</div>
-        <button className="px-4 py-2 bg-rip-red text-white rounded" onClick={() => router.push("/login")}>
+        <button className="px-4 py-2 bg-brand-primary text-white rounded" onClick={() => router.push("/login")}>
           Go to Login
         </button>
       </div>
@@ -72,7 +72,7 @@ export default function ApiKeysPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rip-red"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary"></div>
       </div>
     )
   }

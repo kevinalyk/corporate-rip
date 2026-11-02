@@ -143,7 +143,7 @@ function LoginForm({ successMessage = "", redirectUrl = "" }) {
         )}
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Sign in to your account</CardTitle>
-          <CardDescription>Enter your email and password to access Inbox.GOP</CardDescription>
+          <CardDescription>Enter your email and password to access brandinbox.ai</CardDescription>
         </CardHeader>
         <CardContent>
           {dbStatus === "disconnected" && (
@@ -209,7 +209,7 @@ function LoginForm({ successMessage = "", redirectUrl = "" }) {
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-rip-blue hover:underline">
+            <Link href="/signup" className="text-brand-secondary hover:underline">
               Sign up
             </Link>
           </p>
@@ -239,7 +239,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="min-h-screen min-h-dvh flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rip-red"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary"></div>
         </div>
       }
     >

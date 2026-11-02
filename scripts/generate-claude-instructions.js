@@ -18,7 +18,7 @@ doc
   .fillColor("#ffffff")
   .fontSize(22)
   .font("Helvetica-Bold")
-  .text("Inbox.GOP", 50, 22)
+  .text("brandinbox.ai", 50, 22)
 doc
   .fillColor("rgba(255,255,255,0.85)")
   .fontSize(11)
@@ -71,11 +71,11 @@ function codeBlock(text) {
 // ─── Overview ─────────────────────────────────────────────────────────────────
 sectionTitle("Overview")
 bodyText(
-  "You have access to the Inbox.GOP Intelligence Digest API. After writing a political article, publish it directly to the digest at the endpoint below using a POST request with Bearer token authentication."
+  "You have access to the brandinbox.ai Intelligence Digest API. After writing a political article, publish it directly to the digest at the endpoint below using a POST request with Bearer token authentication."
 )
 doc.moveDown(0.5)
 label("Endpoint")
-codeBlock("POST https://app.rip-tool.com/api/v1/digest")
+codeBlock("POST https://brandinbox.ai/api/v1/digest")
 label("Authentication")
 codeBlock("Authorization: Bearer <DIGEST_API_KEY>")
 label("Content-Type")
@@ -88,7 +88,7 @@ bodyText(
 )
 doc.moveDown(0.3)
 codeBlock(
-  `You have access to the Inbox.GOP Intelligence Digest API. When you write a political article, you can publish it directly to the digest at https://app.rip-tool.com/api/v1/digest using a POST request with Bearer token auth. Always include sources, relevant tags, a short summary, and clean semantic HTML in the body.`
+  `You have access to the brandinbox.ai Intelligence Digest API. When you write a political article, you can publish it directly to the digest at https://brandinbox.ai/api/v1/digest using a POST request with Bearer token auth. Always include sources, relevant tags, a short summary, and clean semantic HTML in the body.`
 )
 
 // ─── Request Body Fields ──────────────────────────────────────────────────────
@@ -135,7 +135,7 @@ bodyText("Provide this JSON as a tool definition in Claude's tool configuration:
 doc.moveDown(0.3)
 codeBlock(`{
   "name": "publish_digest_article",
-  "description": "Publishes a political intelligence article to the Inbox.GOP Intelligence Digest.",
+  "description": "Publishes a political intelligence article to the brandinbox.ai Intelligence Digest.",
   "input_schema": {
     "type": "object",
     "required": ["title", "body", "summary"],
@@ -164,7 +164,7 @@ codeBlock(`{
 
 // ─── Example Request ──────────────────────────────────────────────────────────
 sectionTitle("Example Request")
-codeBlock(`POST https://app.rip-tool.com/api/v1/digest
+codeBlock(`POST https://brandinbox.ai/api/v1/digest
 Authorization: Bearer <DIGEST_API_KEY>
 Content-Type: application/json
 
@@ -184,7 +184,7 @@ sectionTitle("Success Response (201)")
 codeBlock(`{
   "id": "cuid...",
   "slug": "senate-republicans-pass-budget-framework",
-  "url": "https://app.rip-tool.com/digest/senate-republicans-pass-budget-framework"
+  "url": "https://brandinbox.ai/digest/senate-republicans-pass-budget-framework"
 }`)
 
 // ─── Notes ────────────────────────────────────────────────────────────────────
@@ -219,7 +219,7 @@ doc
   .fillColor(GRAY)
   .fontSize(8.5)
   .font("Helvetica")
-  .text("Inbox.GOP — Intelligence Digest API  |  app.rip-tool.com", { align: "center" })
+  .text("brandinbox.ai — Intelligence Digest API  |  brandinbox.ai", { align: "center" })
 
 doc.end()
 console.log("PDF written to:", outputPath)

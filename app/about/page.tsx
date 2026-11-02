@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "About - Inbox.GOP",
+  title: "About - brandinbox.ai",
   description:
-    "RIP Tool is a political intelligence platform built for Republican campaigns, committees, and political organizations. Learn about our competitive intelligence, political email monitoring, and entity directory tools.",
+    "brandinbox.ai is a political intelligence platform built for Republican campaigns, committees, and political organizations. Learn about our competitive intelligence, political email monitoring, and entity directory tools.",
   robots: { index: true, follow: true },
 }
 
@@ -12,10 +12,10 @@ export default function AboutPage() {
     <main className="max-w-3xl mx-auto px-6 py-16 text-foreground">
       <header className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight mb-4">
-          About RIP Tool
+          About brandinbox.ai
         </h1>
         <p className="text-xl text-muted-foreground leading-relaxed">
-          RIP Tool — Republican Inboxing Protocol — is a political intelligence
+          brandinbox.ai — brandinbox.ai — is a political intelligence
           platform built specifically for Republican campaigns, party committees,
           PACs, and political organizations. We help political professionals
           understand what the competition is sending, who is sending it, and
@@ -30,7 +30,7 @@ export default function AboutPage() {
           most important revenue channels for campaigns at every level — from
           local races to presidential campaigns. Staying informed about what
           competing campaigns and organizations are sending to their donors
-          gives political professionals a meaningful strategic edge. RIP Tool
+          gives political professionals a meaningful strategic edge. brandinbox.ai
           was built to make that intelligence accessible, organized, and
           actionable.
         </p>
@@ -70,7 +70,7 @@ export default function AboutPage() {
               Political Entity Directory
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              RIP Tool maintains a comprehensive public directory of over 800
+              brandinbox.ai maintains a comprehensive public directory of over 800
               political entities — including candidates for U.S. Senate, U.S.
               House, governor, and other offices, as well as PACs, party
               committees, nonprofits, and political organizations. Each entity
@@ -80,7 +80,7 @@ export default function AboutPage() {
               biography, and a historical record of emails and text messages
               sent by that entity. The directory is searchable and filterable by
               party, state, and entity type, and is publicly accessible at
-              app.rip-tool.com/directory.
+              brandinbox.ai/directory.
             </p>
           </div>
 
@@ -89,7 +89,7 @@ export default function AboutPage() {
               New Campaigns Directory
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              RIP Tool tracks newly active political campaigns entering the
+              brandinbox.ai tracks newly active political campaigns entering the
               fundraising ecosystem. The New Campaigns page surfaces candidates
               and committees that have recently begun sending political emails
               or SMS messages, giving clients early visibility into emerging
@@ -104,7 +104,7 @@ export default function AboutPage() {
               Personal Email and SMS Monitoring
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              RIP Tool clients can connect their own personal email addresses
+              brandinbox.ai clients can connect their own personal email addresses
               and phone numbers to the platform. The Personal Monitoring feature
               captures every political email and SMS message received by those
               accounts and attributes them to the correct sending entity, giving
@@ -118,11 +118,11 @@ export default function AboutPage() {
               Sender Domain and Short Code Tracking
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              Every entity in the RIP Tool directory is mapped to its known
+              Every entity in the brandinbox.ai directory is mapped to its known
               sending infrastructure — including email sending domains, from
               addresses, SMS short codes, long codes, and donation platform
               identifiers. When a new message arrives from an unrecognized
-              sender, RIP Tool automatically attempts to match it to a known
+              sender, brandinbox.ai automatically attempts to match it to a known
               entity using domain matching, short code matching, and donation
               link analysis. Unmatched messages are surfaced for manual review
               and assignment.
@@ -134,7 +134,7 @@ export default function AboutPage() {
               Compliance and Name Redaction
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              RIP Tool includes built-in compliance tools to help clients manage
+              brandinbox.ai includes built-in compliance tools to help clients manage
               their seed list data responsibly. The platform supports name
               redaction across captured message content, blocked domain
               management to exclude known transactional senders from the
@@ -146,9 +146,9 @@ export default function AboutPage() {
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">Who Uses RIP Tool</h2>
+        <h2 className="text-2xl font-semibold mb-4">Who Uses brandinbox.ai</h2>
         <p className="text-muted-foreground leading-relaxed mb-4">
-          RIP Tool is used by Republican political campaigns, national and state
+          brandinbox.ai is used by Republican political campaigns, national and state
           party committees, PACs, super PACs, political consultants, digital
           fundraising firms, and research organizations. The platform is designed
           for professionals who manage political email and SMS programs and need
@@ -177,12 +177,12 @@ export default function AboutPage() {
           Understanding what competing campaigns are sending — the messaging
           strategies, subject line approaches, call-to-action tactics, and
           sending cadences they use — is increasingly important for campaigns
-          that want to stay competitive. RIP Tool aggregates that activity into
+          that want to stay competitive. brandinbox.ai aggregates that activity into
           a single, searchable, filterable feed updated in real time.
         </p>
         <p className="text-muted-foreground leading-relaxed">
           With over 800 tracked entities spanning federal candidates, state
-          candidates, party committees, PACs, and political organizations, RIP
+          candidates, party committees, PACs, and political organizations, brandinbox.ai
           Tool provides one of the most comprehensive views of Republican
           political communication activity available anywhere.
         </p>
@@ -191,13 +191,13 @@ export default function AboutPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-semibold mb-4">News and Updates</h2>
         <p className="text-muted-foreground leading-relaxed">
-          RIP Tool publishes regular updates on platform changes, new features,
+          brandinbox.ai publishes regular updates on platform changes, new features,
           political email industry trends, and research findings at{" "}
           <a
             href="/news"
             className="underline underline-offset-4 hover:text-foreground transition-colors"
           >
-            app.rip-tool.com/news
+            brandinbox.ai/news
           </a>
           . Articles cover topics including fundraising platform updates,
           compliance changes, and analysis of political email and SMS sending
@@ -208,33 +208,33 @@ export default function AboutPage() {
       <section className="mb-12">
         <h2 className="text-2xl font-semibold mb-4">Access and Availability</h2>
         <p className="text-muted-foreground leading-relaxed mb-4">
-          RIP Tool is available to qualified political campaigns, committees, and
+          brandinbox.ai is available to qualified political campaigns, committees, and
           organizations. The platform operates at{" "}
           <a
-            href="https://app.rip-tool.com"
+            href="https://brandinbox.ai"
             className="underline underline-offset-4 hover:text-foreground transition-colors"
           >
-            app.rip-tool.com
+            brandinbox.ai
           </a>{" "}
           and requires account registration. The political entity directory and
           news section are publicly accessible without registration.
         </p>
         <p className="text-muted-foreground leading-relaxed">
           For information about pricing and access, visit the sign-up page or
-          contact the RIP Tool team directly. The platform is maintained and
-          operated by the Republican Inboxing Protocol team.
+          contact the brandinbox.ai team directly. The platform is maintained and
+          operated by the brandinbox.ai team.
         </p>
       </section>
 
       <footer className="border-t pt-8">
         <address className="not-italic text-sm text-muted-foreground space-y-1">
-          <p className="font-medium text-foreground">RIP Tool — Republican Inboxing Protocol</p>
+          <p className="font-medium text-foreground">brandinbox.ai — brandinbox.ai</p>
           <p>
             <a
-              href="https://app.rip-tool.com"
+              href="https://brandinbox.ai"
               className="hover:text-foreground transition-colors"
             >
-              app.rip-tool.com
+              brandinbox.ai
             </a>
           </p>
           <p>

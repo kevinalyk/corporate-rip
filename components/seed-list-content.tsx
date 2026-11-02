@@ -121,7 +121,7 @@ export default function SeedListContent({
 
       const link = document.createElement("a")
       link.href = data.url
-      link.download = "RIP-Seed-Email-Setup-Guide.txt"
+      link.download = "Seed-Email-Setup-Guide.txt"
       link.target = "_blank"
       document.body.appendChild(link)
       link.click()
@@ -933,7 +933,7 @@ export default function SeedListContent({
           <Button
             variant="default"
             size="sm"
-            className="flex items-center gap-2 bg-rip-red hover:bg-rip-red/90 text-white"
+            className="flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white"
             onClick={exportToCSV}
             disabled={seedEmails.length === 0}
           >
@@ -979,7 +979,7 @@ export default function SeedListContent({
               <TableRow>
                 <TableCell colSpan={isAdminView ? 7 : 5} className="text-center py-12">
                   <div className="flex justify-center">
-                    <Loader2 size={24} className="animate-spin text-rip-red" />
+                    <Loader2 size={24} className="animate-spin text-brand-primary" />
                   </div>
                 </TableCell>
               </TableRow>
@@ -1043,7 +1043,7 @@ export default function SeedListContent({
                             />
                             <Lock
                               size={16}
-                              className={`absolute inset-0 text-rip-red transition-all duration-400 ${
+                              className={`absolute inset-0 text-brand-primary transition-all duration-400 ${
                                 email.locked
                                   ? animatingLockId === email.id
                                     ? "opacity-100 rotate-0 scale-100"
@@ -1305,7 +1305,7 @@ export default function SeedListContent({
             {testingConnection ? (
               <div className="flex items-center justify-center py-8">
                 <div className="text-center">
-                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-rip-red" />
+                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-brand-primary" />
                   <p>Testing connection...</p>
                 </div>
               </div>
@@ -1358,7 +1358,7 @@ export default function SeedListContent({
             {debuggingId ? (
               <div className="flex items-center justify-center py-8">
                 <div className="text-center">
-                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-rip-red" />
+                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-brand-primary" />
                   <p>Running debug tests...</p>
                 </div>
               </div>
@@ -1416,7 +1416,7 @@ export default function SeedListContent({
             {debuggingBoxesId ? (
               <div className="flex items-center justify-center py-8">
                 <div className="text-center">
-                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-rip-red" />
+                  <Loader2 size={32} className="animate-spin mx-auto mb-4 text-brand-primary" />
                   <p>Loading email folders...</p>
                 </div>
               </div>

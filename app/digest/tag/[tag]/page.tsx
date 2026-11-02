@@ -11,7 +11,7 @@ import AppLayout from "@/components/app-layout"
 import AdBanner from "@/components/ad-banner"
 import { shouldShowAd } from "@/lib/ads"
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 const ALL_TAGS = [
   "2026-elections",
@@ -73,11 +73,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   let description: string
 
   if (STATE_TAGS.has(tag)) {
-    title = `${label} Senate 2026 News & Polls | GOP Digest | Inbox.GOP`
-    description = `Latest Republican political intelligence for ${label} — polling, endorsements, primary results, and 2026 Senate race updates. Published daily by Inbox.GOP.`
+    title = `${label} Senate 2026 News & Polls | GOP Digest | brandinbox.ai`
+    description = `Latest Republican political intelligence for ${label} — polling, endorsements, primary results, and 2026 Senate race updates. Published daily by brandinbox.ai.`
   } else {
-    title = `GOP ${label} Tracker 2026 | Intelligence Digest | Inbox.GOP`
-    description = `All GOP Digest articles covering ${label} — Republican polling, primary results, and 2026 election intelligence from Inbox.GOP.`
+    title = `GOP ${label} Tracker 2026 | Intelligence Digest | brandinbox.ai`
+    description = `All GOP Digest articles covering ${label} — Republican polling, primary results, and 2026 election intelligence from brandinbox.ai.`
   }
 
   return {
@@ -89,9 +89,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       url,
-      siteName: "Inbox.GOP",
+      siteName: "brandinbox.ai",
       type: "website",
-      images: [{ url: `${BASE_URL}/og-candidate-directory.png`, width: 1200, height: 630, alt: `Inbox.GOP — ${label}` }],
+      images: [{ url: `${BASE_URL}/og-candidate-directory.png`, width: 1200, height: 630, alt: `brandinbox.ai — ${label}` }],
     },
     twitter: {
       card: "summary_large_image",
@@ -193,7 +193,7 @@ export default async function DigestTagPage({ params }: Props) {
           </a>
 
           <div className="flex items-center gap-3 mb-2">
-            <Newspaper size={22} className="text-rip-red" />
+            <Newspaper size={22} className="text-brand-primary" />
             <h1 className="text-2xl font-bold tracking-tight">{label}</h1>
           </div>
           <p className="text-sm text-muted-foreground mb-10">
@@ -215,7 +215,7 @@ export default async function DigestTagPage({ params }: Props) {
                 return (
                   <article
                     key={a.id}
-                    className="rounded-xl border border-border bg-card overflow-hidden hover:border-rip-red/40 hover:shadow-md transition-all"
+                    className="rounded-xl border border-border bg-card overflow-hidden hover:border-brand-primary/40 hover:shadow-md transition-all"
                   >
                     {a.imageUrl && (
                       <div className="w-full aspect-[16/5] overflow-hidden bg-muted">
@@ -224,7 +224,7 @@ export default async function DigestTagPage({ params }: Props) {
                     )}
                     <div className="px-5 pt-4 pb-5">
                       <div className="flex items-center gap-2 flex-wrap mb-2">
-                        <span className="text-[10px] font-bold tracking-widest text-rip-red uppercase border border-rip-red/40 rounded px-2 py-0.5">
+                        <span className="text-[10px] font-bold tracking-widest text-brand-primary uppercase border border-brand-primary/40 rounded px-2 py-0.5">
                           Daily Digest
                         </span>
                         <span className="text-muted-foreground text-xs">·</span>
@@ -239,7 +239,7 @@ export default async function DigestTagPage({ params }: Props) {
                       <h2 className="text-lg font-bold leading-snug mb-2 text-balance">
                         <a
                           href={`/digest/${a.slug}`}
-                          className="hover:text-rip-red transition-colors"
+                          className="hover:text-brand-primary transition-colors"
                         >
                           {a.title}
                         </a>
@@ -257,8 +257,8 @@ export default async function DigestTagPage({ params }: Props) {
                               href={`/digest/tag/${t}`}
                               className={`text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors ${
                                 t === tag
-                                  ? "bg-rip-red/10 text-rip-red border-rip-red/40"
-                                  : "bg-muted text-muted-foreground border-border hover:border-rip-red/40 hover:text-foreground"
+                                  ? "bg-brand-primary/10 text-brand-primary border-brand-primary/40"
+                                  : "bg-muted text-muted-foreground border-border hover:border-brand-primary/40 hover:text-foreground"
                               }`}
                             >
                               {t}
@@ -268,7 +268,7 @@ export default async function DigestTagPage({ params }: Props) {
                         <a
                           href={`/digest/${a.slug}`}
                           aria-label={`Continue reading ${a.title}`}
-                          className="inline-flex items-center gap-1.5 text-rip-red text-sm font-medium hover:underline transition-colors flex-shrink-0"
+                          className="inline-flex items-center gap-1.5 text-brand-primary text-sm font-medium hover:underline transition-colors flex-shrink-0"
                         >
                           Read Digest
                           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>

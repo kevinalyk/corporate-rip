@@ -4,7 +4,7 @@ function getGSCClient() {
   const oauth2Client = new google.auth.OAuth2(
     process.env.GSC_CLIENT_ID,
     process.env.GSC_CLIENT_SECRET,
-    `${process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"}/api/auth/gsc/callback`
+    `${process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"}/api/auth/gsc/callback`
   )
 
   oauth2Client.setCredentials({
@@ -142,7 +142,7 @@ export async function submitUrlForIndexing(url: string): Promise<boolean> {
     throw new Error("Missing INDEXNOW_KEY env var")
   }
 
-  const siteUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "https://app.rip-tool.com").trim()
+  const siteUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "https://brandinbox.ai").trim()
   const host = new URL(siteUrl).host
 
   const body = {

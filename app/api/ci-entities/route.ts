@@ -152,7 +152,7 @@ export async function PUT(request: NextRequest) {
       try {
         const imgRes = await fetch(imageUrlOverride, {
           headers: {
-            "User-Agent": "Mozilla/5.0 (compatible; RIPTool/1.0; +https://app.rip-tool.com)",
+            "User-Agent": "Mozilla/5.0 (compatible; brandinbox/1.0; +https://brandinbox.ai)",
           },
         })
         if (imgRes.ok) {

@@ -282,7 +282,7 @@ export default function AutomationApiPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-rip-red" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
       </div>
     )
   }
@@ -331,7 +331,7 @@ export default function AutomationApiPage() {
               <div className="flex justify-end">
                 <Dialog open={isCreateOpen} onOpenChange={(open) => (open ? setIsCreateOpen(true) : handleCloseCreateDialog())}>
                   <DialogTrigger asChild>
-                    <Button className="bg-rip-red hover:bg-rip-red/90 text-white">
+                    <Button className="bg-brand-primary hover:bg-brand-primary/90 text-white">
                       <Plus size={16} className="mr-2" />
                       Create Key
                     </Button>
@@ -397,7 +397,7 @@ export default function AutomationApiPage() {
                           <Button variant="outline" onClick={handleCloseCreateDialog}>
                             Cancel
                           </Button>
-                          <Button onClick={handleCreateKey} className="bg-rip-red hover:bg-rip-red/90 text-white">
+                          <Button onClick={handleCreateKey} className="bg-brand-primary hover:bg-brand-primary/90 text-white">
                             Create Key
                           </Button>
                         </DialogFooter>
@@ -424,7 +424,7 @@ export default function AutomationApiPage() {
                     {keysLoading ? (
                       <TableRow>
                         <TableCell colSpan={7} className="text-center py-12">
-                          <Loader2 size={24} className="animate-spin text-rip-red mx-auto" />
+                          <Loader2 size={24} className="animate-spin text-brand-primary mx-auto" />
                         </TableCell>
                       </TableRow>
                     ) : keys.length > 0 ? (
@@ -520,7 +520,7 @@ export default function AutomationApiPage() {
                     {logsLoading ? (
                       <TableRow>
                         <TableCell colSpan={6} className="text-center py-12">
-                          <Loader2 size={24} className="animate-spin text-rip-red mx-auto" />
+                          <Loader2 size={24} className="animate-spin text-brand-primary mx-auto" />
                         </TableCell>
                       </TableRow>
                     ) : logs.length > 0 ? (

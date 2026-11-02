@@ -176,18 +176,18 @@ export default function SharePageClient({ isAuthenticated, isTwitterShare, token
         <div className="max-w-md w-full text-center space-y-4">
           <h1 className="text-2xl font-bold">Sign in to view this campaign</h1>
           <p className="text-muted-foreground">
-            You need an Inbox.GOP account to view shared campaigns.
+            You need an brandinbox.ai account to view shared campaigns.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button onClick={() => router.push(`/login?redirect=/share/${token}`)}>
               Sign in
             </Button>
             <Button variant="outline" asChild>
-              <a href="https://app.rip-tool.com/signup">Sign up</a>
+              <a href="https://brandinbox.ai/signup">Sign up</a>
             </Button>
           </div>
           <div className="pt-4 border-t">
-            <p className="text-xs text-muted-foreground">Powered by Inbox.GOP</p>
+            <p className="text-xs text-muted-foreground">Powered by brandinbox.ai</p>
           </div>
         </div>
       </div>
@@ -216,7 +216,7 @@ export default function SharePageClient({ isAuthenticated, isTwitterShare, token
           </p>
           <Button onClick={handleClose}>{isAuthenticated ? "Go to Dashboard" : "Go to Login"}</Button>
           <div className="pt-4 border-t">
-            <p className="text-xs text-muted-foreground">Powered by Inbox.GOP</p>
+            <p className="text-xs text-muted-foreground">Powered by brandinbox.ai</p>
           </div>
         </div>
       </div>
@@ -304,7 +304,7 @@ export default function SharePageClient({ isAuthenticated, isTwitterShare, token
                   Sign in
                 </Button>
                 <Button size="sm" asChild>
-                  <a href="https://app.rip-tool.com/signup">Get Access</a>
+                  <a href="https://brandinbox.ai/signup">Get Access</a>
                 </Button>
               </div>
             )}
@@ -385,7 +385,7 @@ export default function SharePageClient({ isAuthenticated, isTwitterShare, token
                             href={bestUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-start gap-2 text-sm text-rip-red hover:underline break-all min-w-0"
+                            className="flex items-start gap-2 text-sm text-brand-primary hover:underline break-all min-w-0"
                           >
                             <ExternalLink className="h-4 w-4 flex-shrink-0 mt-0.5" />
                             <span className="min-w-0 break-all">{bestUrl}</span>
@@ -403,7 +403,7 @@ export default function SharePageClient({ isAuthenticated, isTwitterShare, token
 
           <div className="mt-4 pt-4 border-t">
             <p className="text-xs text-muted-foreground text-center">
-              Shared via <span className="font-medium">Inbox.GOP</span> • Competitive Intelligence Platform
+              Shared via <span className="font-medium">brandinbox.ai</span> • Competitive Intelligence Platform
             </p>
           </div>
       </div>

@@ -1914,7 +1914,7 @@ const handler = createMcpHandler(
       {
         title: "Search Content",
         description:
-          "Read-only keyword search across email (sender name, subject, preview, body) and SMS text in the shared RIP inbox, with optional date range, type (email/sms/both) and party (R/D) filters. Use match=\"any\" (default) for OR across keywords or \"all\" for AND. Returns one page of results (id, entity name/slug, party, state, type, received time, subject or SMS text, from address or short code, share link when one exists) plus totals and per-entity counts across ALL matches, so senders can be ranked without paging. Unassigned messages are included unless a party filter is set. Never returns client-private personal-subscription messages or full email bodies.",
+          "Read-only keyword search across email (sender name, subject, preview, body) and SMS text in the shared brandinbox.ai inbox, with optional date range, type (email/sms/both) and party (R/D) filters. Use match=\"any\" (default) for OR across keywords or \"all\" for AND. Returns one page of results (id, entity name/slug, party, state, type, received time, subject or SMS text, from address or short code, share link when one exists) plus totals and per-entity counts across ALL matches, so senders can be ranked without paging. Unassigned messages are included unless a party filter is set. Never returns client-private personal-subscription messages or full email bodies.",
         inputSchema: {
           query: z.string().min(1).max(200).describe('Keywords separated by spaces, e.g. "Musk Elon"'),
           match: z.enum(["any", "all"]).default("any").describe("any = message contains at least one keyword; all = contains every keyword"),
@@ -1967,7 +1967,7 @@ const handler = createMcpHandler(
       {
         title: "Get Inbox Placement",
         description:
-          "Read-only report on where email is landing across the RIP seed inboxes: inbox vs spam (and not delivered). Counts are seed-inbox placements summed across campaigns, so one campaign can count in several inboxes; inboxRatePct = inbox / (inbox + spam + notDelivered). Filter by date range, party (R/D), entity name (substring) or sender email/name (substring), and break results out with groupBy: none (one overall total), entity, sender, sender_domain, party or day. Returns overall totals plus one row per group (campaigns, inbox, spam, notDelivered, rates). Aggregates only - no message bodies. To see placement on individual emails, use search_content, whose email results include a placement block.",
+          "Read-only report on where email is landing across the brandinbox.ai seed inboxes: inbox vs spam (and not delivered). Counts are seed-inbox placements summed across campaigns, so one campaign can count in several inboxes; inboxRatePct = inbox / (inbox + spam + notDelivered). Filter by date range, party (R/D), entity name (substring) or sender email/name (substring), and break results out with groupBy: none (one overall total), entity, sender, sender_domain, party or day. Returns overall totals plus one row per group (campaigns, inbox, spam, notDelivered, rates). Aggregates only - no message bodies. To see placement on individual emails, use search_content, whose email results include a placement block.",
         inputSchema: {
           startDate: z.string().optional().describe("ISO date/time; window start (inclusive)"),
           endDate: z.string().optional().describe("ISO date/time; window end (inclusive)"),
@@ -2015,7 +2015,7 @@ const handler = createMcpHandler(
     )
   },
   {
-    serverInfo: { name: "rip-tool-ci-assignment", version: "1.0.0" },
+    serverInfo: { name: "brandinbox-ci-assignment", version: "1.0.0" },
   },
   // This route file lives at a single fixed path (app/api/mcp/ci-assignment/route.ts),
   // not a [transport] catch-all, so the handler must match the streamable HTTP

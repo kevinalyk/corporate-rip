@@ -34,8 +34,8 @@ export async function POST(request: NextRequest) {
     // Send email alert to admin
     if (MAILGUN_API_KEY && MAILGUN_DOMAIN) {
       const emailBody = new FormData()
-      emailBody.append("from", `RIP Tool <hello@${MAILGUN_DOMAIN}>`)
-      emailBody.append("to", "admin@rip-tool.com")
+      emailBody.append("from", `brandinbox.ai <hello@${MAILGUN_DOMAIN}>`)
+      emailBody.append("to", "admin@brandinbox.ai")
       emailBody.append("subject", `[Support Ticket] ${title}`)
       emailBody.append(
         "html",

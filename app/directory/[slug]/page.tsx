@@ -16,15 +16,15 @@ import AdBanner from "@/components/ad-banner"
 import AdSidebar from "@/components/ad-sidebar"
 import { shouldShowAd, shouldShowSidebarAd } from "@/lib/ads"
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 // ──────────────────────────────────────────────────────────────────────────────
 // Metadata builders
 // ──────────────────────────────────────────────────────────────────────────────
 
 function buildStateMetadata(stateName: string, slug: string): Metadata {
-  const title = `${stateName} Directory - Inbox.GOP`
-  const description = `See campaign emails and texts from ${stateName} candidates, PACs, and political organizations. Track political messaging across ${stateName} with the Republican Inboxing Protocol.`
+  const title = `${stateName} Directory - brandinbox.ai`
+  const description = `See campaign emails and texts from ${stateName} candidates, PACs, and political organizations. Track political messaging across ${stateName} with the brandinbox.ai.`
   const url = `${APP_URL}/directory/${slug}`
   return {
     title,
@@ -33,7 +33,7 @@ function buildStateMetadata(stateName: string, slug: string): Metadata {
       title,
       description,
       url,
-      siteName: "Inbox.GOP",
+      siteName: "brandinbox.ai",
       type: "website",
       images: [{ url: `${APP_URL}/og-candidate-directory.png`, width: 1200, height: 630, alt: title }],
     },
@@ -43,8 +43,8 @@ function buildStateMetadata(stateName: string, slug: string): Metadata {
 }
 
 function buildPartyMetadata(partySlug: string, partyLabel: string): Metadata {
-  const title = `${partyLabel} Directory - Inbox.GOP`
-  const description = `Track ${partyLabel.toLowerCase()}' campaign emails, fundraising texts, and political messaging. See how ${partyLabel.toLowerCase()} are reaching voters via the Republican Inboxing Protocol.`
+  const title = `${partyLabel} Directory - brandinbox.ai`
+  const description = `Track ${partyLabel.toLowerCase()}' campaign emails, fundraising texts, and political messaging. See how ${partyLabel.toLowerCase()} are reaching voters via the brandinbox.ai.`
   const url = `${APP_URL}/directory/${partySlug}`
   return {
     title,
@@ -53,7 +53,7 @@ function buildPartyMetadata(partySlug: string, partyLabel: string): Metadata {
       title,
       description,
       url,
-      siteName: "Inbox.GOP",
+      siteName: "brandinbox.ai",
       type: "website",
       images: [{ url: `${APP_URL}/og-candidate-directory.png`, width: 1200, height: 630, alt: title }],
     },
@@ -66,7 +66,7 @@ function buildEntityMetadata(data: NonNullable<Awaited<ReturnType<typeof getEnti
   const { entity } = data
   const partyLabel = entity.party ? `, ${entity.party.charAt(0).toUpperCase() + entity.party.slice(1)}` : ""
   const stateLabel = entity.state ? ` ${entity.state}` : ""
-  const title = `${entity.name}${partyLabel}${stateLabel} - Inbox.GOP`
+  const title = `${entity.name}${partyLabel}${stateLabel} - brandinbox.ai`
 
   let description: string
   if (entity.type === "candidate" || entity.type === "politician") {
@@ -84,7 +84,7 @@ function buildEntityMetadata(data: NonNullable<Awaited<ReturnType<typeof getEnti
 
   const ogImage = isPublicBlobUrl(entity.imageUrl)
     ? { url: entity.imageUrl as string, width: 400, height: 500, alt: entity.name }
-    : { url: `${APP_URL}/og-candidate-directory.png`, width: 1200, height: 630, alt: "RIP Tool" }
+    : { url: `${APP_URL}/og-candidate-directory.png`, width: 1200, height: 630, alt: "brandinbox.ai" }
 
   return {
     title,
@@ -93,7 +93,7 @@ function buildEntityMetadata(data: NonNullable<Awaited<ReturnType<typeof getEnti
       title,
       description,
       url: `${APP_URL}/directory/${slug}`,
-      siteName: "Inbox.GOP",
+      siteName: "brandinbox.ai",
       type: "profile",
       images: [ogImage],
     },
@@ -126,8 +126,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const data = await getEntityBySlug(slug)
   if (!data) {
     return {
-      title: "Entity Not Found - Inbox.GOP",
-      description: "This entity could not be found in the RIP Tool directory.",
+      title: "Entity Not Found - brandinbox.ai",
+      description: "This entity could not be found in the brandinbox.ai directory.",
     }
   }
   return buildEntityMetadata(data, slug)
@@ -156,7 +156,7 @@ function buildEntityStructuredData(data: NonNullable<Awaited<ReturnType<typeof g
   const description =
     entity.bio ||
     entity.description ||
-    `${entity.name}${entity.office ? `, ${entity.office}` : ""}${entity.state ? ` (${entity.state})` : ""}. Email and SMS communications tracked by the Republican Inboxing Protocol.`
+    `${entity.name}${entity.office ? `, ${entity.office}` : ""}${entity.state ? ` (${entity.state})` : ""}. Email and SMS communications tracked by the brandinbox.ai.`
 
   if (isPerson) {
     return {
@@ -223,7 +223,7 @@ function buildLandingCollectionPage(name: string, description: string, slug: str
     url: `${APP_URL}/directory/${slug}`,
     isPartOf: {
       "@type": "WebSite",
-      name: "RIP Tool",
+      name: "brandinbox.ai",
       url: APP_URL,
     },
   }
@@ -437,7 +437,7 @@ function EntitySeoContent({
   } else if (partyLabel) {
     contextParts.push(`${entity.name} is a ${partyLabel} ${typeLabel}.`)
   } else {
-    contextParts.push(`${entity.name} is a ${typeLabel} tracked in the RIP Tool political communications directory.`)
+    contextParts.push(`${entity.name} is a ${typeLabel} tracked in the brandinbox.ai political communications directory.`)
   }
 
   if (entity.counts.total > 0) {
@@ -445,7 +445,7 @@ function EntitySeoContent({
     if (entity.counts.emails > 0) parts.push(`${entity.counts.emails} email${entity.counts.emails === 1 ? "" : "s"}`)
     if (entity.counts.sms > 0) parts.push(`${entity.counts.sms} SMS message${entity.counts.sms === 1 ? "" : "s"}`)
     contextParts.push(
-      `RIP Tool has tracked ${parts.join(" and ")} from ${entity.name}, totaling ${entity.counts.total} political communications.`,
+      `brandinbox.ai has tracked ${parts.join(" and ")} from ${entity.name}, totaling ${entity.counts.total} political communications.`,
     )
   }
 
@@ -470,7 +470,7 @@ function EntitySeoContent({
 
   // No-content fallback paragraph
   const noContentNote = !hasAnyContent
-    ? `${entity.name} is listed in the RIP Tool directory but does not yet have emails, SMS messages, sending domains, or phone numbers on record. We are actively monitoring for new communications and will update this profile as data becomes available.`
+    ? `${entity.name} is listed in the brandinbox.ai directory but does not yet have emails, SMS messages, sending domains, or phone numbers on record. We are actively monitoring for new communications and will update this profile as data becomes available.`
     : null
 
   // ── Recent activity list ─────────────────────────────────────────────────
@@ -612,7 +612,7 @@ function EntitySeoContent({
               href="/directory"
               style={{ color: "rgba(255,255,255,0.25)", textDecoration: "underline" }}
             >
-              RIP Tool political communications directory
+              brandinbox.ai political communications directory
             </a>
             {entity.ballotpediaUrl && (
               <>

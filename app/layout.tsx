@@ -15,9 +15,9 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"),
-  title: "Inbox.GOP",
-  description: "A tool dedicated to helping Republicans and conservatives inbox effectively. Ensure your message reaches your supporters with the Republican Inboxing Protocol.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"),
+  title: "brandinbox.ai",
+  description: "A tool dedicated to helping Republicans and conservatives inbox effectively. Ensure your message reaches your supporters with the brandinbox.ai.",
   icons: {
     icon: [
       { url: "/images/IconOnly_Transparent_NoBuffer.png", sizes: "any", type: "image/png" },

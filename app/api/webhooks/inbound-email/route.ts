@@ -169,7 +169,7 @@ async function runLinkCheck(htmlBody: string): Promise<
           method: "HEAD",
           redirect: "follow",
           signal: controller.signal,
-          headers: { "User-Agent": "Mozilla/5.0 (compatible; RIPToolBot/1.0)" },
+          headers: { "User-Agent": "Mozilla/5.0 (compatible; brandinboxBot/1.0)" },
         })
         clearTimeout(timeout)
         return { url, ok: resp.ok, statusCode: resp.status }

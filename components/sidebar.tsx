@@ -99,7 +99,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
   const [reportProblemOpen, setReportProblemOpen] = useState(false)
 
   // Developers section is a pilot: visible to super admins and to users of the
-  // pilot clients (RIP, Red Spark Strategy) while those clients are selected.
+  // pilot clients (brandinbox.ai, Red Spark Strategy) while those clients are selected.
   // The MCP Access item additionally requires a qualifying plan (Professional / Enterprise).
   const showDevelopersNav =
     userRole !== null && (selectedClientSlug === "rip" || selectedClientSlug === "redsparkstrategy")
@@ -156,7 +156,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
     }
   }, [pathname])
 
-  // Auto-select RIP for super_admins on initial load
+  // Auto-select brandinbox.ai for super_admins on initial load
   useEffect(() => {
     if (userRole === "super_admin" && clients.length > 0 && !selectedClientSlug) {
       const ripClient = clients.find((client) => client.slug === "rip")
@@ -300,7 +300,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
               size="sm"
               className={cn(
                 "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0",
-                pathname.startsWith("/news") && "bg-rip-red/10 text-rip-red hover:bg-rip-red/20 hover:text-rip-red",
+                pathname.startsWith("/news") && "bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20 hover:text-brand-primary",
                 collapsed && "justify-center",
               )}
               onClick={() => navigate("/news")}
@@ -332,7 +332,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
               variant="ghost"
               size="sm"
               className={cn(
-                "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0 text-rip-red hover:text-rip-red hover:bg-rip-red/10",
+                "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0 text-brand-primary hover:text-brand-primary hover:bg-brand-primary/10",
                 collapsed && "justify-center",
               )}
               onClick={() => navigate("/login")}
@@ -375,7 +375,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
             <Select value={selectedClientSlug} onValueChange={handleClientSwitch} disabled={loadingClients}>
               <SelectTrigger className="w-full bg-transparent">
                 <div className="flex items-center gap-2">
-                  <Building size={16} className="text-rip-blue" />
+                  <Building size={16} className="text-brand-secondary" />
                   <SelectValue placeholder={loadingClients ? "Loading clients..." : "Select Client"} />
                 </div>
               </SelectTrigger>
@@ -802,7 +802,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
             size="sm"
             className={cn(
               "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0",
-              pathname.startsWith("/news") && "bg-rip-red/10 text-rip-red hover:bg-rip-red/20 hover:text-rip-red",
+              pathname.startsWith("/news") && "bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20 hover:text-brand-primary",
               collapsed && "justify-center",
             )}
             onClick={() => navigate("/news")}
@@ -848,7 +848,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
             variant="ghost"
             size="sm"
             className={cn(
-              "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0 text-rip-red hover:text-rip-red hover:bg-rip-red/10",
+              "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0 text-brand-primary hover:text-brand-primary hover:bg-brand-primary/10",
               collapsed && "justify-center",
             )}
             onClick={handleLogout}
@@ -882,13 +882,13 @@ function NavSection({ icon, label, collapsed, expanded, onToggle }: NavSectionPr
   // (components/app-layout.tsx); md:min-h-0 lets the default h-9 govern the
   // denser desktop sidebar unchanged.
   "relative w-full justify-start gap-3 px-3 font-medium min-h-11 md:min-h-0",
-  expanded && "bg-rip-red/10 text-rip-red hover:bg-rip-red/15 hover:text-rip-red",
+  expanded && "bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/15 hover:text-brand-primary",
   collapsed && "justify-center",
   )}
   onClick={onToggle}
   >
       {expanded && (
-        <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-rip-red" aria-hidden="true" />
+        <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-brand-primary" aria-hidden="true" />
       )}
       {icon}
       {!collapsed && (
@@ -917,13 +917,13 @@ function NavItem({ icon, label, active, collapsed, onClick }: NavItemProps) {
   className={cn(
   // Same mobile-drawer touch-target reasoning as NavSection above.
   "relative w-full justify-start gap-3 px-3 min-h-11 md:min-h-0",
-  active && "bg-rip-red/10 hover:bg-rip-red/15 text-rip-red hover:text-rip-red",
+  active && "bg-brand-primary/10 hover:bg-brand-primary/15 text-brand-primary hover:text-brand-primary",
   collapsed && "justify-center",
   )}
   onClick={onClick}
   >
       {active && (
-        <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-rip-red" aria-hidden="true" />
+        <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-brand-primary" aria-hidden="true" />
       )}
       {icon}
       {!collapsed && <span>{label}</span>}

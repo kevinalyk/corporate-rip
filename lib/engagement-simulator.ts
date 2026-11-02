@@ -140,31 +140,31 @@ export class EngagementSimulator {
   }
 
   async simulateRipEngagement(): Promise<void> {
-    console.log("Starting RIP seed engagement simulation...")
+    console.log("Starting brandinbox.ai seed engagement simulation...")
 
     const allAccounts = await this.getRipAccounts()
 
     if (allAccounts.length === 0) {
-      console.log("No RIP seed accounts found, skipping")
+      console.log("No brandinbox.ai seed accounts found, skipping")
       return
     }
 
-    // Process all RIP seeds every run (no random subset — we want consistent coverage)
+    // Process all brandinbox.ai seeds every run (no random subset — we want consistent coverage)
     for (const account of allAccounts) {
       try {
         await this.processAccountEngagement(account)
         const delay = 1000 + Math.random() * 9000
         await this.sleep(delay)
       } catch (error) {
-        console.error(`Error processing RIP account ${account.email}:`, error)
+        console.error(`Error processing brandinbox.ai account ${account.email}:`, error)
       }
     }
 
-    console.log("RIP seed engagement simulation completed")
+    console.log("brandinbox.ai seed engagement simulation completed")
   }
 
   private async getRipAccounts(): Promise<SeedAccount[]> {
-    console.log("Fetching RIP-locked seed accounts...")
+    console.log("Fetching brandinbox.ai-locked seed accounts...")
 
     const accounts = await sql`
       SELECT 
@@ -187,7 +187,7 @@ export class EngagementSimulator {
       AND "domainHealthMode" = false
     `
 
-    console.log(`Found ${accounts.length} RIP-locked accounts`)
+    console.log(`Found ${accounts.length} brandinbox.ai-locked accounts`)
 
     return accounts.map((account) => ({
       id: account.id,
@@ -200,7 +200,7 @@ export class EngagementSimulator {
       openRateTarget: account.openRateTarget || 50,
       readingSchedule: account.readingSchedule || "flexible",
       lastEngagementAt: account.lastEngagementAt ? new Date(account.lastEngagementAt) : null,
-      engagementEnabled: true, // Always run for RIP seeds regardless of flag
+      engagementEnabled: true, // Always run for brandinbox.ai seeds regardless of flag
     }))
   }
 

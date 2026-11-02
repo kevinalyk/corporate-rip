@@ -15,11 +15,11 @@ import { OFFICES } from "@/lib/campaign-filter-options"
 import AdBanner from "@/components/ad-banner"
 import { shouldShowAd } from "@/lib/ads"
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
-const NC_TITLE = "Recently Launched Campaigns - Inbox.GOP"
+const NC_TITLE = "Recently Launched Campaigns - brandinbox.ai"
 const NC_DESCRIPTION =
-  "Track political campaigns launched in the last 7 days. New House, Senate, and other federal candidates from across the United States, captured by the Republican Inboxing Protocol."
+  "Track political campaigns launched in the last 7 days. New House, Senate, and other federal candidates from across the United States, captured by the brandinbox.ai."
 
 export const metadata: Metadata = {
   title: NC_TITLE,
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     title: NC_TITLE,
     description: NC_DESCRIPTION,
     url: `${APP_URL}/directory/new-campaigns`,
-    siteName: "RIP Tool",
+    siteName: "brandinbox.ai",
     type: "website",
     images: [{ url: `${APP_URL}/og-candidate-directory.png`, width: 1200, height: 630, alt: NC_TITLE }],
   },
@@ -162,7 +162,7 @@ export default async function NewCampaignsPage({
               Back to Directory
             </Link>
             <h1 className="text-xl font-semibold tracking-tight flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-rip-red" />
+              <Sparkles className="h-5 w-5 text-brand-primary" />
               Recently Launched Campaigns
             </h1>
             <p className="text-sm text-muted-foreground mt-0.5 max-w-2xl">
@@ -197,8 +197,8 @@ export default async function NewCampaignsPage({
             <div className="flex items-center justify-center py-24">
               <Card className="max-w-xl w-full border-border/60">
                 <CardContent className="flex flex-col items-center gap-4 py-12 px-6 text-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-rip-red/10 border border-rip-red/30">
-                    <Megaphone className="h-6 w-6 text-rip-red" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary/10 border border-brand-primary/30">
+                    <Megaphone className="h-6 w-6 text-brand-primary" />
                   </div>
                   <h2 className="text-lg font-semibold">
                     {party || state || office ? "No matching campaigns" : "No new launches this week"}
@@ -210,7 +210,7 @@ export default async function NewCampaignsPage({
                   </p>
                   <Link
                     href="/directory"
-                    className="inline-flex items-center gap-1.5 mt-2 text-sm font-medium text-rip-red hover:text-rip-red/80 transition-colors"
+                    className="inline-flex items-center gap-1.5 mt-2 text-sm font-medium text-brand-primary hover:text-brand-primary/80 transition-colors"
                   >
                     Browse the full directory
                     <ArrowRight className="h-4 w-4" />
@@ -295,7 +295,7 @@ export default async function NewCampaignsPage({
                           {formatRelativeDate(launch.launchedAt || launch.firstSeenAt)}
                         </span>
                         {profileUrl ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-rip-red">
+                          <span className="inline-flex items-center gap-1 text-xs text-brand-primary">
                             View profile
                             <ArrowRight className="h-3 w-3" />
                           </span>

@@ -108,11 +108,11 @@ function parseStories(html: string): { stories: StoryItem[]; remainder: string }
 }
 
 const PROSE_CLASSES = `prose prose-neutral dark:prose-invert max-w-none text-base leading-relaxed text-foreground
-  [&_a]:text-rip-red [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:text-rip-red/90 [&_a]:transition-colors
+  [&_a]:text-brand-primary [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:text-brand-primary/90 [&_a]:transition-colors
   [&_img]:rounded-md [&_img]:max-w-full [&_img]:my-4
   [&_h2]:text-lg [&_h2]:font-bold [&_h2]:mt-6 [&_h2]:mb-2
   [&_h3]:text-base [&_h3]:font-semibold [&_h3]:mt-4 [&_h3]:mb-1
-  [&_blockquote]:border-l-4 [&_blockquote]:border-rip-red [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-muted-foreground
+  [&_blockquote]:border-l-4 [&_blockquote]:border-brand-primary [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-muted-foreground
   [&_table]:min-w-full [&_table]:text-sm [&_th]:text-left [&_th]:py-2 [&_th]:px-3 [&_th]:font-semibold [&_th]:border-b [&_th]:border-border [&_th]:whitespace-nowrap
   [&_td]:py-2 [&_td]:px-3 [&_td]:border-b [&_td]:border-border/50 [&_td]:whitespace-nowrap
   [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5`
@@ -134,7 +134,7 @@ function DigestBody({ html }: { html: string }) {
     return (
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-4">
-          <span className="text-[10px] font-bold tracking-widest text-rip-red uppercase">Today&apos;s Digest</span>
+          <span className="text-[10px] font-bold tracking-widest text-brand-primary uppercase">Today&apos;s Digest</span>
           <span className="h-px flex-1 bg-border" />
           <span className="text-xs font-semibold text-muted-foreground">Top Stories</span>
         </div>
@@ -151,7 +151,7 @@ function DigestBody({ html }: { html: string }) {
                   <p className="text-sm font-semibold leading-snug text-foreground mb-1">{s.headline}</p>
                   {s.body && (
                     <p
-                      className="text-sm text-muted-foreground leading-relaxed [&_a]:text-rip-red [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:text-rip-red/90"
+                      className="text-sm text-muted-foreground leading-relaxed [&_a]:text-brand-primary [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:text-brand-primary/90"
                       dangerouslySetInnerHTML={{ __html: s.body }}
                     />
                   )}
@@ -259,7 +259,7 @@ export default function DigestArticleClient({
   if ((authLoading && !initialArticle) || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-rip-red" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
       </div>
     )
   }
@@ -298,7 +298,7 @@ export default function DigestArticleClient({
         {/* Header card */}
         <div className="rounded-xl border border-border bg-card px-6 py-5 mb-6">
           <div className="flex items-center gap-3 mb-3 flex-wrap">
-            <span className="text-[10px] font-bold tracking-widest text-rip-red uppercase border border-rip-red/40 rounded px-2 py-0.5">
+            <span className="text-[10px] font-bold tracking-widest text-brand-primary uppercase border border-brand-primary/40 rounded px-2 py-0.5">
               Daily Digest
             </span>
             <span className="text-muted-foreground text-xs">
@@ -324,7 +324,7 @@ export default function DigestArticleClient({
               <a
                 key={tag}
                 href={`/digest/tag/${tag}`}
-                className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border hover:border-rip-red/40 hover:text-foreground transition-colors"
+                className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border hover:border-brand-primary/40 hover:text-foreground transition-colors"
               >
                 {tag}
               </a>
@@ -354,7 +354,7 @@ export default function DigestArticleClient({
                     href={s.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-rip-red hover:underline"
+                    className="text-sm text-brand-primary hover:underline"
                   >
                     {s.label || s.url}
                   </a>
@@ -367,13 +367,13 @@ export default function DigestArticleClient({
         {/* Footer branding + share */}
         <div className="rounded-xl border border-border bg-card px-5 py-4">
           <p className="text-xs text-muted-foreground mb-3">
-            <span className="font-semibold text-foreground">Inbox.GOP</span>
+            <span className="font-semibold text-foreground">brandinbox.ai</span>
             {" · Political Wire — Daily Republican intelligence digest published every weekday morning."}
           </p>
           <div className="flex items-center gap-2 flex-wrap">
-            <Link href="/directory" className="text-xs text-rip-red hover:underline">← Directory</Link>
+            <Link href="/directory" className="text-xs text-brand-primary hover:underline">← Directory</Link>
             <span className="text-muted-foreground text-xs">·</span>
-            <Link href="/digest" className="text-xs text-rip-red hover:underline">All Digests</Link>
+            <Link href="/digest" className="text-xs text-brand-primary hover:underline">All Digests</Link>
           </div>
         </div>
 
@@ -425,8 +425,8 @@ export default function DigestArticleClient({
 
         {/* AI disclaimer */}
         <p className="text-xs text-muted-foreground mt-4">
-          The Inbox.GOP Digest is curated by AI. AI can make mistakes. Please{" "}
-          <a href="mailto:support@rip-tool.com" className="underline hover:text-foreground transition-colors">
+          The brandinbox.ai Digest is curated by AI. AI can make mistakes. Please{" "}
+          <a href="mailto:support@brandinbox.ai" className="underline hover:text-foreground transition-colors">
             let us know
           </a>{" "}
           if you see any issues.

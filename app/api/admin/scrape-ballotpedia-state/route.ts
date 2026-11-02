@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     const res = await fetch(fetchUrl, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; InboxGOP/1.0)",
+        "User-Agent": "Mozilla/5.0 (compatible; brandinbox/1.0)",
         "Accept": "text/html,application/xhtml+xml",
         "Accept-Language": "en-US,en;q=0.9",
       },

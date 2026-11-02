@@ -17,7 +17,7 @@ export function generateTrackedLink(
     | "whats_new"
     | `article_${string}`,
   destination: string,
-  baseUrl: string = process.env.APP_URL || "https://app.inbox.gop"
+  baseUrl: string = process.env.APP_URL || "https://brandinbox.ai"
 ): string {
   // Create encrypted token with click metadata
   const clickData = {

@@ -16,7 +16,7 @@ export async function GET(request: Request) {
 
   console.log("[cron/gsc-index] Starting GSC indexing run")
 
-  const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+  const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
   try {
     // Get articles published in the last 48 hours that haven't been indexed yet

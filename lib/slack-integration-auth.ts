@@ -27,7 +27,7 @@ export function canManageSlackIntegration(role: string | null | undefined) {
 
 /**
  * Resolves the authenticated request to { userId, role, clientId }, or null
- * if unauthenticated or the user has no client (e.g. a RIP employee with no
+ * if unauthenticated or the user has no client (e.g. a brandinbox.ai employee with no
  * client assignment - Slack integration is a per-client concept).
  */
 export async function getRequestingClientUser(request: Request) {

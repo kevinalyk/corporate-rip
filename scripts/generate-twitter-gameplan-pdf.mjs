@@ -13,7 +13,7 @@ const html = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Twitter/X Automation Gameplan — Inbox.GOP</title>
+  <title>Twitter/X Automation Gameplan — brandinbox.ai</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -262,7 +262,7 @@ const html = `<!DOCTYPE html>
 
   <!-- Header -->
   <div class="header">
-    <div class="eyebrow">Inbox.GOP — Internal Gameplan</div>
+    <div class="eyebrow">brandinbox.ai — Internal Gameplan</div>
     <h1>Twitter/X Daily Post Automation</h1>
     <div class="subtitle">Automated daily posts from email/SMS archive to drive site traffic and ad revenue</div>
     <div class="meta">
@@ -276,7 +276,7 @@ const html = `<!DOCTYPE html>
   <p>
     Once Twitter API credentials are approved and Google AdSense is live on public share pages,
     this system will automatically post one email or SMS from the archive to the
-    <strong>@InboxGOP</strong> (or equivalent) Twitter/X account every day. The post links to a
+    <strong>@brandinbox</strong> (or equivalent) Twitter/X account every day. The post links to a
     public share token URL on our site, driving traffic to ad-monetized pages.
   </p>
   <div class="callout blue">
@@ -349,7 +349,7 @@ const html = `<!DOCTYPE html>
       </tr>
       <tr>
         <td>Fallback</td>
-        <td>&#x1F440; [Name] campaign message just dropped &rarr; [share URL] #InboxGOP</td>
+        <td>&#x1F440; [Name] campaign message just dropped &rarr; [share URL] #brandinbox</td>
       </tr>
     </tbody>
   </table>
@@ -424,7 +424,7 @@ const html = `<!DOCTYPE html>
     random token (e.g. <code>abc123xyz</code>) stored in the database, producing a URL like:
   </p>
   <div class="code-block">
-    https://app.rip-tool.com/share/abc123xyz
+    https://brandinbox.ai/share/abc123xyz
   </div>
   <p>
     This page renders the full message content — subject, body, sender, date, entity name/photo —
@@ -511,7 +511,7 @@ const html = `<!DOCTYPE html>
       <tr>
         <td>Hashtag strategy</td>
         <td>Generic (#GOP), entity-specific (#TomEmmer), or none</td>
-        <td>Mix: #InboxGOP always + entity name hashtag</td>
+        <td>Mix: #brandinbox always + entity name hashtag</td>
       </tr>
       <tr>
         <td>What if Twitter API post fails?</td>
@@ -528,7 +528,7 @@ const html = `<!DOCTYPE html>
 
   <!-- Footer -->
   <div class="footer">
-    <span>Inbox.GOP — Internal Document</span>
+    <span>brandinbox.ai — Internal Document</span>
     <span>Twitter/X Automation Gameplan v1.0</span>
   </div>
 

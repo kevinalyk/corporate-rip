@@ -413,7 +413,7 @@ export default function SenderProvidersPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-rip-red" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
       </div>
     )
   }
@@ -449,7 +449,7 @@ export default function SenderProvidersPage() {
                     {reResolving ? <Loader2 size={16} className="mr-2 animate-spin" /> : <RefreshCw size={16} className="mr-2" />}
                     {reResolving ? "Resetting..." : "Full Reset & Backfill All"}
                   </Button>
-                  <Button className="bg-rip-red hover:bg-rip-red/90 text-white" onClick={openIpAddDialog}>
+                  <Button className="bg-brand-primary hover:bg-brand-primary/90 text-white" onClick={openIpAddDialog}>
                     <Plus size={16} className="mr-2" />
                     Add IP Mapping
                   </Button>
@@ -475,7 +475,7 @@ export default function SenderProvidersPage() {
                       <TableRow>
                         <TableCell colSpan={8} className="text-center py-12">
                           <div className="flex justify-center">
-                            <Loader2 size={24} className="animate-spin text-rip-red" />
+                            <Loader2 size={24} className="animate-spin text-brand-primary" />
                           </div>
                         </TableCell>
                       </TableRow>
@@ -524,7 +524,7 @@ export default function SenderProvidersPage() {
                     {backfilling ? <Loader2 size={16} className="mr-2 animate-spin" /> : <RefreshCw size={16} className="mr-2" />}
                     Backfill Providers
                   </Button>
-                  <Button className="bg-rip-red hover:bg-rip-red/90 text-white" onClick={openDkimAddDialog}>
+                  <Button className="bg-brand-primary hover:bg-brand-primary/90 text-white" onClick={openDkimAddDialog}>
                     <Plus size={16} className="mr-2" />
                     Add Mapping
                   </Button>
@@ -547,7 +547,7 @@ export default function SenderProvidersPage() {
                       <TableRow>
                         <TableCell colSpan={5} className="text-center py-12">
                           <div className="flex justify-center">
-                            <Loader2 size={24} className="animate-spin text-rip-red" />
+                            <Loader2 size={24} className="animate-spin text-brand-primary" />
                           </div>
                         </TableCell>
                       </TableRow>
@@ -590,7 +590,7 @@ export default function SenderProvidersPage() {
                   <code className="text-xs bg-muted px-1 py-0.5 rounded">List-Unsubscribe</code> headers.
                   Assign a provider name to use them for Tier 2 resolution.
                 </p>
-                <Button className="bg-rip-red hover:bg-rip-red/90 text-white shrink-0 ml-4" onClick={openUnsubAddDialog}>
+                <Button className="bg-brand-primary hover:bg-brand-primary/90 text-white shrink-0 ml-4" onClick={openUnsubAddDialog}>
                   <Plus size={16} className="mr-2" />
                   Add Mapping
                 </Button>
@@ -612,7 +612,7 @@ export default function SenderProvidersPage() {
                       <TableRow>
                         <TableCell colSpan={5} className="text-center py-12">
                           <div className="flex justify-center">
-                            <Loader2 size={24} className="animate-spin text-rip-red" />
+                            <Loader2 size={24} className="animate-spin text-brand-primary" />
                           </div>
                         </TableCell>
                       </TableRow>
@@ -722,7 +722,7 @@ export default function SenderProvidersPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIpDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleIpSave} disabled={ipSaving} className="bg-rip-red hover:bg-rip-red/90 text-white">
+            <Button onClick={handleIpSave} disabled={ipSaving} className="bg-brand-primary hover:bg-brand-primary/90 text-white">
               {ipSaving && <Loader2 size={14} className="mr-2 animate-spin" />}
               {ipEditTarget ? "Save Changes" : "Add Mapping"}
             </Button>
@@ -770,7 +770,7 @@ export default function SenderProvidersPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDkimDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleDkimSave} disabled={dkimSaving} className="bg-rip-red hover:bg-rip-red/90 text-white">
+            <Button onClick={handleDkimSave} disabled={dkimSaving} className="bg-brand-primary hover:bg-brand-primary/90 text-white">
               {dkimSaving && <Loader2 size={14} className="mr-2 animate-spin" />}
               {dkimEditTarget ? "Save Changes" : "Add Mapping"}
             </Button>
@@ -852,7 +852,7 @@ export default function SenderProvidersPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setUnsubDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleUnsubSave} disabled={unsubSaving} className="bg-rip-red hover:bg-rip-red/90 text-white">
+            <Button onClick={handleUnsubSave} disabled={unsubSaving} className="bg-brand-primary hover:bg-brand-primary/90 text-white">
               {unsubSaving && <Loader2 size={14} className="mr-2 animate-spin" />}
               {unsubEditTarget ? "Save Changes" : "Add Mapping"}
             </Button>

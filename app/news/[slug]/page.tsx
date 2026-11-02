@@ -9,7 +9,7 @@ import NewsPostClient from "./news-post-client"
 import AdBanner from "@/components/ad-banner"
 import { shouldShowAd } from "@/lib/ads"
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 interface Props {
   params: { slug: string }
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     })
 
     if (!post) {
-      return { title: "Post Not Found - Inbox.GOP" }
+      return { title: "Post Not Found - brandinbox.ai" }
     }
 
     const plainText = stripHtml(post.body)
@@ -37,13 +37,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const ogImageUrl = post.imageUrl ?? `${url}/opengraph-image`
 
     return {
-      title: `${post.title} - Inbox.GOP`,
+      title: `${post.title} - brandinbox.ai`,
       description,
       openGraph: {
         title: post.title,
         description,
         url,
-        siteName: "Inbox.GOP",
+        siteName: "brandinbox.ai",
         type: "article",
         publishedTime,
         images: [{ url: ogImageUrl, width: 1200, height: 630, alt: post.title }],
@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   } catch (err) {
     console.error("[generateMetadata] error for slug:", params.slug, err)
-    return { title: "What's New - Inbox.GOP" }
+    return { title: "What's New - brandinbox.ai" }
   }
 }
 

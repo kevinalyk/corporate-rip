@@ -5,7 +5,7 @@ import { nanoid } from "nanoid"
 import { sendWeeklyDigest, type WeeklyDigestItem } from "@/lib/mailgun"
 import { nameToSlug } from "@/lib/directory-utils"
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 /**
  * POST /api/admin/trigger-weekly-digest

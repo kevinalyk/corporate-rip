@@ -6,7 +6,7 @@ import {
   PARTY_VALUE_TO_SLUG,
 } from "@/lib/directory-routing"
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 const ALL_DIGEST_TAGS = [
   "2026-elections",

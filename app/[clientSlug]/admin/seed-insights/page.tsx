@@ -49,7 +49,7 @@ export default function AdminSeedInsightsPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">
         <div className="text-red-500 mb-4">{error}</div>
-        <button className="px-4 py-2 bg-rip-red text-white rounded" onClick={() => router.push("/login")}>
+        <button className="px-4 py-2 bg-brand-primary text-white rounded" onClick={() => router.push("/login")}>
           Go to Login
         </button>
       </div>
@@ -59,7 +59,7 @@ export default function AdminSeedInsightsPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rip-red"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary"></div>
       </div>
     )
   }

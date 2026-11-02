@@ -64,7 +64,7 @@ export async function getServerSession() {
 }
 
 /**
- * Get RIP employee with their client domain access
+ * Get brandinbox.ai employee with their client domain access
  */
 export async function getUserWithDomains(userId: string) {
   try {
@@ -87,7 +87,7 @@ export async function getUserWithDomains(userId: string) {
 }
 
 /**
- * Check if a RIP employee has access to monitor a specific client domain
+ * Check if a brandinbox.ai employee has access to monitor a specific client domain
  */
 export async function hasAccessToDomain(userId: string, domainId: string, requiredRole?: string) {
   try {
@@ -107,7 +107,7 @@ export async function hasAccessToDomain(userId: string, domainId: string, requir
 }
 
 /**
- * Check if a RIP employee is a system admin
+ * Check if a brandinbox.ai employee is a system admin
  * This checks both the legacy User.role field and the new UserDomainAccess system
  */
 export async function isSystemAdmin(userId: string) {
@@ -138,7 +138,7 @@ export async function isSystemAdmin(userId: string) {
 }
 
 /**
- * Get all client domains that a RIP employee can monitor
+ * Get all client domains that a brandinbox.ai employee can monitor
  */
 export async function getUserDomains(userId: string) {
   try {

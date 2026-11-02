@@ -141,7 +141,7 @@ export async function assertClientMcpAccess(key: { id: string; clientId: string 
   if (!eligibility.eligible) return deny(eligibility.reason ?? "MCP access is not available for this account.", 403)
 
   if (!(await hasAcceptedCurrentTerms(key.clientId))) {
-    return deny("Your organization has not accepted the current MCP Terms of Use. Accept them in the RIP app.", 403)
+    return deny("Your organization has not accepted the current MCP Terms of Use. Accept them in the brandinbox.ai app.", 403)
   }
 
   const minuteAgo = new Date(Date.now() - 60 * 1000)

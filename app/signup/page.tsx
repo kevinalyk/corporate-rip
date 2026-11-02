@@ -176,7 +176,7 @@ export default function SignupPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Create Client Account</CardTitle>
-          <CardDescription>Register your organization to get started with Inbox.GOP</CardDescription>
+          <CardDescription>Register your organization to get started with brandinbox.ai</CardDescription>
         </CardHeader>
         <CardContent>
           {error && (
@@ -324,10 +324,10 @@ export default function SignupPage() {
                 <label htmlFor="agreeToTerms" className="text-sm leading-relaxed cursor-pointer">
                   I agree to the{" "}
                   <a
-                    href="https://inbox.gop/terms"
+                    href="https://brandinbox.ai/terms"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-rip-blue hover:underline"
+                    className="text-brand-secondary hover:underline"
                   >
                     Terms of Service
                   </a>
@@ -343,10 +343,10 @@ export default function SignupPage() {
                 <label htmlFor="agreeToPrivacy" className="text-sm leading-relaxed cursor-pointer">
                   I agree to the{" "}
                   <a
-                    href="https://inbox.gop/privacy"
+                    href="https://brandinbox.ai/privacy"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-rip-blue hover:underline"
+                    className="text-brand-secondary hover:underline"
                   >
                     Privacy Policy
                   </a>
@@ -362,7 +362,7 @@ export default function SignupPage() {
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/login" className="text-rip-blue hover:underline">
+            <Link href="/login" className="text-brand-secondary hover:underline">
               Sign in
             </Link>
           </p>

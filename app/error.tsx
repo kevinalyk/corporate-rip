@@ -24,7 +24,7 @@ export default function Error({
         height={56}
         className="mb-8 opacity-90"
       />
-      <p className="text-sm font-semibold tracking-widest text-rip-red mb-3">ERROR</p>
+      <p className="text-sm font-semibold tracking-widest text-brand-primary mb-3">ERROR</p>
       <h1 className="text-3xl font-bold tracking-tight mb-4 text-balance">Something went wrong</h1>
       <p className="text-muted-foreground leading-relaxed max-w-md mb-8 text-pretty">
         An unexpected error occurred while loading this page. You can try again, or head back to the homepage.

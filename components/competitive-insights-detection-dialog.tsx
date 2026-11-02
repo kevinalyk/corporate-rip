@@ -84,7 +84,7 @@ export function CompetitiveInsightsDetectionDialog({ onDetectionComplete }: { on
         <DialogHeader>
           <DialogTitle>Detect Competitive Insights</DialogTitle>
           <DialogDescription>
-            Scan RIP-locked seed emails to detect competitor campaigns and build competitive intelligence.
+            Scan brandinbox.ai-locked seed emails to detect competitor campaigns and build competitive intelligence.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

@@ -4,15 +4,15 @@ import prisma from "@/lib/prisma"
  * Determine what a seed email is currently being used for, based on the same
  * signals the rest of the app already relies on to route seeds:
  * - domainHealthMode: used for domain health scans -> "Domain Health"
- * - locked + assigned to the RIP client itself: RIP's own pool used to scan
+ * - locked + assigned to the brandinbox.ai client itself: brandinbox.ai's own pool used to scan
  *   general political campaigns (see lib/campaign-detector.ts ripSeedEmails) -> "CI"
  * - locked + assigned to any other real client: that client's dedicated
  *   personal-inbox monitoring seed (see app/api/ci/personal/assignments,
  *   app/api/domain-health/seeds) -> "Personal"
  * - anything else (unlocked / unassigned pool seed) has no active use yet -> null
  *
- * RIP never has "Personal" seeds — its own accounts are always "CI" seeds, so
- * a seed assigned to RIP is never auto-labeled "Personal".
+ * brandinbox.ai never has "Personal" seeds — its own accounts are always "CI" seeds, so
+ * a seed assigned to brandinbox.ai is never auto-labeled "Personal".
  */
 export function computeSeedPurpose(seed: {
   assignedToClient: string | null
@@ -29,7 +29,7 @@ export function computeSeedPurpose(seed: {
 /**
  * Unassign all seeds from a cancelled client
  * - User-uploaded seeds: Set assignedToClient to null (keep ownedByClient)
- * - RIP-provided seeds: Return to pool (assignedToClient = null)
+ * - brandinbox.ai-provided seeds: Return to pool (assignedToClient = null)
  */
 export async function unassignClientSeeds(clientId: string): Promise<void> {
   try {
@@ -47,7 +47,7 @@ export async function unassignClientSeeds(clientId: string): Promise<void> {
     }
 
     // Unassign all seeds assigned to this client
-    // This includes both user-uploaded and RIP seeds
+    // This includes both user-uploaded and brandinbox.ai seeds
     const result = await prisma.seedEmail.updateMany({
       where: {
         assignedToClient: client.name,

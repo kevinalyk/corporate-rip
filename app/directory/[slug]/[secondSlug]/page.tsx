@@ -17,7 +17,7 @@ import {
 import AdBanner from "@/components/ad-banner"
 import { shouldShowAd } from "@/lib/ads"
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 /**
  * State + party combo landing pages, e.g.:
@@ -68,13 +68,13 @@ export async function generateMetadata({
 
   if (!combo) {
     return {
-      title: "Page Not Found - Inbox.GOP",
+      title: "Page Not Found - brandinbox.ai",
       description: "This directory page could not be found.",
     }
   }
 
-  const title = `${combo.stateName} ${combo.partyLabel} Directory - Inbox.GOP`
-  const description = `Track campaign emails and texts from ${combo.stateName} ${combo.partyAdjective} candidates and officials. See how ${combo.stateName} ${combo.partyLabel.toLowerCase()} are communicating with voters via the Republican Inboxing Protocol.`
+  const title = `${combo.stateName} ${combo.partyLabel} Directory - brandinbox.ai`
+  const description = `Track campaign emails and texts from ${combo.stateName} ${combo.partyAdjective} candidates and officials. See how ${combo.stateName} ${combo.partyLabel.toLowerCase()} are communicating with voters via the brandinbox.ai.`
   const url = `${APP_URL}/directory/${combo.stateSlug}/${combo.partySlug}`
 
   return {
@@ -84,7 +84,7 @@ export async function generateMetadata({
       title,
       description,
       url,
-      siteName: "Inbox.GOP",
+      siteName: "brandinbox.ai",
       type: "website",
       images: [{ url: `${APP_URL}/og-candidate-directory.png`, width: 1200, height: 630, alt: title }],
     },
@@ -137,7 +137,7 @@ export default async function DirectoryStatePartyPage({
     name: heading,
     description: subtitle,
     url,
-    isPartOf: { "@type": "WebSite", name: "RIP Tool", url: APP_URL },
+    isPartOf: { "@type": "WebSite", name: "brandinbox.ai", url: APP_URL },
   }
 
   const breadcrumb = {

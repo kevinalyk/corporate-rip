@@ -12,20 +12,20 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    console.log("Starting RIP seed engagement cron job...")
+    console.log("Starting brandinbox.ai seed engagement cron job...")
 
     const simulator = new EngagementSimulator()
     await simulator.simulateRipEngagement()
 
-    console.log("RIP seed engagement cron job completed successfully")
+    console.log("brandinbox.ai seed engagement cron job completed successfully")
 
     return NextResponse.json({
       success: true,
-      message: "RIP seed engagement completed",
+      message: "brandinbox.ai seed engagement completed",
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
-    console.error("RIP seed engagement cron job failed:", error)
+    console.error("brandinbox.ai seed engagement cron job failed:", error)
 
     return NextResponse.json(
       {

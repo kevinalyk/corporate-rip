@@ -3,7 +3,7 @@ import { decrypt } from "@/lib/encryption"
 import { SLACK_MULTI_BOT_ENABLED } from "@/lib/feature-flags"
 import { matchesMessageFilters } from "@/lib/slack-message-filters"
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 // entityId only becomes non-null well after a message actually arrived in several
 // paths: the twice-daily auto-assign-unassigned cron sweeps a backlog of anything
@@ -196,7 +196,7 @@ function buildSlackMessageText(params: NotifyParams, shareUrl: string): string {
       `New email from *${params.entityName}*`,
       `${params.senderName} <${params.senderEmail}>`,
       `"${truncate(subject, 200)}"`,
-      `<${shareUrl}|View in RIP Tool>`,
+      `<${shareUrl}|View in brandinbox.ai>`,
     ].join("\n")
   }
 
@@ -205,7 +205,7 @@ function buildSlackMessageText(params: NotifyParams, shareUrl: string): string {
     `New text from *${params.entityName}*`,
     params.phoneNumber ?? "Unknown number",
     `"${preview}"`,
-    `<${shareUrl}|View in RIP Tool>`,
+    `<${shareUrl}|View in brandinbox.ai>`,
   ].join("\n")
 }
 
