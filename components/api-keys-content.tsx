@@ -449,28 +449,28 @@ export function ApiKeysContent() {
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Get all campaigns:</p>
                 <pre className="bg-muted p-3 rounded-md text-sm font-mono overflow-x-auto whitespace-pre-wrap">
-{`curl "https://app.rip-tool.com/api/v1/campaigns" \\
+{`curl "https://brandinbox.ai/api/v1/campaigns" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Filter campaigns by date range:</p>
                 <pre className="bg-muted p-3 rounded-md text-sm font-mono overflow-x-auto whitespace-pre-wrap">
-{`curl "https://app.rip-tool.com/api/v1/campaigns?from=2026-03-01&to=2026-03-31" \\
+{`curl "https://brandinbox.ai/api/v1/campaigns?from=2026-03-01&to=2026-03-31" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Get SMS messages with pagination:</p>
                 <pre className="bg-muted p-3 rounded-md text-sm font-mono overflow-x-auto whitespace-pre-wrap">
-{`curl "https://app.rip-tool.com/api/v1/sms?limit=50&offset=100" \\
+{`curl "https://brandinbox.ai/api/v1/sms?limit=50&offset=100" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Filter by entity:</p>
                 <pre className="bg-muted p-3 rounded-md text-sm font-mono overflow-x-auto whitespace-pre-wrap">
-{`curl "https://app.rip-tool.com/api/v1/campaigns?entityId=abc123" \\
+{`curl "https://brandinbox.ai/api/v1/campaigns?entityId=abc123" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
               </div>

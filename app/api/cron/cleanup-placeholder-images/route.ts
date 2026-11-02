@@ -20,7 +20,7 @@ const MAX_BATCH_SIZE = 500
 // path; the weekly refresh cron then naturally retries those entities.
 //
 // Trigger manually via either:
-//   curl "https://app.rip-tool.com/api/cron/cleanup-placeholder-images?secret=$CRON_SECRET&limit=250"
+//   curl "https://brandinbox.ai/api/cron/cleanup-placeholder-images?secret=$CRON_SECRET&limit=250"
 // or paste the URL directly into a browser. Re-run until {processed: 0}
 // comes back. Idempotent — once an entity has been moved to
 // imageUrlSource='ballotpedia-placeholder' it falls out of the scan query.

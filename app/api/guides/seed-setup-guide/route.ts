@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 
 const PDF_CONTENT = `# SEED LIST EMAIL ACCOUNT SETUP GUIDE
 This guide provides detailed instructions for creating and configuring email
-accounts across Gmail, Yahoo, Outlook, and AOL for use in the RIP Email Testing
+accounts across Gmail, Yahoo, Outlook, and AOL for use in the brandinbox.ai Email Testing
 System.
 
 ## GENERAL RECOMMENDATIONS
@@ -31,7 +31,7 @@ B4A/edit?usp=sharing)
 ### Creation Process:
 1. Go to https://accounts.google.com/signup
 2. Click "Create account" and select "For myself"
-3. Enter first name, last name (use consistent naming like "RIP Test")
+3. Enter first name, last name (use consistent naming like "brandinbox.ai Test")
 4. Choose username (follow your naming convention + number)
 5. Create password (document this)
 6. Enter recovery phone number (optional but recommended)
@@ -58,7 +58,7 @@ B4A/edit?usp=sharing)
 4. If you need to enable it, also generate an App Password:
    a. After enabling 2-Step Verification, go back to the Security page
    b. Generate an app password: https://myaccount.google.com/apppasswords
-   c. Name the app RIP Tool or something similar.
+   c. Name the app brandinbox.ai or something similar.
    d. Generate the code and save it to your document.
 
 ### Verification:
@@ -88,7 +88,7 @@ B4A/edit?usp=sharing)
 
    a. In Account security, find "Generate app password"
    b. Select "Other app"
-   c. Name it "RIP Testing"
+   c. Name it "brandinbox.ai Testing"
    d. Copy and document the password
 
 ### Verification:
@@ -118,7 +118,7 @@ B4A/edit?usp=sharing)
 --You will have to add an email or phone in order to turn this on. Please make sure to document whatever you pick--
 
 ### Security Settings:
---You do NOT need to set this up with RIP. We created a custom app to access Outlook emails--
+--You do NOT need to set this up with brandinbox.ai. We created a custom app to access Outlook emails--
 
 ### Verification:
 1. Send a test email to the account
@@ -148,7 +148,7 @@ B4A/edit?usp=sharing)
 
    a. In Account security, find "Generate app password"
    b. Select "Other app"
-   c. Name it "RIP Testing"
+   c. Name it "brandinbox.ai Testing"
    d. Copy and document the password
 
 ### Verification:
@@ -187,7 +187,7 @@ Use this link and make a copy:
 https://docs.google.com/spreadsheets/d/1bjrlO2eRagLlNi0vH7ph3tznaupKjJnccxgpJL9Z
 B4A/edit?usp=sharing
 
-Feel free to download and upload to RIP whenever you make any changes. Our system will automatically update any changes and add any new seed emails when available.`
+Feel free to download and upload to brandinbox.ai whenever you make any changes. Our system will automatically update any changes and add any new seed emails when available.`
 
 // Store the blob URL in memory (in production, you'd want to store this in a database)
 let cachedBlobUrl: string | null = null

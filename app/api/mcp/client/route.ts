@@ -183,7 +183,7 @@ const handler = createMcpHandler(
         ),
     )
   },
-  { serverInfo: { name: "rip-tool-client", version: "1.0.0" } },
+  { serverInfo: { name: "brandinbox-client", version: "1.0.0" } },
   { streamableHttpEndpoint: "/api/mcp/client", disableSse: true },
 )
 

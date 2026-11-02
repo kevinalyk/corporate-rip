@@ -2347,7 +2347,7 @@ export async function createDigestArticle(input: CreateDigestArticleInput) {
   return {
     id: article.id,
     slug: article.slug,
-    url: `https://app.rip-tool.com/digest/${article.slug}`,
+    url: `https://brandinbox.ai/digest/${article.slug}`,
     publishedAt: article.publishedAt,
   }
 }
@@ -2439,7 +2439,7 @@ export async function createNewsArticle(input: CreateNewsArticleInput) {
   return {
     id: article.id,
     slug: article.slug,
-    url: `https://app.rip-tool.com/news/${article.slug}`,
+    url: `https://brandinbox.ai/news/${article.slug}`,
     publishedAt: article.publishedAt,
   }
 }
@@ -2522,7 +2522,7 @@ export async function updateNewsArticle(input: UpdateNewsArticleInput) {
   return {
     id: article.id,
     slug: article.slug,
-    url: `https://app.rip-tool.com/news/${article.slug}`,
+    url: `https://brandinbox.ai/news/${article.slug}`,
     title: article.title,
     imageUrl: article.imageUrl,
     publishedAt: article.publishedAt,

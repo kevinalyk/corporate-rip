@@ -7,7 +7,7 @@ import {
   EMAIL_POSTAL_ADDRESS,
 } from "./email-unsubscribe"
 
-const ADMIN_NOTIFICATION_EMAIL = "kevin@rip-tool.com"
+const ADMIN_NOTIFICATION_EMAIL = "kevin@brandinbox.ai"
 
 async function sendMailgunEmail(subject: string, html: string, text: string): Promise<boolean> {
   const MAILGUN_API_KEY = process.env.MAILGUN_API_KEY
@@ -19,7 +19,7 @@ async function sendMailgunEmail(subject: string, html: string, text: string): Pr
   }
 
   const formData = new FormData()
-  formData.append("from", `Inbox.GOP Alerts <inbox@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai Alerts <inbox@${MAILGUN_DOMAIN}>`)
   formData.append("to", ADMIN_NOTIFICATION_EMAIL)
   formData.append("subject", subject)
   formData.append("html", html)
@@ -70,7 +70,7 @@ export async function sendNewSignupNotification(params: {
     timeZone: "America/New_York",
   }).format(signupAt)
 
-  const profileUrl = `https://app.rip-tool.com/${clientSlug}`
+  const profileUrl = `https://brandinbox.ai/${clientSlug}`
 
   const html = `
     <!DOCTYPE html>
@@ -79,7 +79,7 @@ export async function sendNewSignupNotification(params: {
       <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 560px; margin: 0 auto; padding: 20px; background: #f5f5f5;">
         <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
           <div style="background: #dc2626; padding: 24px 28px;">
-            <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Inbox.GOP</p>
+            <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">brandinbox.ai</p>
             <h1 style="margin: 4px 0 0 0; color: white; font-size: 22px; font-weight: 700;">New Account Signup</h1>
           </div>
           <div style="padding: 28px;">
@@ -124,7 +124,7 @@ export async function sendNewSignupNotification(params: {
   `
 
   const text = `
-New Account Signup — Inbox.GOP
+New Account Signup — brandinbox.ai
 
 Name:         ${firstName} ${lastName}
 Email:        ${email}
@@ -158,7 +158,7 @@ export async function sendLookupSignupNotification(params: {
     timeZone: "America/New_York",
   }).format(signupAt)
 
-  const lookupUrl = "https://app.rip-tool.com/lookup"
+  const lookupUrl = "https://brandinbox.ai/lookup"
 
   const html = `
     <!DOCTYPE html>
@@ -167,7 +167,7 @@ export async function sendLookupSignupNotification(params: {
       <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 560px; margin: 0 auto; padding: 20px; background: #f5f5f5;">
         <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
           <div style="background: #2563eb; padding: 24px 28px;">
-            <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Inbox.GOP Lookup</p>
+            <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">brandinbox.ai Lookup</p>
             <h1 style="margin: 4px 0 0 0; color: white; font-size: 22px; font-weight: 700;">New Lookup Signup</h1>
           </div>
           <div style="padding: 28px;">
@@ -200,7 +200,7 @@ export async function sendLookupSignupNotification(params: {
   `
 
   const text = `
-New Lookup Signup — Inbox.GOP
+New Lookup Signup — brandinbox.ai
 
 Email:     ${email}
 Signed Up: ${formattedDate}
@@ -271,7 +271,7 @@ export async function sendNewPaymentNotification(params: {
       <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 560px; margin: 0 auto; padding: 20px; background: #f5f5f5;">
         <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
           <div style="background: #16a34a; padding: 24px 28px;">
-            <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Inbox.GOP</p>
+            <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">brandinbox.ai</p>
             <h1 style="margin: 4px 0 0 0; color: white; font-size: 22px; font-weight: 700;">New Subscription Payment</h1>
             <p style="margin: 6px 0 0 0; color: rgba(255,255,255,0.9); font-size: 28px; font-weight: 800; letter-spacing: -0.5px;">${amountFormatted}</p>
           </div>
@@ -326,7 +326,7 @@ export async function sendNewPaymentNotification(params: {
   `
 
   const text = `
-New Subscription Payment — Inbox.GOP
+New Subscription Payment — brandinbox.ai
 
 Amount:          ${amountFormatted}
 Client ID:       ${clientId}
@@ -363,7 +363,7 @@ export async function sendWelcomeEmail(params: {
   const {
     firstName,
     email,
-    loginUrl = "https://app.rip-tool.com/login",
+    loginUrl = "https://brandinbox.ai/login",
   } = params
 
   const html = `
@@ -373,13 +373,13 @@ export async function sendWelcomeEmail(params: {
       <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 560px; margin: 0 auto; padding: 20px; background: #f5f5f5;">
         <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
           <div style="background: #dc2626; padding: 24px 28px;">
-            <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Inbox.GOP</p>
-            <h1 style="margin: 4px 0 0 0; color: white; font-size: 22px; font-weight: 700;">Welcome to Inbox.GOP</h1>
+            <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">brandinbox.ai</p>
+            <h1 style="margin: 4px 0 0 0; color: white; font-size: 22px; font-weight: 700;">Welcome to brandinbox.ai</h1>
           </div>
           <div style="padding: 28px;">
             <p style="margin: 0 0 16px 0; font-size: 15px; color: #1a1a1a;">Hi ${firstName},</p>
             <p style="margin: 0 0 16px 0; font-size: 15px; color: #1a1a1a;">
-              Welcome to Inbox.GOP — the most comprehensive database of Republican political fundraising emails and SMS messages.
+              Welcome to brandinbox.ai — the most comprehensive database of Republican political fundraising emails and SMS messages.
             </p>
             <p style="margin: 0 0 8px 0; font-size: 14px; color: #555; font-weight: 600;">Your free Starter plan gives you access to:</p>
             <ul style="margin: 0 0 20px 0; padding-left: 20px; font-size: 14px; color: #333; line-height: 1.8;">
@@ -393,12 +393,12 @@ export async function sendWelcomeEmail(params: {
               If you'd like a walkthrough of everything the platform can do, just reply to this email and we'll set up a time.
             </p>
             <div style="text-align: center; margin-bottom: 28px;">
-              <a href="${loginUrl}" style="display: inline-block; background: #dc2626; color: white; text-decoration: none; padding: 12px 28px; border-radius: 6px; font-size: 15px; font-weight: 600;">Go to Inbox.GOP</a>
+              <a href="${loginUrl}" style="display: inline-block; background: #dc2626; color: white; text-decoration: none; padding: 12px 28px; border-radius: 6px; font-size: 15px; font-weight: 600;">Go to brandinbox.ai</a>
             </div>
             <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 0 0 20px 0;" />
             <p style="margin: 0; font-size: 13px; color: #888; text-align: center;">
               Questions? Just reply to this email.<br/>
-              <a href="https://app.rip-tool.com" style="color: #dc2626; text-decoration: none;">app.rip-tool.com</a>
+              <a href="https://brandinbox.ai" style="color: #dc2626; text-decoration: none;">brandinbox.ai</a>
             </p>
           </div>
         </div>
@@ -409,7 +409,7 @@ export async function sendWelcomeEmail(params: {
   const text = `
 Hi ${firstName},
 
-Welcome to Inbox.GOP — the most comprehensive database of Republican political fundraising emails and SMS messages.
+Welcome to brandinbox.ai — the most comprehensive database of Republican political fundraising emails and SMS messages.
 
 Your free Starter plan gives you access to:
 - The last 3 hours of email and SMS campaigns across the database
@@ -419,16 +419,16 @@ Upgrading unlocks deeper history, search and filtering, the ability to follow sp
 
 If you'd like a walkthrough of everything the platform can do, just reply to this email and we'll set up a time.
 
-Go to Inbox.GOP: ${loginUrl}
+Go to brandinbox.ai: ${loginUrl}
 
 Questions? Just reply to this email.
   `.trim()
 
   const formData = new FormData()
-  formData.append("from", `Inbox.GOP <inbox@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai <inbox@${MAILGUN_DOMAIN}>`)
   formData.append("to", email)
-  formData.append("h:Reply-To", "kevin@rip-tool.com, ryan@rip-tool.com")
-  formData.append("subject", `Welcome to Inbox.GOP, ${firstName}`)
+  formData.append("h:Reply-To", "kevin@brandinbox.ai, ryan@brandinbox.ai")
+  formData.append("subject", `Welcome to brandinbox.ai, ${firstName}`)
   formData.append("html", html)
   formData.append("text", text)
 
@@ -470,8 +470,8 @@ export async function sendTrialEndedEmail(params: {
     return false
   }
 
-  const { firstName, email, organizationName, clientSlug, loginUrl = "https://app.rip-tool.com/login" } = params
-  const billingUrl = `https://app.rip-tool.com/${clientSlug}/account/billing`
+  const { firstName, email, organizationName, clientSlug, loginUrl = "https://brandinbox.ai/login" } = params
+  const billingUrl = `https://brandinbox.ai/${clientSlug}/account/billing`
 
   const html = `
   <!DOCTYPE html>
@@ -480,13 +480,13 @@ export async function sendTrialEndedEmail(params: {
   <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 560px; margin: 0 auto; padding: 20px; background: #f5f5f5;">
   <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
   <div style="background: #dc2626; padding: 24px 28px;">
-  <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Inbox.GOP</p>
+  <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">brandinbox.ai</p>
   <h1 style="margin: 4px 0 0 0; color: white; font-size: 22px; font-weight: 700;">Your free trial has ended</h1>
   </div>
   <div style="padding: 28px;">
   <p style="margin: 0 0 16px 0; font-size: 15px; color: #1a1a1a;">Hi ${firstName},</p>
   <p style="margin: 0 0 16px 0; font-size: 15px; color: #1a1a1a;">
-  Your free trial of Inbox.GOP for <strong>${organizationName}</strong> has ended. Your account has been moved to our free Starter plan, which limits access to the last 3 hours of campaigns and basic details.
+  Your free trial of brandinbox.ai for <strong>${organizationName}</strong> has ended. Your account has been moved to our free Starter plan, which limits access to the last 3 hours of campaigns and basic details.
   </p>
   <p style="margin: 0 0 24px 0; font-size: 14px; color: #555;">
   Subscribe now to keep unlimited users, deeper history, full search and filtering, following entities, analytics, and our inboxing and seed testing tools.
@@ -497,7 +497,7 @@ export async function sendTrialEndedEmail(params: {
   <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 0 0 20px 0;" />
   <p style="margin: 0; font-size: 13px; color: #888; text-align: center;">
   Questions? Just reply to this email.<br/>
-  <a href="${loginUrl}" style="color: #dc2626; text-decoration: none;">Log in to Inbox.GOP</a>
+  <a href="${loginUrl}" style="color: #dc2626; text-decoration: none;">Log in to brandinbox.ai</a>
   </p>
   </div>
   </div>
@@ -508,7 +508,7 @@ export async function sendTrialEndedEmail(params: {
   const text = `
 Hi ${firstName},
 
-Your free trial of Inbox.GOP for ${organizationName} has ended. Your account has been moved to our free Starter plan, which limits access to the last 3 hours of campaigns and basic details.
+Your free trial of brandinbox.ai for ${organizationName} has ended. Your account has been moved to our free Starter plan, which limits access to the last 3 hours of campaigns and basic details.
 
 Subscribe now to keep unlimited users, deeper history, full search and filtering, following entities, analytics, and our inboxing and seed testing tools.
 
@@ -518,10 +518,10 @@ Questions? Just reply to this email.
   `.trim()
 
   const formData = new FormData()
-  formData.append("from", `Inbox.GOP <inbox@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai <inbox@${MAILGUN_DOMAIN}>`)
   formData.append("to", email)
-  formData.append("h:Reply-To", "kevin@rip-tool.com, ryan@rip-tool.com")
-  formData.append("subject", `Your Inbox.GOP trial has ended`)
+  formData.append("h:Reply-To", "kevin@brandinbox.ai, ryan@brandinbox.ai")
+  formData.append("subject", `Your brandinbox.ai trial has ended`)
   formData.append("html", html)
   formData.append("text", text)
 
@@ -566,8 +566,8 @@ export async function sendTrialConvertedEmail(params: {
     return false
   }
 
-  const { firstName, email, organizationName, clientSlug, loginUrl = "https://app.rip-tool.com/login" } = params
-  const billingUrl = `https://app.rip-tool.com/${clientSlug}/account/billing`
+  const { firstName, email, organizationName, clientSlug, loginUrl = "https://brandinbox.ai/login" } = params
+  const billingUrl = `https://brandinbox.ai/${clientSlug}/account/billing`
 
   const html = `
   <!DOCTYPE html>
@@ -576,13 +576,13 @@ export async function sendTrialConvertedEmail(params: {
   <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 560px; margin: 0 auto; padding: 20px; background: #f5f5f5;">
   <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
   <div style="background: #16a34a; padding: 24px 28px;">
-  <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Inbox.GOP</p>
+  <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">brandinbox.ai</p>
   <h1 style="margin: 4px 0 0 0; color: white; font-size: 22px; font-weight: 700;">Your trial has converted to Basic</h1>
   </div>
   <div style="padding: 28px;">
   <p style="margin: 0 0 16px 0; font-size: 15px; color: #1a1a1a;">Hi ${firstName},</p>
   <p style="margin: 0 0 16px 0; font-size: 15px; color: #1a1a1a;">
-  Your free trial of Inbox.GOP for <strong>${organizationName}</strong> has ended, and your card on file has been charged for our Basic plan ($50/month). Your account has moved from full trial access to Basic-plan limits.
+  Your free trial of brandinbox.ai for <strong>${organizationName}</strong> has ended, and your card on file has been charged for our Basic plan ($50/month). Your account has moved from full trial access to Basic-plan limits.
   </p>
   <p style="margin: 0 0 24px 0; font-size: 14px; color: #555;">
   Want to keep unlimited users, deeper campaign history, reporting, and our inboxing and seed testing tools? You can upgrade anytime from your billing page.
@@ -593,7 +593,7 @@ export async function sendTrialConvertedEmail(params: {
   <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 0 0 20px 0;" />
   <p style="margin: 0; font-size: 13px; color: #888; text-align: center;">
   Questions? Just reply to this email.<br/>
-  <a href="${loginUrl}" style="color: #16a34a; text-decoration: none;">Log in to Inbox.GOP</a>
+  <a href="${loginUrl}" style="color: #16a34a; text-decoration: none;">Log in to brandinbox.ai</a>
   </p>
   </div>
   </div>
@@ -604,7 +604,7 @@ export async function sendTrialConvertedEmail(params: {
   const text = `
 Hi ${firstName},
 
-Your free trial of Inbox.GOP for ${organizationName} has ended, and your card on file has been charged for our Basic plan ($50/month). Your account has moved from full trial access to Basic-plan limits.
+Your free trial of brandinbox.ai for ${organizationName} has ended, and your card on file has been charged for our Basic plan ($50/month). Your account has moved from full trial access to Basic-plan limits.
 
 Want to keep unlimited users, deeper campaign history, reporting, and our inboxing and seed testing tools? You can upgrade anytime from your billing page.
 
@@ -614,10 +614,10 @@ Questions? Just reply to this email.
   `.trim()
 
   const formData = new FormData()
-  formData.append("from", `Inbox.GOP <inbox@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai <inbox@${MAILGUN_DOMAIN}>`)
   formData.append("to", email)
-  formData.append("h:Reply-To", "kevin@rip-tool.com, ryan@rip-tool.com")
-  formData.append("subject", `Your Inbox.GOP trial has converted to Basic`)
+  formData.append("h:Reply-To", "kevin@brandinbox.ai, ryan@brandinbox.ai")
+  formData.append("subject", `Your brandinbox.ai trial has converted to Basic`)
   formData.append("html", html)
   formData.append("text", text)
 
@@ -668,9 +668,9 @@ export async function sendTrialEndingSoonEmail(params: {
     organizationName,
     clientSlug,
     trialEndsAt,
-    loginUrl = "https://app.rip-tool.com/login",
+    loginUrl = "https://brandinbox.ai/login",
   } = params
-  const billingUrl = `https://app.rip-tool.com/${clientSlug}/account/billing`
+  const billingUrl = `https://brandinbox.ai/${clientSlug}/account/billing`
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     month: "long",
     day: "numeric",
@@ -684,13 +684,13 @@ export async function sendTrialEndingSoonEmail(params: {
   <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 560px; margin: 0 auto; padding: 20px; background: #f5f5f5;">
   <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
   <div style="background: #d97706; padding: 24px 28px;">
-  <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Inbox.GOP</p>
+  <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">brandinbox.ai</p>
   <h1 style="margin: 4px 0 0 0; color: white; font-size: 22px; font-weight: 700;">Your trial ends on ${formattedDate}</h1>
   </div>
   <div style="padding: 28px;">
   <p style="margin: 0 0 16px 0; font-size: 15px; color: #1a1a1a;">Hi ${firstName},</p>
   <p style="margin: 0 0 16px 0; font-size: 15px; color: #1a1a1a;">
-  Your free trial of Inbox.GOP for <strong>${organizationName}</strong> ends on <strong>${formattedDate}</strong>. After that, the card on file will be charged for our Basic plan ($50/month) and your account will move to Basic-plan limits.
+  Your free trial of brandinbox.ai for <strong>${organizationName}</strong> ends on <strong>${formattedDate}</strong>. After that, the card on file will be charged for our Basic plan ($50/month) and your account will move to Basic-plan limits.
   </p>
   <p style="margin: 0 0 24px 0; font-size: 14px; color: #555;">
   Nothing to do if you'd like to continue — you'll be moved over automatically. If you'd rather not continue, you can cancel from your billing page before the trial ends and you won't be charged.
@@ -701,7 +701,7 @@ export async function sendTrialEndingSoonEmail(params: {
   <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 0 0 20px 0;" />
   <p style="margin: 0; font-size: 13px; color: #888; text-align: center;">
   Questions? Just reply to this email.<br/>
-  <a href="${loginUrl}" style="color: #d97706; text-decoration: none;">Log in to Inbox.GOP</a>
+  <a href="${loginUrl}" style="color: #d97706; text-decoration: none;">Log in to brandinbox.ai</a>
   </p>
   </div>
   </div>
@@ -712,7 +712,7 @@ export async function sendTrialEndingSoonEmail(params: {
   const text = `
 Hi ${firstName},
 
-Your free trial of Inbox.GOP for ${organizationName} ends on ${formattedDate}. After that, the card on file will be charged for our Basic plan ($50/month) and your account will move to Basic-plan limits.
+Your free trial of brandinbox.ai for ${organizationName} ends on ${formattedDate}. After that, the card on file will be charged for our Basic plan ($50/month) and your account will move to Basic-plan limits.
 
 Nothing to do if you'd like to continue — you'll be moved over automatically. If you'd rather not continue, you can cancel from your billing page before the trial ends and you won't be charged.
 
@@ -722,10 +722,10 @@ Questions? Just reply to this email.
   `.trim()
 
   const formData = new FormData()
-  formData.append("from", `Inbox.GOP <inbox@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai <inbox@${MAILGUN_DOMAIN}>`)
   formData.append("to", email)
-  formData.append("h:Reply-To", "kevin@rip-tool.com, ryan@rip-tool.com")
-  formData.append("subject", `Your Inbox.GOP trial ends ${formattedDate}`)
+  formData.append("h:Reply-To", "kevin@brandinbox.ai, ryan@brandinbox.ai")
+  formData.append("subject", `Your brandinbox.ai trial ends ${formattedDate}`)
   formData.append("html", html)
   formData.append("text", text)
 
@@ -761,14 +761,14 @@ export async function sendPasswordResetEmail(email: string, resetToken: string):
     return false
   }
 
-  // Construct reset URL - use app.rip-tool.com in production
-  const baseUrl = process.env.NODE_ENV === "production" ? "https://app.rip-tool.com" : "http://localhost:3000"
+  // Construct reset URL - use brandinbox.ai in production
+  const baseUrl = process.env.NODE_ENV === "production" ? "https://brandinbox.ai" : "http://localhost:3000"
   const resetUrl = `${baseUrl}/reset-password?token=${resetToken}`
 
   const formData = new FormData()
-  formData.append("from", `RIP Tool <hello@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai <hello@${MAILGUN_DOMAIN}>`)
   formData.append("to", email)
-  formData.append("subject", "Reset Your Password - RIP Tool")
+  formData.append("subject", "Reset Your Password - brandinbox.ai")
   formData.append(
     "html",
     `
@@ -782,7 +782,7 @@ export async function sendPasswordResetEmail(email: string, resetToken: string):
         <div style="background-color: #f8f9fa; border-radius: 8px; padding: 30px; margin-bottom: 20px;">
           <h1 style="color: #dc2626; margin: 0 0 20px 0; font-size: 24px;">Reset Your Password</h1>
           <p style="margin: 0 0 20px 0; font-size: 16px;">
-            We received a request to reset your password for your RIP Tool account.
+            We received a request to reset your password for your brandinbox.ai account.
           </p>
           <p style="margin: 0 0 20px 0; font-size: 16px;">
             Click the button below to reset your password. This link will expire in 1 hour.
@@ -797,7 +797,7 @@ export async function sendPasswordResetEmail(email: string, resetToken: string):
           </p>
         </div>
         <div style="text-align: center; font-size: 12px; color: #999; margin-top: 20px;">
-          <p>Inbox.GOP</p>
+          <p>brandinbox.ai</p>
           <p>If the button doesn't work, copy and paste this link into your browser:</p>
           <p style="word-break: break-all;">${resetUrl}</p>
         </div>
@@ -810,7 +810,7 @@ export async function sendPasswordResetEmail(email: string, resetToken: string):
     `
 Reset Your Password
 
-We received a request to reset your password for your RIP Tool account.
+We received a request to reset your password for your brandinbox.ai account.
 
 Click the link below to reset your password. This link will expire in 1 hour.
 
@@ -819,7 +819,7 @@ ${resetUrl}
 If you didn't request a password reset, you can safely ignore this email. Your password will not be changed.
 
 ---
-Inbox.GOP
+brandinbox.ai
   `,
   )
 
@@ -869,11 +869,11 @@ export async function sendSubscriptionCancellationWarning(
     year: "numeric",
   }).format(expiryDate)
 
-  const baseUrl = process.env.NODE_ENV === "production" ? "https://app.rip-tool.com" : "http://localhost:3000"
+  const baseUrl = process.env.NODE_ENV === "production" ? "https://brandinbox.ai" : "http://localhost:3000"
   const billingUrl = `${baseUrl}/${clientName}/billing`
 
   const formData = new FormData()
-  formData.append("from", `RIP Tool <hello@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai <hello@${MAILGUN_DOMAIN}>`)
   formData.append("to", email)
   formData.append("subject", `Your ${planName} subscription is ending soon`)
   formData.append(
@@ -930,7 +930,7 @@ export async function sendSubscriptionCancellationWarning(
         </div>
         
         <div style="text-align: center; font-size: 12px; color: #999; margin-top: 20px;">
-          <p>Inbox.GOP</p>
+          <p>brandinbox.ai</p>
           <p>If the button doesn't work, visit: ${billingUrl}</p>
         </div>
       </body>
@@ -967,7 +967,7 @@ To keep your current plan and maintain access, you can reactivate your subscript
 Manage your subscription: ${billingUrl}
 
 ---
-Inbox.GOP
+brandinbox.ai
   `,
   )
 
@@ -1024,7 +1024,7 @@ export async function sendDowngradeScheduledEmail(
     : `You are currently following ${currentFollowCount} entities, which is within the ${targetPlan} plan limit of ${newFollowLimit} entities.`
 
   const formData = new FormData()
-  formData.append("from", `RIP Tool <hello@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai <hello@${MAILGUN_DOMAIN}>`)
   formData.append("to", to)
   formData.append("subject", `Your Plan Will Change on ${formattedDate}`)
   formData.append(
@@ -1086,11 +1086,11 @@ export async function sendDowngradeScheduledEmail(
             <p>If you'd like to keep your current plan, you can upgrade anytime before ${formattedDate}.</p>
             
             <center>
-              <a href="https://app.rip-tool.com" class="button">Manage Subscription</a>
+              <a href="https://brandinbox.ai" class="button">Manage Subscription</a>
             </center>
             
             <div class="footer">
-              <p>Questions? Contact us at support@rip-tool.com</p>
+              <p>Questions? Contact us at support@brandinbox.ai</p>
             </div>
           </div>
         </div>
@@ -1130,7 +1130,7 @@ export interface DigestMessage {
   subject: string       // email subject or SMS preview (first ~80 chars)
   senderIdentifier: string // senderEmail (emails) or phoneNumber (sms)
   receivedAt: Date
-  shareUrl: string      // https://app.rip-tool.com/share/<token>
+  shareUrl: string      // https://brandinbox.ai/share/<token>
 }
 
 export interface DigestEntitySection {
@@ -1159,7 +1159,7 @@ export async function sendFollowingDigest(params: {
 
   const { to, userId, firstName, digestDate, entitySections, clientSlug } = params
 
-  const APP_URL = "https://app.rip-tool.com"
+  const APP_URL = "https://brandinbox.ai"
   const feedUrl = generateTrackedLink(userId, "daily_digest", "feed", `/${clientSlug}/ci/campaigns`, APP_URL)
   const subscriptionsUrl = generateTrackedLink(userId, "daily_digest", "subscriptions", `/${clientSlug}/ci/subscriptions`, APP_URL)
   const unsubscribeUrl = createEmailUnsubscribeUrl(userId, APP_URL)
@@ -1294,7 +1294,7 @@ export async function sendFollowingDigest(params: {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daily Digest - Inbox.GOP</title>
+  <title>Daily Digest - brandinbox.ai</title>
 </head>
 <body style="margin:0;padding:0;background:#030712;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#030712;padding:32px 16px;">
@@ -1308,7 +1308,7 @@ export async function sendFollowingDigest(params: {
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="vertical-align:middle;">
-                    <img src="${logoUrl}" alt="Inbox.GOP" width="28" height="28" style="display:inline-block;vertical-align:middle;margin-right:8px;" />
+                    <img src="${logoUrl}" alt="brandinbox.ai" width="28" height="28" style="display:inline-block;vertical-align:middle;margin-right:8px;" />
                     <span style="font-size:13px;color:#d1d5db;font-weight:700;vertical-align:middle;">Following Digest</span>
                   </td>
                   <td style="text-align:right;vertical-align:middle;">
@@ -1351,9 +1351,9 @@ export async function sendFollowingDigest(params: {
             <td style="padding:24px 0 0;">
               <p style="margin:0;font-size:12px;color:#374151;text-align:center;line-height:1.8;">
                 You&apos;re receiving this because you follow entities on
-                <a href="https://app.rip-tool.com" style="color:#6b7280;text-decoration:none;">app.rip-tool.com</a>.<br/>
+                <a href="https://brandinbox.ai" style="color:#6b7280;text-decoration:none;">brandinbox.ai</a>.<br/>
                 View the full feed at
-                <a href="${feedUrl}" style="color:#6b7280;text-decoration:none;">app.rip-tool.com</a>.<br/>
+                <a href="${feedUrl}" style="color:#6b7280;text-decoration:none;">brandinbox.ai</a>.<br/>
                 <a href="${unsubscribeUrl}" style="color:#6b7280;text-decoration:underline;">Unsubscribe from email updates</a>.<br/>
                 ${EMAIL_POSTAL_ADDRESS}
               </p>
@@ -1369,7 +1369,7 @@ export async function sendFollowingDigest(params: {
 
   const text = `${greeting}
 
-Daily Digest - Inbox.GOP — ${digestDate}
+Daily Digest - brandinbox.ai — ${digestDate}
 
 ${activeSections
   .map((s) => {
@@ -1387,9 +1387,9 @@ ${EMAIL_POSTAL_ADDRESS}
 `
 
   const formData = new FormData()
-  formData.append("from", `Inbox.GOP Digest <digest@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai Digest <digest@${MAILGUN_DOMAIN}>`)
   formData.append("to", to)
-  formData.append("subject", `Daily Digest - Inbox.GOP`)
+  formData.append("subject", `Daily Digest - brandinbox.ai`)
   formData.append("html", html)
   formData.append("text", text)
   addEmailUnsubscribeHeaders(formData, unsubscribeUrl)
@@ -1450,7 +1450,7 @@ export async function sendWeeklyDigest(params: {
 
   const { to, firstName, weekStart, weekEnd, items, clientSlug, userId } = params
 
-  const APP_URL = "https://app.rip-tool.com"
+  const APP_URL = "https://brandinbox.ai"
   const feedUrl = generateTrackedLink(userId, "weekly_digest", "feed", `/${clientSlug}/ci/campaigns`, APP_URL)
   const subscriptionsUrl = generateTrackedLink(userId, "weekly_digest", "subscriptions", `/${clientSlug}/ci/subscriptions`, APP_URL)
   const unsubscribeUrl = createEmailUnsubscribeUrl(userId, APP_URL)
@@ -1546,7 +1546,7 @@ export async function sendWeeklyDigest(params: {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Weekly Top Content - Inbox.GOP</title>
+  <title>Weekly Top Content - brandinbox.ai</title>
 </head>
 <body style="margin:0;padding:0;background:#030712;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#030712;padding:32px 16px;">
@@ -1560,7 +1560,7 @@ export async function sendWeeklyDigest(params: {
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="vertical-align:middle;">
-                    <img src="${logoUrl}" alt="Inbox.GOP" width="28" height="28" style="display:inline-block;vertical-align:middle;margin-right:8px;" />
+                    <img src="${logoUrl}" alt="brandinbox.ai" width="28" height="28" style="display:inline-block;vertical-align:middle;margin-right:8px;" />
                     <span style="font-size:13px;color:#d1d5db;font-weight:700;vertical-align:middle;">Weekly Top ${items.length}</span>
                   </td>
                   <td style="text-align:right;vertical-align:middle;">
@@ -1579,7 +1579,7 @@ export async function sendWeeklyDigest(params: {
                   <td style="vertical-align:top;">
                     <p style="margin:0 0 4px;font-size:15px;color:#f9fafb;font-weight:600;">${greeting}</p>
                     <p style="margin:0;font-size:13px;color:#9ca3af;line-height:1.6;">
-                      Here are ${items.length} of the <strong style="color:#e5e7eb;">top viewed</strong> emails and SMS sends from across <a href="${feedUrl}" target="_blank" style="color:#e5e7eb;">Inbox.GOP</a> over the past week.
+                      Here are ${items.length} of the <strong style="color:#e5e7eb;">top viewed</strong> emails and SMS sends from across <a href="${feedUrl}" target="_blank" style="color:#e5e7eb;">brandinbox.ai</a> over the past week.
                     </p>
                   </td>
                   <td style="text-align:right;vertical-align:top;padding-left:16px;white-space:nowrap;">
@@ -1604,9 +1604,9 @@ export async function sendWeeklyDigest(params: {
             <td style="padding:24px 0 0;">
               <p style="margin:0;font-size:12px;color:#374151;text-align:center;line-height:1.8;">
                 You&apos;re receiving this because you follow entities on
-                <a href="https://app.rip-tool.com" style="color:#6b7280;text-decoration:none;">app.rip-tool.com</a>.<br/>
+                <a href="https://brandinbox.ai" style="color:#6b7280;text-decoration:none;">brandinbox.ai</a>.<br/>
                 View the full feed at
-                <a href="${feedUrl}" style="color:#6b7280;text-decoration:none;">app.rip-tool.com</a>.<br/>
+                <a href="${feedUrl}" style="color:#6b7280;text-decoration:none;">brandinbox.ai</a>.<br/>
                 <a href="${unsubscribeUrl}" style="color:#6b7280;text-decoration:underline;">Unsubscribe from email updates</a>.<br/>
                 ${EMAIL_POSTAL_ADDRESS}
               </p>
@@ -1622,7 +1622,7 @@ export async function sendWeeklyDigest(params: {
 
   const text = `${greeting}
 
-Weekly Top Content - Inbox.GOP
+Weekly Top Content - brandinbox.ai
 ${weekStart} – ${weekEnd}
 
 ${items
@@ -1644,9 +1644,9 @@ ${EMAIL_POSTAL_ADDRESS}
 `
 
   const formData = new FormData()
-  formData.append("from", `Inbox.GOP Digest <digest@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai Digest <digest@${MAILGUN_DOMAIN}>`)
   formData.append("to", to)
-  formData.append("subject", `Weekly Top Content - Inbox.GOP`)
+  formData.append("subject", `Weekly Top Content - brandinbox.ai`)
   formData.append("html", html)
   formData.append("text", text)
   addEmailUnsubscribeHeaders(formData, unsubscribeUrl)
@@ -1702,7 +1702,7 @@ export async function sendProductUpdateEmail(params: {
   }
 
   const { to, firstName, items, userId } = params
-  const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+  const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
   const unsubscribeUrl = createEmailUnsubscribeUrl(userId, APP_URL)
   const whatsNewUrl = generateTrackedLink(userId, "product_update", "whats_new", `/news`, APP_URL)
@@ -1752,7 +1752,7 @@ export async function sendProductUpdateEmail(params: {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>What&apos;s New on Inbox.GOP</title>
+  <title>What&apos;s New on brandinbox.ai</title>
 </head>
 <body style="margin:0;padding:0;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;padding:32px 16px;">
@@ -1766,8 +1766,8 @@ export async function sendProductUpdateEmail(params: {
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="vertical-align:middle;">
-                    <img src="${logoUrl}" alt="Inbox.GOP" width="28" height="28" style="display:inline-block;vertical-align:middle;margin-right:8px;" />
-                    <span style="font-size:13px;color:#6b7280;font-weight:500;vertical-align:middle;">What&apos;s New on Inbox.GOP</span>
+                    <img src="${logoUrl}" alt="brandinbox.ai" width="28" height="28" style="display:inline-block;vertical-align:middle;margin-right:8px;" />
+                    <span style="font-size:13px;color:#6b7280;font-weight:500;vertical-align:middle;">What&apos;s New on brandinbox.ai</span>
                   </td>
                   <td style="text-align:right;vertical-align:middle;">
                     <a href="${whatsNewUrl}" target="_blank" style="font-size:12px;color:#374151;text-decoration:none;">View all updates</a>
@@ -1801,7 +1801,7 @@ export async function sendProductUpdateEmail(params: {
             <td style="padding:24px 0 0;">
               <p style="margin:0;font-size:12px;color:#6b7280;text-align:center;line-height:1.8;">
                 You&apos;re receiving this because you have product updates enabled on
-                <a href="https://app.rip-tool.com" style="color:#374151;text-decoration:none;">app.rip-tool.com</a>.<br/>
+                <a href="https://brandinbox.ai" style="color:#374151;text-decoration:none;">brandinbox.ai</a>.<br/>
                 <a href="${unsubscribeUrl}" style="color:#374151;text-decoration:underline;">Unsubscribe from email updates</a>.<br/>
                 ${EMAIL_POSTAL_ADDRESS}
               </p>
@@ -1817,7 +1817,7 @@ export async function sendProductUpdateEmail(params: {
 
   const text = `${greeting}
 
-What's New on Inbox.GOP
+What's New on brandinbox.ai
 
 ${items.map((item) => `${item.title}\n${formatDate(item.publishedAt)}\n\n${item.body}`).join("\n\n---\n\n")}
 
@@ -1827,9 +1827,9 @@ ${EMAIL_POSTAL_ADDRESS}
 `
 
   const formData = new FormData()
-  formData.append("from", `Inbox.GOP <digest@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai <digest@${MAILGUN_DOMAIN}>`)
   formData.append("to", to)
-  formData.append("subject", `What's New on Inbox.GOP`)
+  formData.append("subject", `What's New on brandinbox.ai`)
   formData.append("html", html)
   formData.append("text", text)
   addEmailUnsubscribeHeaders(formData, unsubscribeUrl)
@@ -1886,7 +1886,7 @@ export async function sendCampaignAlertDigest(params: {
   }
 
   const { userId, to, firstName, matches, runDate } = params
-  const APP_URL = "https://app.rip-tool.com"
+  const APP_URL = "https://brandinbox.ai"
   const radarUrl = `${APP_URL}/directory/new-campaigns`
   const settingsUrl = `${APP_URL}/directory/new-campaigns`
   const unsubscribeUrl = createEmailUnsubscribeUrl(userId, APP_URL)
@@ -2005,7 +2005,7 @@ export async function sendCampaignAlertDigest(params: {
           <!-- Header -->
           <tr>
             <td style="background:#dc2626;padding:24px 28px;">
-              <p style="margin:0;color:rgba(255,255,255,0.75);font-size:10px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">Inbox.GOP — Launch Radar</p>
+              <p style="margin:0;color:rgba(255,255,255,0.75);font-size:10px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;">brandinbox.ai — Launch Radar</p>
               <h1 style="margin:6px 0 0;color:#ffffff;font-size:22px;font-weight:800;line-height:1.2;">
                 ${totalLaunches} New Campaign${totalLaunches === 1 ? "" : "s"} Launched
               </h1>
@@ -2046,7 +2046,7 @@ export async function sendCampaignAlertDigest(params: {
           <tr>
             <td style="padding:16px 28px;border-top:1px solid #1f2937;">
               <p style="margin:0;font-size:11px;color:#4b5563;line-height:1.6;">
-                You received this email because you set up a Campaign Launch Alert on Inbox.GOP. 
+                You received this email because you set up a Campaign Launch Alert on brandinbox.ai. 
                 <a href="${settingsUrl}" target="_blank" style="color:#6b7280;text-decoration:underline;">Manage your alerts</a>.<br/>
                 <a href="${unsubscribeUrl}" style="color:#6b7280;text-decoration:underline;">Unsubscribe from email alerts</a>.<br/>
                 ${EMAIL_POSTAL_ADDRESS}
@@ -2082,7 +2082,7 @@ ${EMAIL_POSTAL_ADDRESS}
 `
 
   const formData = new FormData()
-  formData.append("from", `Inbox.GOP Alerts <alerts@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai Alerts <alerts@${MAILGUN_DOMAIN}>`)
   formData.append("to", to)
   formData.append("subject", `${totalLaunches} new campaign${totalLaunches === 1 ? "" : "s"} match your alerts — ${runDate}`)
   formData.append("html", html)

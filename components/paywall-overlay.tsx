@@ -72,10 +72,10 @@ export function PaywallOverlay({
 
   return (
     <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-      <Card className="max-w-lg mx-4 border-2 border-rip-red/20 shadow-xl">
+      <Card className="max-w-lg mx-4 border-2 border-brand-primary/20 shadow-xl">
         <CardHeader className="text-center space-y-2">
-          <div className="mx-auto w-12 h-12 rounded-full bg-rip-red/10 flex items-center justify-center mb-2">
-            <Lock className="h-6 w-6 text-rip-red" />
+          <div className="mx-auto w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center mb-2">
+            <Lock className="h-6 w-6 text-brand-primary" />
           </div>
           <CardTitle className="text-2xl">{title}</CardTitle>
           <CardDescription className="text-base">{description}</CardDescription>
@@ -95,7 +95,7 @@ export function PaywallOverlay({
               {features.map((feature, idx) => (
                 <li key={idx} className="flex items-start gap-2 text-sm">
                   <div className="mt-0.5">
-                    <div className="h-1.5 w-1.5 rounded-full bg-rip-red" />
+                    <div className="h-1.5 w-1.5 rounded-full bg-brand-primary" />
                   </div>
                   <span>{feature}</span>
                 </li>
@@ -118,7 +118,7 @@ export function PaywallOverlay({
             </div>
           </div>
 
-          <Button className="w-full bg-rip-red hover:bg-rip-red/90 text-white" size="lg" onClick={handleUpgrade}>
+          <Button className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white" size="lg" onClick={handleUpgrade}>
             <TrendingUp className="mr-2 h-4 w-4" />
             {upgradePlan ? "Add to Plan" : "Upgrade Now"}
           </Button>

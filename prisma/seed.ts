@@ -175,7 +175,7 @@ async function main() {
     update: {},
     create: {
       key: "internalEmail",
-      value: "inbox@rip-tool.com",
+      value: "inbox@brandinbox.ai",
     },
   })
 

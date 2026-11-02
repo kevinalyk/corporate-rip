@@ -5,7 +5,7 @@ import { hasCompetitiveInsightsAccess, type SubscriptionPlan, type SubscriptionS
 
 /**
  * Every mobile route that reads/writes client-scoped data must call this first.
- * Fails closed: no clientId on the context (e.g. a RIP employee without a client
+ * Fails closed: no clientId on the context (e.g. a brandinbox.ai employee without a client
  * association) is treated as "no access" rather than "access to everything".
  */
 export function requireClientContext(ctx: MobileAuthContext): { clientId: string; plan: SubscriptionPlan } {

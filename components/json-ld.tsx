@@ -20,14 +20,14 @@ export function DirectoryJsonLd() {
       data={{
         "@context": "https://schema.org",
         "@type": "WebSite",
-        name: "Inbox.GOP Directory",
-        url: "https://app.rip-tool.com/directory",
+        name: "brandinbox.ai Directory",
+        url: "https://brandinbox.ai/directory",
         description: "Track political campaign emails and texts from candidates, PACs, and organizations across the United States.",
         potentialAction: {
           "@type": "SearchAction",
           target: {
             "@type": "EntryPoint",
-            urlTemplate: "https://app.rip-tool.com/directory?q={search_term_string}",
+            urlTemplate: "https://brandinbox.ai/directory?q={search_term_string}",
           },
           "query-input": "required name=search_term_string",
         },
@@ -44,7 +44,7 @@ export function LookupJsonLd() {
         "@context": "https://schema.org",
         "@type": "WebApplication",
         name: "Who's Contacting Me?",
-        url: "https://app.rip-tool.com/lookup",
+        url: "https://brandinbox.ai/lookup",
         applicationCategory: "UtilityApplication",
         description: "Identify which political campaigns, PACs, or advocacy groups are sending you texts and emails.",
         offers: {
@@ -137,8 +137,8 @@ export function DigestJsonLd({
         }),
         publisher: {
           "@type": "Organization",
-          name: "Inbox.GOP",
-          url: "https://app.rip-tool.com",
+          name: "brandinbox.ai",
+          url: "https://brandinbox.ai",
         },
         ...(tags && tags.length > 0 && { keywords: tags.join(", ") }),
       }}

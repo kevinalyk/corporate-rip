@@ -22,7 +22,7 @@ test("signed links identify only their intended user", () => {
 })
 
 test("unsubscribe URL and one-click headers use the same signed link", () => {
-  const url = createEmailUnsubscribeUrl("user-123", "https://app.rip-tool.com", secret)
+  const url = createEmailUnsubscribeUrl("user-123", "https://brandinbox.ai", secret)
   assert.equal(new URL(url).pathname, "/unsubscribe")
   assert.equal(verifyEmailUnsubscribeToken(new URL(url).searchParams.get("token")!, secret), "user-123")
 
@@ -45,7 +45,7 @@ test("all-email opt-out covers product updates and both digests", () => {
 })
 
 test("postal address is present for marketing email templates", () => {
-  assert.match(EMAIL_POSTAL_ADDRESS, /Republican Inboxing Protocol LLC/)
+  assert.match(EMAIL_POSTAL_ADDRESS, /brandinbox.ai LLC/)
   assert.match(EMAIL_POSTAL_ADDRESS, /Albuquerque, NM 87110/)
 })
 
@@ -53,13 +53,13 @@ test("GET previews preferences without writing, and invalid POST fails closed", 
   const previousSecret = process.env.JWT_SECRET
   process.env.JWT_SECRET = secret
   try {
-    const url = createEmailUnsubscribeUrl("user-123", "https://app.rip-tool.com")
+    const url = createEmailUnsubscribeUrl("user-123", "https://brandinbox.ai")
     const preview = await GET(new Request(url))
     assert.equal(preview.status, 200)
     assert.match(await preview.text(), /Stop all update and alert emails/)
     assert.equal(preview.headers.get("Cache-Control"), "no-store")
 
-    const invalid = await POST(new Request("https://app.rip-tool.com/unsubscribe", {
+    const invalid = await POST(new Request("https://brandinbox.ai/unsubscribe", {
       method: "POST",
       body: new URLSearchParams({ token: "invalid", scope: "all" }),
     }))
@@ -106,7 +106,7 @@ test("product-update email contains postal address and a direct unsubscribe link
     })
     assert.equal(ok, true)
     assert.ok(sent)
-    assert.match(String(sent.get("html")), /Republican Inboxing Protocol LLC/)
+    assert.match(String(sent.get("html")), /brandinbox.ai LLC/)
     assert.match(String(sent.get("text")), /Unsubscribe from email updates: https:\/\/app\.rip-tool\.com\/unsubscribe\?token=/)
     assert.match(String(sent.get("h:List-Unsubscribe")), /^<https:\/\/app\.rip-tool\.com\/unsubscribe\?token=/)
     assert.equal(sent.get("h:List-Unsubscribe-Post"), "List-Unsubscribe=One-Click")

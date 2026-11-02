@@ -1,4 +1,4 @@
-# RIP EMAIL TOOL - PROJECT ROADMAP
+# BRANDINBOX.AI - PROJECT ROADMAP
 
 ## CURRENT STATUS
 - Basic application structure and authentication is complete

@@ -171,7 +171,7 @@ export default function AccountSettingsPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <Loader2 size={32} className="animate-spin mx-auto mb-4 text-rip-red" />
+          <Loader2 size={32} className="animate-spin mx-auto mb-4 text-brand-primary" />
           <p>Loading settings...</p>
         </div>
       </div>
@@ -193,7 +193,7 @@ export default function AccountSettingsPage() {
             <CardHeader>
               <CardTitle>Email Notifications</CardTitle>
               <CardDescription>
-                Control which emails you receive from Inbox.GOP.
+                Control which emails you receive from brandinbox.ai.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-0">
@@ -259,7 +259,7 @@ export default function AccountSettingsPage() {
                       Product Updates
                     </Label>
                     <p className="text-sm text-muted-foreground">
-                      Receive a weekly newsletter with the latest features and improvements to Inbox.GOP, sent every Thursday.
+                      Receive a weekly newsletter with the latest features and improvements to brandinbox.ai, sent every Thursday.
                     </p>
                   </div>
                 </div>

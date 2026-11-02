@@ -177,7 +177,7 @@ export function ClientMcpContent({ clientSlug }: { clientSlug: string }) {
             <div className="flex items-start gap-2 pt-2">
               <Checkbox id="mcp-terms" checked={agreed} onCheckedChange={(v) => setAgreed(v === true)} />
               <Label htmlFor="mcp-terms" className="text-sm leading-snug">
-                I have read and agree to the MCP Terms of Use on behalf of my organization, including that RIP data may
+                I have read and agree to the MCP Terms of Use on behalf of my organization, including that brandinbox.ai data may
                 not be scraped, stored, resold or redistributed.
               </Label>
             </div>

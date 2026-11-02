@@ -1186,7 +1186,7 @@ export function DomainHealthContent({ clientSlug }: { clientSlug?: string }) {
                         className="flex-1 flex items-center gap-2 text-sm text-left min-w-0"
                       >
                         <span className={cn("truncate", d.id === selectedDomainId && "font-medium")}>{d.domain}</span>
-                        {d.id === selectedDomainId && <Check size={13} className="text-rip-red flex-shrink-0" />}
+                        {d.id === selectedDomainId && <Check size={13} className="text-brand-primary flex-shrink-0" />}
                       </button>
                       <div className="flex items-center gap-1.5 flex-shrink-0">
                         {(d.status === "pending" || d.status === "failed") && (
@@ -1283,7 +1283,7 @@ export function DomainHealthContent({ clientSlug }: { clientSlug?: string }) {
             <button
               onClick={handleRescan}
               disabled={scanning || selectedRecord?.status !== "verified"}
-              className="flex items-center gap-1 text-foreground font-medium hover:text-rip-red transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex items-center gap-1 text-foreground font-medium hover:text-brand-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <RefreshCw size={11} className={cn(scanning && "animate-spin")} />
               {scanning ? "Scanning..." : "Re-scan"}
@@ -1291,7 +1291,7 @@ export function DomainHealthContent({ clientSlug }: { clientSlug?: string }) {
             <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
             <button
               onClick={() => setShowSeedsModal(true)}
-              className="flex items-center gap-1 text-foreground font-medium hover:text-rip-red transition-colors"
+              className="flex items-center gap-1 text-foreground font-medium hover:text-brand-primary transition-colors"
             >
               <Inbox size={11} />
               View Seeds
@@ -1328,7 +1328,7 @@ export function DomainHealthContent({ clientSlug }: { clientSlug?: string }) {
           </div>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-rip-red text-white text-sm font-medium rounded-lg hover:bg-rip-red/90 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-brand-primary text-white text-sm font-medium rounded-lg hover:bg-brand-primary/90 transition-colors"
           >
             <Plus size={15} />
             Add Domain
@@ -1422,7 +1422,7 @@ export function DomainHealthContent({ clientSlug }: { clientSlug?: string }) {
             className={cn(
               "px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors",
               activeTab === "report"
-                ? "border-rip-red text-foreground"
+                ? "border-brand-primary text-foreground"
                 : "border-transparent text-muted-foreground hover:text-foreground"
             )}
           >
@@ -1433,7 +1433,7 @@ export function DomainHealthContent({ clientSlug }: { clientSlug?: string }) {
             className={cn(
               "flex items-center gap-1.5 px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors",
               activeTab === "samples"
-                ? "border-rip-red text-foreground"
+                ? "border-brand-primary text-foreground"
                 : "border-transparent text-muted-foreground hover:text-foreground"
             )}
           >
@@ -1475,7 +1475,7 @@ export function DomainHealthContent({ clientSlug }: { clientSlug?: string }) {
               </div>
               <div className="text-sm font-medium text-foreground mb-1">No email samples yet</div>
               <div className="text-xs text-muted-foreground max-w-xs">
-                Send a test email from a rip-tool.com address to a domain health seed, then run a scan.
+                Send a test email from a brandinbox.ai address to a domain health seed, then run a scan.
               </div>
             </div>
           ) : emailSamples.map((sample) => {
@@ -1561,7 +1561,7 @@ export function DomainHealthContent({ clientSlug }: { clientSlug?: string }) {
       <div className="p-4 bg-card border border-border rounded-lg flex items-start gap-3">
         <Info size={14} className="text-muted-foreground flex-shrink-0 mt-0.5" />
         <p className="text-xs text-muted-foreground leading-relaxed">
-          Inbox.GOP analyzes emails received from monitored domains and verifies them against{" "}
+          brandinbox.ai analyzes emails received from monitored domains and verifies them against{" "}
           <a href="https://support.google.com/a/answer/81126" target="_blank" rel="noopener noreferrer" className="text-foreground font-medium underline underline-offset-2">
             Google&apos;s Email Sender Guidelines
           </a>

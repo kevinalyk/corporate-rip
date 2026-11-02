@@ -143,9 +143,9 @@ export default function ReportsReportingPage() {
 
           {/* Full-page paywall overlay */}
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/70 backdrop-blur-sm">
-            <div className="max-w-md w-full mx-4 rounded-xl border-2 border-rip-red/20 bg-card shadow-2xl p-8 text-center space-y-6">
-              <div className="mx-auto w-14 h-14 rounded-full bg-rip-red/10 flex items-center justify-center">
-                <Lock className="h-7 w-7 text-rip-red" />
+            <div className="max-w-md w-full mx-4 rounded-xl border-2 border-brand-primary/20 bg-card shadow-2xl p-8 text-center space-y-6">
+              <div className="mx-auto w-14 h-14 rounded-full bg-brand-primary/10 flex items-center justify-center">
+                <Lock className="h-7 w-7 text-brand-primary" />
               </div>
 
               <div className="space-y-2">
@@ -164,7 +164,7 @@ export default function ReportsReportingPage() {
                   "Third-party vs. house file analysis",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">
-                    <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-rip-red" />
+                    <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
                     <span>{f}</span>
                   </li>
                 ))}
@@ -172,7 +172,7 @@ export default function ReportsReportingPage() {
 
               <Button
                 size="lg"
-                className="w-full bg-rip-red hover:bg-rip-red/90 text-white"
+                className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white"
                 onClick={() => router.push(`/${clientSlug}/billing`)}
               >
                 <TrendingUp className="mr-2 h-4 w-4" />

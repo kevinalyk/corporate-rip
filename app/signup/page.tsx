@@ -2,32 +2,36 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Eye, EyeOff } from "lucide-react"
 import Image from "next/image"
-import { BrandWordmark } from "@/components/brand-wordmark"
 import Link from "next/link"
-import { Checkbox } from "@/components/ui/checkbox"
-import { createTrialCheckoutSession } from "@/app/actions/stripe"
+import { BrandWordmark } from "@/components/brand-wordmark"
+
+function validatePassword(password: string) {
+  if (password.length < 12) return "Password must be at least 12 characters long"
+  if (!/\d/.test(password)) return "Password must contain at least one number"
+  if (!/[a-zA-Z]/.test(password)) return "Password must contain at least one letter"
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return "Password must contain at least one symbol"
+  return null
+}
 
 export default function SignupPage() {
-  const router = useRouter()
-  const [loadTime, setLoadTime] = useState<number>(0)
+  const [loadTime, setLoadTime] = useState(0)
   const [formData, setFormData] = useState({
-    clientName: "",
     firstName: "",
     lastName: "",
     email: "",
+    company: "",
+    jobTitle: "",
     password: "",
     confirmPassword: "",
     agreeToTerms: false,
-    agreeToPrivacy: false,
-    trialCode: "",
     website: "",
   })
   const [showPassword, setShowPassword] = useState(false)
@@ -39,21 +43,8 @@ export default function SignupPage() {
     setLoadTime(Date.now())
   }, [])
 
-  const validatePassword = (password: string) => {
-    if (password.length < 12) {
-      return "Password must be at least 12 characters long"
-    }
-    if (!/\d/.test(password)) {
-      return "Password must contain at least one number"
-    }
-    if (!/[a-zA-Z]/.test(password)) {
-      return "Password must contain at least one letter"
-    }
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      return "Password must contain at least one symbol"
-    }
-    return null
-  }
+  const update = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormData({ ...formData, [field]: e.target.value })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -63,95 +54,56 @@ export default function SignupPage() {
       setError("Invalid submission detected")
       return
     }
-
-    const timeElapsed = Date.now() - loadTime
-    if (timeElapsed < 3000) {
+    if (Date.now() - loadTime < 3000) {
       setError("Please take your time filling out the form")
       return
     }
-
-    if (
-      !formData.clientName ||
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.email ||
-      !formData.password ||
-      !formData.confirmPassword
-    ) {
-      setError("All fields are required")
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+      setError("Please fill in all required fields")
       return
     }
-
-    if (!formData.agreeToTerms || !formData.agreeToPrivacy) {
+    if (!formData.agreeToTerms) {
       setError("You must agree to the Terms of Service and Privacy Policy to continue")
       return
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(formData.email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       setError("Please enter a valid email address")
       return
     }
-
     const passwordError = validatePassword(formData.password)
     if (passwordError) {
       setError(passwordError)
       return
     }
-
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match")
       return
     }
 
     setLoading(true)
-
     try {
-      const response = await fetch("/api/auth/signup", {
+      const response = await fetch("/api/brand/auth/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          clientName: formData.clientName,
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
+          company: formData.company,
+          jobTitle: formData.jobTitle,
           password: formData.password,
-          trialCode: formData.trialCode.trim() || undefined,
+          agreeToTerms: formData.agreeToTerms,
           _hp: formData.website,
           _ts: loadTime,
         }),
       })
-
       const data = await response.json()
-
       if (!response.ok) {
         throw new Error(data.error || "Signup failed")
       }
-
-      // A redeemed trial code now requires a card via Stripe Checkout before the trial starts —
-      // send them there instead of the dashboard. If they abandon checkout, the billing page
-      // offers to resume it since the redemption is already recorded.
-      if (data.requiresTrialCheckout) {
-        try {
-          const { url } = await createTrialCheckoutSession(data.clientId)
-          if (url) {
-            window.location.href = url
-            return
-          }
-        } catch (checkoutError) {
-          // If Stripe checkout fails to start for any reason, fall back to the dashboard — the
-          // account still exists on the free plan and can resume checkout from billing.
-          console.error("Failed to start trial checkout:", checkoutError)
-        }
-      }
-
-      // Auth cookie is set by the API — redirect straight to the dashboard
-      router.push("/rip")
-    } catch (err: any) {
-      console.error("Signup error:", err)
-      setError(err.message || "An error occurred during signup")
+      window.location.href = "/account"
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred during signup")
       setLoading(false)
     }
   }
@@ -175,8 +127,8 @@ export default function SignupPage() {
 
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Create Client Account</CardTitle>
-          <CardDescription>Register your organization to get started with Inbox.GOP</CardDescription>
+          <CardTitle className="text-2xl">Create your account</CardTitle>
+          <CardDescription>Sign up to get started with brandinbox.ai</CardDescription>
         </CardHeader>
         <CardContent>
           {error && (
@@ -190,60 +142,50 @@ export default function SignupPage() {
               type="text"
               name="website"
               value={formData.website}
-              onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+              onChange={update("website")}
               style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px" }}
               tabIndex={-1}
               autoComplete="off"
               aria-hidden="true"
             />
 
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">First Name</Label>
+                <Input id="firstName" autoComplete="given-name" value={formData.firstName} onChange={update("firstName")} required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Last Name</Label>
+                <Input id="lastName" autoComplete="family-name" value={formData.lastName} onChange={update("lastName")} required />
+              </div>
+            </div>
+
             <div className="space-y-2">
-              <Label htmlFor="clientName">Organization Name</Label>
+              <Label htmlFor="email">Work Email</Label>
               <Input
-                id="clientName"
-                type="text"
-                placeholder="Company Name"
-                value={formData.clientName}
-                onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+                id="email"
+                type="email"
+                autoComplete="email"
+                placeholder="name@company.com"
+                value={formData.email}
+                onChange={update("email")}
                 required
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
-                <Input
-                  id="firstName"
-                  type="text"
-                  placeholder="John"
-                  value={formData.firstName}
-                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                  required
-                />
+                <Label htmlFor="company">
+                  Company <span className="text-muted-foreground font-normal">(optional)</span>
+                </Label>
+                <Input id="company" autoComplete="organization" value={formData.company} onChange={update("company")} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
-                <Input
-                  id="lastName"
-                  type="text"
-                  placeholder="Doe"
-                  value={formData.lastName}
-                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                  required
-                />
+                <Label htmlFor="jobTitle">
+                  Job Title <span className="text-muted-foreground font-normal">(optional)</span>
+                </Label>
+                <Input id="jobTitle" autoComplete="organization-title" value={formData.jobTitle} onChange={update("jobTitle")} />
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="name@example.com"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-              />
             </div>
 
             <div className="space-y-2">
@@ -252,13 +194,15 @@ export default function SignupPage() {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={update("password")}
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -273,13 +217,15 @@ export default function SignupPage() {
                 <Input
                   id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
+                  autoComplete="new-password"
                   value={formData.confirmPassword}
-                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                  onChange={update("confirmPassword")}
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
                   {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -287,71 +233,22 @@ export default function SignupPage() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="trialCode">
-                Trial Code <span className="text-muted-foreground font-normal">(optional)</span>
-              </Label>
-              <Input
-                id="trialCode"
-                type="text"
-                placeholder="Have a code? Enter it here"
-                value={formData.trialCode}
-                onChange={(e) => setFormData({ ...formData, trialCode: e.target.value })}
-                className="uppercase placeholder:normal-case"
-                autoCapitalize="characters"
+            <div className="flex items-start gap-2 pt-2">
+              <Checkbox
+                id="agreeToTerms"
+                checked={formData.agreeToTerms}
+                onCheckedChange={(checked) => setFormData({ ...formData, agreeToTerms: checked === true })}
               />
-              <p className="text-xs text-muted-foreground">
-                Get a free full-featured trial with unlimited users, reporting, and filters. You&apos;ll be asked to
-                add a card next — you won&apos;t be charged during the trial, but afterward you&apos;ll
-                automatically be subscribed to our Basic plan ($50/month) unless you cancel first.
-              </p>
-            </div>
-
-            <Alert>
-              <AlertDescription className="text-xs">
-                Without a trial code, your account starts on the Free plan, which shows a 1-hour window of feed data
-                delayed by 24 hours (not live). Redeem a trial code above or upgrade anytime for real-time data.
-              </AlertDescription>
-            </Alert>
-
-            <div className="space-y-3 pt-2">
-              <div className="flex items-start gap-2">
-                <Checkbox
-                  id="agreeToTerms"
-                  checked={formData.agreeToTerms}
-                  onCheckedChange={(checked) => setFormData({ ...formData, agreeToTerms: checked === true })}
-                />
-                <label htmlFor="agreeToTerms" className="text-sm leading-relaxed cursor-pointer">
-                  I agree to the{" "}
-                  <a
-                    href="https://inbox.gop/terms"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-rip-blue hover:underline"
-                  >
-                    Terms of Service
-                  </a>
-                </label>
-              </div>
-
-              <div className="flex items-start gap-2">
-                <Checkbox
-                  id="agreeToPrivacy"
-                  checked={formData.agreeToPrivacy}
-                  onCheckedChange={(checked) => setFormData({ ...formData, agreeToPrivacy: checked === true })}
-                />
-                <label htmlFor="agreeToPrivacy" className="text-sm leading-relaxed cursor-pointer">
-                  I agree to the{" "}
-                  <a
-                    href="https://inbox.gop/privacy"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-rip-blue hover:underline"
-                  >
-                    Privacy Policy
-                  </a>
-                </label>
-              </div>
+              <label htmlFor="agreeToTerms" className="text-sm leading-relaxed cursor-pointer">
+                I agree to the{" "}
+                <Link href="/terms" target="_blank" className="text-brand-secondary hover:underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link href="/privacy" target="_blank" className="text-brand-secondary hover:underline">
+                  Privacy Policy
+                </Link>
+              </label>
             </div>
 
             <Button type="submit" variant="branded" className="w-full" disabled={loading}>
@@ -362,7 +259,7 @@ export default function SignupPage() {
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/login" className="text-rip-blue hover:underline">
+            <Link href="/login" className="text-brand-secondary hover:underline">
               Sign in
             </Link>
           </p>

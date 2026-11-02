@@ -312,7 +312,7 @@ export default function AccountUsersPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-rip-red" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
       </div>
     )
   }
@@ -339,7 +339,7 @@ export default function AccountUsersPage() {
 
               <Dialog open={isAddUserOpen} onOpenChange={setIsAddUserOpen}>
                 <DialogTrigger asChild>
-                  <Button size="sm" className="flex items-center gap-2 !bg-rip-red hover:!bg-rip-red/90 !text-white">
+                  <Button size="sm" className="flex items-center gap-2 !bg-brand-primary hover:!bg-brand-primary/90 !text-white">
                     <UserPlus size={16} />
                     <span className="hidden sm:inline">Add User</span>
                   </Button>
@@ -405,7 +405,7 @@ export default function AccountUsersPage() {
                     <Button
                       onClick={handleAddUser}
                       disabled={addingUser}
-                      className="!bg-rip-red hover:!bg-rip-red/90 !text-white"
+                      className="!bg-brand-primary hover:!bg-brand-primary/90 !text-white"
                     >
                       {addingUser ? (
                         <>
@@ -442,7 +442,7 @@ export default function AccountUsersPage() {
           <div className="md:hidden border rounded-md divide-y">
             {loading ? (
               <div className="flex justify-center py-12">
-                <Loader2 size={24} className="animate-spin text-rip-red" />
+                <Loader2 size={24} className="animate-spin text-brand-primary" />
               </div>
             ) : filteredUsers.length === 0 ? (
               <div className="text-center py-12 text-sm text-muted-foreground">No users found</div>
@@ -451,7 +451,7 @@ export default function AccountUsersPage() {
                 <div key={user.id} className="p-3">
                   <div className="flex items-start gap-3">
                     <Avatar className="h-9 w-9 flex-shrink-0">
-                      <AvatarFallback className="bg-rip-red/10 text-rip-red text-xs">
+                      <AvatarFallback className="bg-brand-primary/10 text-brand-primary text-xs">
                         {user.firstName?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
                         {user.lastName?.[0]?.toUpperCase() || ""}
                       </AvatarFallback>
@@ -594,7 +594,7 @@ export default function AccountUsersPage() {
                   <TableRow>
                     <TableCell colSpan={5} className="text-center py-12">
                       <div className="flex justify-center">
-                        <Loader2 size={24} className="animate-spin text-rip-red" />
+                        <Loader2 size={24} className="animate-spin text-brand-primary" />
                       </div>
                     </TableCell>
                   </TableRow>
@@ -610,7 +610,7 @@ export default function AccountUsersPage() {
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <Avatar className="h-8 w-8">
-                            <AvatarFallback className="bg-rip-red/10 text-rip-red text-xs">
+                            <AvatarFallback className="bg-brand-primary/10 text-brand-primary text-xs">
                               {user.firstName?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
                               {user.lastName?.[0]?.toUpperCase() || ""}
                             </AvatarFallback>
@@ -796,7 +796,7 @@ export default function AccountUsersPage() {
                 <Button
                   onClick={handleUpdateRole}
                   disabled={updatingRole}
-                  className="!bg-rip-red hover:!bg-rip-red/90 !text-white"
+                  className="!bg-brand-primary hover:!bg-brand-primary/90 !text-white"
                 >
                   {updatingRole ? (
                     <>
@@ -823,7 +823,7 @@ export default function AccountUsersPage() {
                 </p>
                 <Button
                   onClick={() => setResetPasswordResult(null)}
-                  className="bg-rip-red hover:bg-rip-red/90 text-white"
+                  className="bg-brand-primary hover:bg-brand-primary/90 text-white"
                 >
                   Close
                 </Button>

@@ -54,8 +54,8 @@ export async function GET(request: Request) {
         console.log("Filtering users by client slug:", clientSlug, "clientId:", client.id)
       }
     } else if (clientSlug && clientSlug.toLowerCase() === "rip" && isSuperAdmin) {
-      // Super admin viewing RIP - show ALL users across all clients
-      console.log("Super admin viewing RIP - showing all users across all clients")
+      // Super admin viewing brandinbox.ai - show ALL users across all clients
+      console.log("Super admin viewing brandinbox.ai - showing all users across all clients")
       // No filter - whereClause remains empty
     } else if (!isSuperAdmin && userRecord?.clientId) {
       // Regular users can only see users from their own client

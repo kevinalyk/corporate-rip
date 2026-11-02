@@ -16,8 +16,6 @@ import {
   Moon,
   Sun,
   UserCog,
-  Shield,
-  ShieldAlert,
   ShieldCheck,
   BarChart3,
   Lightbulb,
@@ -38,15 +36,12 @@ import {
   MailCheck,
   Code,
   Key,
-  Activity,
   Smartphone,
   Rocket,
   Newspaper,
-  ScrollText,
   TrendingUp,
   Type,
   Tags,
-  MessageSquareOff,
   Bot,
 } from "lucide-react"
 import useSWR from "swr"
@@ -99,7 +94,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
   const [reportProblemOpen, setReportProblemOpen] = useState(false)
 
   // Developers section is a pilot: visible to super admins and to users of the
-  // pilot clients (RIP, Red Spark Strategy) while those clients are selected.
+  // pilot clients (brandinbox.ai, Red Spark Strategy) while those clients are selected.
   // The MCP Access item additionally requires a qualifying plan (Professional / Enterprise).
   const showDevelopersNav =
     userRole !== null && (selectedClientSlug === "rip" || selectedClientSlug === "redsparkstrategy")
@@ -114,7 +109,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
     radar: false,
     reports: false,
     inbox: false,
-    admin: false,
     developers: false,
     account: false,
   })
@@ -156,7 +150,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
     }
   }, [pathname])
 
-  // Auto-select RIP for super_admins on initial load
+  // Auto-select brandinbox.ai for super_admins on initial load
   useEffect(() => {
     if (userRole === "super_admin" && clients.length > 0 && !selectedClientSlug) {
       const ripClient = clients.find((client) => client.slug === "rip")
@@ -183,8 +177,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
       setExpandedSections((prev) => ({ ...prev, reports: true }))
     } else if (pathname.includes("/inbox/")) {
       setExpandedSections((prev) => ({ ...prev, inbox: true }))
-    } else if (pathname.includes("/admin/")) {
-      setExpandedSections((prev) => ({ ...prev, admin: true }))
     } else if (pathname.includes("/developers/")) {
       setExpandedSections((prev) => ({ ...prev, developers: true }))
     }
@@ -300,7 +292,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
               size="sm"
               className={cn(
                 "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0",
-                pathname.startsWith("/news") && "bg-rip-red/10 text-rip-red hover:bg-rip-red/20 hover:text-rip-red",
+                pathname.startsWith("/news") && "bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20 hover:text-brand-primary",
                 collapsed && "justify-center",
               )}
               onClick={() => navigate("/news")}
@@ -332,7 +324,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
               variant="ghost"
               size="sm"
               className={cn(
-                "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0 text-rip-red hover:text-rip-red hover:bg-rip-red/10",
+                "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0 text-brand-primary hover:text-brand-primary hover:bg-brand-primary/10",
                 collapsed && "justify-center",
               )}
               onClick={() => navigate("/login")}
@@ -375,7 +367,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
             <Select value={selectedClientSlug} onValueChange={handleClientSwitch} disabled={loadingClients}>
               <SelectTrigger className="w-full bg-transparent">
                 <div className="flex items-center gap-2">
-                  <Building size={16} className="text-rip-blue" />
+                  <Building size={16} className="text-brand-secondary" />
                   <SelectValue placeholder={loadingClients ? "Loading clients..." : "Select Client"} />
                 </div>
               </SelectTrigger>
@@ -567,134 +559,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
               </>
             )}
 
-            {userRole === "super_admin" && (selectedClientSlug === "rip" || !selectedClientSlug) && (
-              <>
-                <NavSection
-                  icon={<Shield size={20} />}
-                  label="Admin"
-                  collapsed={collapsed}
-                  expanded={expandedSections.admin}
-                  onToggle={() => toggleSection("admin")}
-                />
-                {expandedSections.admin && !collapsed && (
-                  <div className="ml-4 space-y-1">
-                    <NavItem
-                      icon={<Settings size={18} />}
-                      label="Admin Tools"
-                      active={pathname === "/rip/admin/tools"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/tools")}
-                    />
-                    <NavItem
-                      icon={<Users size={18} />}
-                      label="Accounts"
-                      active={pathname === "/rip/admin/accounts"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/accounts")}
-                    />
-                    <NavItem
-                      icon={<Building2 size={18} />}
-                      label="CI Entities"
-                      active={pathname === "/rip/admin/ci-entities"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/ci-entities")}
-                    />
-                    <NavItem
-                      icon={<Key size={18} />}
-                      label="Automation API"
-                      active={pathname === "/rip/admin/automation-api"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/automation-api")}
-                    />
-                    <NavItem
-                      icon={<Shield size={18} />}
-                      label="Blocked Domains"
-                      active={pathname === "/rip/admin/blocked-domains"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/blocked-domains")}
-                    />
-                    <NavItem
-                      icon={<ShieldCheck size={18} />}
-                      label="Compliance"
-                      active={pathname === "/rip/admin/compliance"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/compliance")}
-                    />
-                    <NavItem
-                      icon={<ScrollText size={18} />}
-                      label="Changelog"
-                      active={pathname === "/rip/admin/changelog"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/changelog")}
-                    />
-                    <NavItem
-                      icon={<ShieldAlert size={18} />}
-                      label="Name Redaction"
-                      active={pathname === "/rip/admin/name-redaction"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/name-redaction")}
-                    />
-                    <NavItem
-                      icon={<Globe size={18} />}
-                      label="Personal Assignments"
-                      active={pathname === "/rip/admin/personal-assignments"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/personal-assignments")}
-                    />
-                    <NavItem
-                      icon={<Mail size={18} />}
-                      label="Sender Providers"
-                      active={pathname === "/rip/admin/sender-providers"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/sender-providers")}
-                    />
-                    <NavItem
-                      icon={<ScanSearch size={18} />}
-                      label="Seed Insights"
-                      active={pathname === "/rip/admin/seed-insights"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/seed-insights")}
-                    />
-                    <NavItem
-                      icon={<Inbox size={18} />}
-                      label="WinRed Inbox"
-                      active={pathname === "/rip/admin/winred-inbox"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/winred-inbox")}
-                    />
-                    <NavItem
-                      icon={<LayoutDashboard size={18} />}
-                      label="Dashboard"
-                      active={pathname === "/rip/admin/dashboard"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/dashboard")}
-                    />
-                    <NavItem
-                      icon={<Activity size={18} />}
-                      label="Site Traffic"
-                      active={pathname === "/rip/admin/site-traffic"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/site-traffic")}
-                    />
-                    <NavItem
-                      icon={<TrendingUp size={18} />}
-                      label="SEO Dashboard"
-                      active={pathname === "/rip/admin/seo-dashboard"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/seo-dashboard")}
-                    />
-                    <NavItem
-                      icon={<MessageSquareOff size={18} />}
-                      label="Cancellation Feedback"
-                      active={pathname === "/rip/admin/cancellation-feedback"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/cancellation-feedback")}
-                    />
-                  </div>
-                )}
-              </>
-            )}
-
             {showDevelopersNav && (
               <>
                 <NavSection
@@ -802,7 +666,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
             size="sm"
             className={cn(
               "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0",
-              pathname.startsWith("/news") && "bg-rip-red/10 text-rip-red hover:bg-rip-red/20 hover:text-rip-red",
+              pathname.startsWith("/news") && "bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20 hover:text-brand-primary",
               collapsed && "justify-center",
             )}
             onClick={() => navigate("/news")}
@@ -848,7 +712,7 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
             variant="ghost"
             size="sm"
             className={cn(
-              "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0 text-rip-red hover:text-rip-red hover:bg-rip-red/10",
+              "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0 text-brand-primary hover:text-brand-primary hover:bg-brand-primary/10",
               collapsed && "justify-center",
             )}
             onClick={handleLogout}
@@ -882,13 +746,13 @@ function NavSection({ icon, label, collapsed, expanded, onToggle }: NavSectionPr
   // (components/app-layout.tsx); md:min-h-0 lets the default h-9 govern the
   // denser desktop sidebar unchanged.
   "relative w-full justify-start gap-3 px-3 font-medium min-h-11 md:min-h-0",
-  expanded && "bg-rip-red/10 text-rip-red hover:bg-rip-red/15 hover:text-rip-red",
+  expanded && "bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/15 hover:text-brand-primary",
   collapsed && "justify-center",
   )}
   onClick={onToggle}
   >
       {expanded && (
-        <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-rip-red" aria-hidden="true" />
+        <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-brand-primary" aria-hidden="true" />
       )}
       {icon}
       {!collapsed && (
@@ -917,13 +781,13 @@ function NavItem({ icon, label, active, collapsed, onClick }: NavItemProps) {
   className={cn(
   // Same mobile-drawer touch-target reasoning as NavSection above.
   "relative w-full justify-start gap-3 px-3 min-h-11 md:min-h-0",
-  active && "bg-rip-red/10 hover:bg-rip-red/15 text-rip-red hover:text-rip-red",
+  active && "bg-brand-primary/10 hover:bg-brand-primary/15 text-brand-primary hover:text-brand-primary",
   collapsed && "justify-center",
   )}
   onClick={onClick}
   >
       {active && (
-        <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-rip-red" aria-hidden="true" />
+        <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-brand-primary" aria-hidden="true" />
       )}
       {icon}
       {!collapsed && <span>{label}</span>}

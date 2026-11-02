@@ -26,9 +26,9 @@ export async function POST(
       return NextResponse.json({ verified: true, status: "verified" })
     }
 
-    // Resolve TXT records for the domain root and _inboxgop-verify subdomain
+    // Resolve TXT records for the domain root and _brandinbox-verify subdomain
     let found = false
-    const hostsToCheck = [record.domain, `_inboxgop-verify.${record.domain}`]
+    const hostsToCheck = [record.domain, `_brandinbox-verify.${record.domain}`]
 
     for (const host of hostsToCheck) {
       try {

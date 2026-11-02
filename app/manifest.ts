@@ -7,8 +7,8 @@ import type { MetadataRoute } from "next"
 // `icons` array pointing at them. See docs/mobile-api.md.
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Inbox.GOP",
-    short_name: "Inbox.GOP",
+    name: "brandinbox.ai",
+    short_name: "brandinbox.ai",
     description:
       "A tool dedicated to helping Republicans and conservatives inbox effectively.",
     start_url: "/",

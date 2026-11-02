@@ -65,7 +65,7 @@ export default function PublicBillingPage() {
               </Link>
               <Link
                 href="/signup"
-                className="text-sm bg-rip-red hover:bg-rip-red/90 text-white px-3 py-1.5 rounded-md transition-colors"
+                className="text-sm bg-brand-primary hover:bg-brand-primary/90 text-white px-3 py-1.5 rounded-md transition-colors"
               >
                 Sign up
               </Link>

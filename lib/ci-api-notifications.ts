@@ -8,7 +8,7 @@
  * separate, small helper rather than editing that large shared file.
  */
 
-const ADMIN_NOTIFICATION_EMAIL = "kevin@rip-tool.com"
+const ADMIN_NOTIFICATION_EMAIL = "kevin@brandinbox.ai"
 
 export async function sendCiEntityCreatedByApiNotification(params: {
   entityId: string
@@ -41,7 +41,7 @@ export async function sendCiEntityCreatedByApiNotification(params: {
     timeZone: "America/New_York",
   }).format(createdAt)
 
-  const entityUrl = `https://app.rip-tool.com/rip/admin/ci-entities?entityId=${entityId}`
+  const entityUrl = `https://brandinbox.ai/rip/ci-entities?entityId=${entityId}`
 
   const html = `
     <!DOCTYPE html>
@@ -50,7 +50,7 @@ export async function sendCiEntityCreatedByApiNotification(params: {
       <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 560px; margin: 0 auto; padding: 20px; background: #f5f5f5;">
         <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
           <div style="background: #d97706; padding: 24px 28px;">
-            <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">RIP Tool</p>
+            <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">brandinbox.ai</p>
             <h1 style="margin: 4px 0 0 0; color: white; font-size: 22px; font-weight: 700;">New CI Entity Created by API</h1>
           </div>
           <div style="padding: 28px;">
@@ -97,7 +97,7 @@ export async function sendCiEntityCreatedByApiNotification(params: {
   `
 
   const text = `
-New CI Entity Created by API — RIP Tool
+New CI Entity Created by API — brandinbox.ai
 
 Entity Name: ${entityName}
 Type:        ${entityType}
@@ -110,7 +110,7 @@ Review: ${entityUrl}
   `.trim()
 
   const formData = new FormData()
-  formData.append("from", `RIP Tool Alerts <inbox@${MAILGUN_DOMAIN}>`)
+  formData.append("from", `brandinbox.ai Alerts <inbox@${MAILGUN_DOMAIN}>`)
   formData.append("to", ADMIN_NOTIFICATION_EMAIL)
   formData.append("subject", `New CI Entity via API: ${entityName}`)
   formData.append("html", html)

@@ -4,11 +4,11 @@
 export const CLIENT_MCP_TERMS_SECTIONS: { heading: string; body: string }[] = [
   {
     heading: "What you can do",
-    body: "You may use the RIP MCP to search and read competitive-intelligence emails, text messages and entity information for your own projects, research, analysis, reporting and message inspiration. You may keep excerpts, quotes, screenshots and summaries that you need for that work.",
+    body: "You may use the brandinbox.ai MCP to search and read competitive-intelligence emails, text messages and entity information for your own projects, research, analysis, reporting and message inspiration. You may keep excerpts, quotes, screenshots and summaries that you need for that work.",
   },
   {
     heading: "What you may not do",
-    body: "You may not scrape, bulk-export, systematically sweep date ranges or entities, or otherwise build a copy or database of RIP data. You may not store, resell, sublicense, republish or redistribute RIP data, or use it to build or train a competing product, dataset or AI model. You may not share your key or use multiple keys to avoid limits.",
+    body: "You may not scrape, bulk-export, systematically sweep date ranges or entities, or otherwise build a copy or database of brandinbox.ai data. You may not store, resell, sublicense, republish or redistribute brandinbox.ai data, or use it to build or train a competing product, dataset or AI model. You may not share your key or use multiple keys to avoid limits.",
   },
   {
     heading: "Limits and monitoring",

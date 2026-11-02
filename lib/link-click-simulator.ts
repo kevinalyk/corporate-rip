@@ -6,7 +6,7 @@
  * requests to simulate a human clicking through campaign emails.
  *
  * Only runs against domain-health seeds (domainHealthMode = true).
- * RIP-locked seeds are explicitly excluded.
+ * brandinbox.ai-locked seeds are explicitly excluded.
  */
 
 import { neon } from "@neondatabase/serverless"

@@ -12,4 +12,4 @@ Disallow: /admin/
 # can refresh their snippets, but each page sets `robots: noindex` in metadata
 # so they don't appear in search results.
 
-Sitemap: https://app.rip-tool.com/sitemap.xml
+Sitemap: https://brandinbox.ai/sitemap.xml

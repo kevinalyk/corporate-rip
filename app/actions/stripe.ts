@@ -128,12 +128,12 @@ export async function createCheckoutSession(data: {
 
     if (data.plan === "enterprise") {
       return {
-        url: `mailto:support@rip-tool.com?subject=Enterprise Plan Inquiry&body=I'm interested in the Enterprise plan for ${client.name}`,
+        url: `mailto:support@brandinbox.ai?subject=Enterprise Plan Inquiry&body=I'm interested in the Enterprise plan for ${client.name}`,
       }
     }
 
     const isDevelopment = process.env.NODE_ENV === "development"
-    const baseUrl = isDevelopment ? "http://localhost:3000" : "https://app.rip-tool.com"
+    const baseUrl = isDevelopment ? "http://localhost:3000" : "https://brandinbox.ai"
     const successUrl = `${baseUrl}/${data.clientSlug}?success=true`
     const cancelUrl = `${baseUrl}/${data.clientSlug}/billing?canceled=true`
 
@@ -210,7 +210,7 @@ export async function createTrialCheckoutSession(clientId: string) {
   const basicPrice = PLAN_PRICES.paid // $50/mo — the plan the trial converts into
 
   const isDevelopment = process.env.NODE_ENV === "development"
-  const baseUrl = isDevelopment ? "http://localhost:3000" : "https://app.rip-tool.com"
+  const baseUrl = isDevelopment ? "http://localhost:3000" : "https://brandinbox.ai"
   const successUrl = `${baseUrl}/${client.slug}?trialStarted=true`
   // Cancelling checkout leaves the client on free with pendingTrialCodeId still set, so the
   // billing page can offer to resume checkout with the same redeemed code instead of losing it.

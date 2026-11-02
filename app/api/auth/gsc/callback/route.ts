@@ -5,7 +5,7 @@ function getOAuthClient() {
   return new google.auth.OAuth2(
     process.env.GSC_CLIENT_ID,
     process.env.GSC_CLIENT_SECRET,
-    `${process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"}/api/auth/gsc/callback`
+    `${process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"}/api/auth/gsc/callback`
   )
 }
 

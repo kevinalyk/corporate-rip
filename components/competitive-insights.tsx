@@ -1545,7 +1545,7 @@ export function CompetitiveInsights({
 
       {(subscriptionPlan === "free" || subscriptionPlan === "preview") && !hasAdminAccess && (
         <div
-          className="mb-6 bg-gradient-to-r from-rip-red/10 to-rip-red/5 border border-rip-red/20 rounded-lg p-6"
+          className="mb-6 bg-gradient-to-r from-brand-primary/10 to-brand-primary/5 border border-brand-primary/20 rounded-lg p-6"
           data-upgrade-banner
         >
           <div className="flex items-start justify-between gap-4">
@@ -2262,7 +2262,7 @@ export function CompetitiveInsights({
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
                   <Badge
                     variant="secondary"
-                    className="text-sm font-semibold shadow-lg border-rip-red/20 bg-background/95 px-4 py-2"
+                    className="text-sm font-semibold shadow-lg border-brand-primary/20 bg-background/95 px-4 py-2"
                   >
                     🔒 Upgrade to use Search & Filters
                   </Badge>
@@ -3214,7 +3214,7 @@ export function CompetitiveInsights({
                                     href={displayUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-start gap-2 text-rip-red hover:underline break-all text-sm min-w-0"
+                                    className="flex items-start gap-2 text-brand-primary hover:underline break-all text-sm min-w-0"
                                   >
                                     <ExternalLink className="h-4 w-4 flex-shrink-0 mt-0.5" />
                                     <span className="min-w-0 break-all">{displayUrl}</span>

@@ -14,17 +14,17 @@ export function Footer() {
             className="h-6 w-6"
           />
           <span className="text-sm text-muted-foreground">
-            © 2025 Inbox.GOP. All rights reserved.
+            © 2025 brandinbox.ai. All rights reserved.
           </span>
         </div>
         <div className="flex items-center gap-6">
-          <Link href="#" className="text-sm text-muted-foreground hover:text-rip-red transition-colors">
+          <Link href="#" className="text-sm text-muted-foreground hover:text-brand-primary transition-colors">
             Privacy Policy
           </Link>
-          <Link href="#" className="text-sm text-muted-foreground hover:text-rip-red transition-colors">
+          <Link href="#" className="text-sm text-muted-foreground hover:text-brand-primary transition-colors">
             Terms and Conditions
           </Link>
-          <Link href="#" className="text-sm text-muted-foreground hover:text-rip-red transition-colors">
+          <Link href="#" className="text-sm text-muted-foreground hover:text-brand-primary transition-colors">
             Contact
           </Link>
         </div>

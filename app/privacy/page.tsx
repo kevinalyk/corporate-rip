@@ -1,26 +1,26 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Privacy Policy - Inbox.GOP",
+  title: "Privacy Policy - brandinbox.ai",
   description:
-    "Privacy Policy for RIP Tool (Republican Inboxing Protocol). Learn how we collect, use, and protect your personal information.",
+    "Privacy Policy for brandinbox.ai (brandinbox.ai). Learn how we collect, use, and protect your personal information.",
 }
 
 export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-white text-gray-900">
       <div className="max-w-3xl mx-auto px-6 py-16">
-        <h1 className="text-3xl font-bold mb-2">RIP Tool Privacy Policy</h1>
+        <h1 className="text-3xl font-bold mb-2">brandinbox.ai Privacy Policy</h1>
         <p className="text-sm text-gray-500 mb-10">
           Effective Date: October 15, 2025 &nbsp;&mdash;&nbsp; Last Updated: October 15, 2025
         </p>
 
         <p className="mb-8 text-gray-700 leading-relaxed">
-          Your privacy is important to us. This is RIP Tool&rsquo;s policy to respect your privacy and comply with
+          Your privacy is important to us. This is brandinbox.ai&rsquo;s policy to respect your privacy and comply with
           applicable laws and regulations regarding any personal information we may collect about you when you use or
-          visit rip-tool.com and related services (the &ldquo;Service&rdquo;). We are Republican Inboxing Protocol LLC,
-          and references to &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo; mean Republican Inboxing Protocol
-          LLC in its role as operator of RIP Tool.
+          visit brandinbox.ai and related services (the &ldquo;Service&rdquo;). We are brandinbox.ai LLC,
+          and references to &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo; mean brandinbox.ai
+          LLC in its role as operator of brandinbox.ai.
         </p>
 
         <section className="mb-8">
@@ -85,7 +85,7 @@ export default function PrivacyPage() {
           <ul className="list-disc pl-6 space-y-2 text-gray-700 leading-relaxed">
             <li>You retain whatever ownership rights you have in your content.</li>
             <li>
-              By submitting User Content, you grant Republican Inboxing Protocol LLC a non-exclusive, royalty-free,
+              By submitting User Content, you grant brandinbox.ai LLC a non-exclusive, royalty-free,
               worldwide, transferable, sub-licensable license to use, reproduce, distribute, display, prepare derivative
               works of, and perform that content in connection with operating the Service (including for marketing,
               promotional, or technical purposes).
@@ -271,11 +271,11 @@ export default function PrivacyPage() {
             information, please contact:
           </p>
           <address className="not-italic text-gray-700 leading-relaxed">
-            <strong>Republican Inboxing Protocol LLC (operating RIP Tool)</strong>
+            <strong>brandinbox.ai LLC (operating brandinbox.ai)</strong>
             <br />
             Email:{" "}
-            <a href="mailto:privacy@rip-tool.com" className="text-blue-600 underline">
-              privacy@rip-tool.com
+            <a href="mailto:privacy@brandinbox.ai" className="text-blue-600 underline">
+              privacy@brandinbox.ai
             </a>
             <br />
             Address: 1209 Mountain Road Place Northeast, STE R, Albuquerque, New Mexico 87110
@@ -283,7 +283,7 @@ export default function PrivacyPage() {
         </section>
 
         <footer className="border-t pt-6 text-sm text-gray-500">
-          &copy; 2025 Republican Inboxing Protocol LLC. All rights reserved.
+          &copy; 2025 brandinbox.ai LLC. All rights reserved.
         </footer>
       </div>
     </main>

@@ -498,7 +498,7 @@ export default function AccountIntegrationsPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <Loader2 size={32} className="animate-spin mx-auto mb-4 text-rip-red" />
+          <Loader2 size={32} className="animate-spin mx-auto mb-4 text-brand-primary" />
           <p>Loading integrations...</p>
         </div>
       </div>

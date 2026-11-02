@@ -76,12 +76,12 @@ function AcceptInvitationContent() {
     <main className="min-h-dvh grid place-items-center bg-background p-4">
       <Card className="w-full max-w-lg">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-full bg-rip-red/10 text-rip-red">
+          <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-full bg-brand-primary/10 text-brand-primary">
             <Users className="h-6 w-6" />
           </div>
           <CardTitle>Join your organization</CardTitle>
           <CardDescription>
-            {invitation ? `${invitation.organizationName} invited ${invitation.email}.` : "Review your Inbox.GOP invitation."}
+            {invitation ? `${invitation.organizationName} invited ${invitation.email}.` : "Review your brandinbox.ai invitation."}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -90,7 +90,7 @@ function AcceptInvitationContent() {
           {invitation ? (
             <>
               <div className="flex items-start gap-3 rounded-lg bg-muted p-4 text-sm">
-                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-rip-red" />
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand-primary" />
                 <p>Your personal follows and saved views will move with you. Your mobile credentials stay the same.</p>
               </div>
               <Button variant="branded" className="w-full" disabled={accepting} onClick={() => void accept()}>

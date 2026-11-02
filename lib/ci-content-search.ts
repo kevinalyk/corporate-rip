@@ -24,7 +24,7 @@ export interface SearchContentParams {
 }
 
 function appUrl(): string {
-  return process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+  return process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 }
 
 function parseDateRange(startDate?: string, endDate?: string) {

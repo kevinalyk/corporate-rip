@@ -9,7 +9,7 @@ async function fixSeedData() {
 
     // Create default domain if it doesn't exist
     let defaultDomain = await prisma.domain.findUnique({
-      where: { domain: "default.rip-tool.com" },
+      where: { domain: "default.brandinbox.ai" },
     })
 
     if (!defaultDomain) {
@@ -17,7 +17,7 @@ async function fixSeedData() {
       defaultDomain = await prisma.domain.create({
         data: {
           name: "Default Organization",
-          domain: "default.rip-tool.com",
+          domain: "default.brandinbox.ai",
           description: "Default domain for initial setup",
           dataRetentionDays: 90,
           active: true,

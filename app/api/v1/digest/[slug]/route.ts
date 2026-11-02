@@ -86,7 +86,7 @@ export async function PATCH(
   return NextResponse.json({
     id: updated.id,
     slug: updated.slug,
-    url: `https://app.rip-tool.com/digest/${updated.slug}`,
+    url: `https://brandinbox.ai/digest/${updated.slug}`,
     updatedAt: updated.updatedAt,
   })
 }

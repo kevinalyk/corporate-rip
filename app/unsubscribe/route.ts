@@ -19,7 +19,7 @@ const pageHeaders = {
 function page(title: string, content: string, status = 200) {
   return new NextResponse(`<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${title} | Inbox.GOP</title><style>
+<title>${title} | brandinbox.ai</title><style>
 body{font:16px/1.5 system-ui,sans-serif;background:#f4f6f8;color:#14212b;margin:0;padding:32px 16px}
 main{max-width:560px;margin:8vh auto;background:white;border:1px solid #dce2e6;border-radius:16px;padding:32px}
 h1{font-size:1.6rem;margin-top:0}button{display:block;width:100%;font:inherit;background:#d9414d;color:white;border:0;border-radius:8px;padding:14px;margin-top:12px;cursor:pointer}
@@ -33,11 +33,11 @@ button.secondary{background:#e9eef1;color:#14212b}small{color:#536370}
 export async function GET(request: Request) {
   const token = new URL(request.url).searchParams.get("token") ?? ""
   if (!token || !verifyEmailUnsubscribeToken(token)) {
-    return page("Invalid unsubscribe link", "<p>This link is invalid. Please contact support@rip-tool.com for help.</p>", 400)
+    return page("Invalid unsubscribe link", "<p>This link is invalid. Please contact support@brandinbox.ai for help.</p>", 400)
   }
 
   // The token is limited to base64url characters and a dot by the verifier.
-  return page("Email preferences", `<p>Choose which Inbox.GOP emails to stop. No sign-in is required. Account, billing, and security messages are unaffected.</p>
+  return page("Email preferences", `<p>Choose which brandinbox.ai emails to stop. No sign-in is required. Account, billing, and security messages are unaffected.</p>
 <form method="post" action="/unsubscribe"><input type="hidden" name="token" value="${token}">
 <button name="scope" value="all">Stop all update and alert emails</button>
 <button class="secondary" name="scope" value="product_update">Stop What's New emails only</button>
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
   const oneClick = form?.get("List-Unsubscribe") === "One-Click"
   const scope = oneClick ? "all" : form?.get("scope")
   if (!userId || !isEmailUnsubscribeScope(scope)) {
-    return page("Invalid unsubscribe request", "<p>This link is invalid. Please contact support@rip-tool.com for help.</p>", 400)
+    return page("Invalid unsubscribe request", "<p>This link is invalid. Please contact support@brandinbox.ai for help.</p>", 400)
   }
 
   try {

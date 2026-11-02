@@ -4,7 +4,7 @@ import { nanoid } from "nanoid"
 import { sendWeeklyDigest, type WeeklyDigestItem } from "@/lib/mailgun"
 import { nameToSlug } from "@/lib/directory-utils"
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 /**
  * Weekly Top-10 Digest — fires at 9 PM ET every Sunday (02:00 UTC Monday)

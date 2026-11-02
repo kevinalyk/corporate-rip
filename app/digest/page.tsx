@@ -11,7 +11,7 @@ import { Newspaper } from "lucide-react"
 import AdBanner from "@/components/ad-banner"
 import { shouldShowAd } from "@/lib/ads"
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 const PAGE_SIZE = 30
 
 interface Props {
@@ -27,9 +27,9 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   }
 
   return {
-    title: "GOP Intelligence Digest | Daily Republican Political Analysis | Inbox.GOP",
+    title: "GOP Intelligence Digest | Daily Republican Political Analysis | brandinbox.ai",
     description:
-      "Daily Republican political intelligence covering 2026 Senate battlegrounds, primaries, polling, endorsements, and Democratic failures. Published every weekday by Inbox.GOP.",
+      "Daily Republican political intelligence covering 2026 Senate battlegrounds, primaries, polling, endorsements, and Democratic failures. Published every weekday by brandinbox.ai.",
     keywords: [
       "republican intelligence digest",
       "GOP daily briefing",
@@ -43,18 +43,18 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     robots: { index: true, follow: true },
     alternates: links,
     openGraph: {
-      title: "GOP Intelligence Digest | Daily Republican Political Analysis | Inbox.GOP",
+      title: "GOP Intelligence Digest | Daily Republican Political Analysis | brandinbox.ai",
       description:
-        "Daily Republican political intelligence covering 2026 Senate battlegrounds, primaries, polling, endorsements, and Democratic failures. Published every weekday by Inbox.GOP.",
+        "Daily Republican political intelligence covering 2026 Senate battlegrounds, primaries, polling, endorsements, and Democratic failures. Published every weekday by brandinbox.ai.",
       url: `${BASE_URL}/digest`,
-      siteName: "Inbox.GOP",
+      siteName: "brandinbox.ai",
       type: "website",
-      images: [{ url: `${BASE_URL}/og-candidate-directory.png`, width: 1200, height: 630, alt: "Inbox.GOP Intelligence Digest" }],
+      images: [{ url: `${BASE_URL}/og-candidate-directory.png`, width: 1200, height: 630, alt: "brandinbox.ai Intelligence Digest" }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "GOP Intelligence Digest | Inbox.GOP",
-      description: "Daily Republican political intelligence and analysis from Inbox.GOP.",
+      title: "GOP Intelligence Digest | brandinbox.ai",
+      description: "Daily Republican political intelligence and analysis from brandinbox.ai.",
       images: [`${BASE_URL}/og-candidate-directory.png`],
     },
   }
@@ -132,7 +132,7 @@ export default async function DigestPage({ searchParams }: Props) {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "GOP Intelligence Digest",
-    description: "Daily Republican political intelligence published by Inbox.GOP",
+    description: "Daily Republican political intelligence published by brandinbox.ai",
     url: `${BASE_URL}/digest`,
     itemListElement: articles.slice(0, 10).map((a, i) => ({
       "@type": "ListItem",
@@ -163,7 +163,7 @@ export default async function DigestPage({ searchParams }: Props) {
           <div className="flex items-center justify-between mb-10">
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <Newspaper size={22} className="text-rip-red" />
+                <Newspaper size={22} className="text-brand-primary" />
                 <h1 className="text-2xl font-bold tracking-tight">Intelligence Digest</h1>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -187,7 +187,7 @@ export default async function DigestPage({ searchParams }: Props) {
                 return (
                   <article
                     key={a.id}
-                    className="rounded-xl border border-border bg-card overflow-hidden hover:border-rip-red/40 hover:shadow-md transition-all"
+                    className="rounded-xl border border-border bg-card overflow-hidden hover:border-brand-primary/40 hover:shadow-md transition-all"
                   >
                     {a.imageUrl && (
                       <div className="w-full aspect-[16/5] overflow-hidden bg-muted">
@@ -197,7 +197,7 @@ export default async function DigestPage({ searchParams }: Props) {
                     <div className="px-5 pt-4 pb-5">
                       {/* Badge + date row */}
                       <div className="flex items-center gap-2 flex-wrap mb-2">
-                        <span className="text-[10px] font-bold tracking-widest text-rip-red uppercase border border-rip-red/40 rounded px-2 py-0.5">
+                        <span className="text-[10px] font-bold tracking-widest text-brand-primary uppercase border border-brand-primary/40 rounded px-2 py-0.5">
                           Daily Digest
                         </span>
                         <span className="text-muted-foreground text-xs">·</span>
@@ -213,7 +213,7 @@ export default async function DigestPage({ searchParams }: Props) {
                       <h2 className="text-lg font-bold leading-snug mb-2 text-balance">
                         <a
                           href={`/digest/${a.slug}`}
-                          className="hover:text-rip-red transition-colors"
+                          className="hover:text-brand-primary transition-colors"
                         >
                           {a.title}
                         </a>
@@ -231,7 +231,7 @@ export default async function DigestPage({ searchParams }: Props) {
                             <a
                               key={tag}
                               href={`/digest/tag/${tag}`}
-                              className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border hover:border-rip-red/40 hover:text-foreground transition-colors"
+                              className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border hover:border-brand-primary/40 hover:text-foreground transition-colors"
                             >
                               {tag}
                             </a>
@@ -240,7 +240,7 @@ export default async function DigestPage({ searchParams }: Props) {
                         <a
                           href={`/digest/${a.slug}`}
                           aria-label={`Continue reading ${a.title}`}
-                          className="inline-flex items-center gap-1.5 text-rip-red text-sm font-medium hover:underline transition-colors flex-shrink-0"
+                          className="inline-flex items-center gap-1.5 text-brand-primary text-sm font-medium hover:underline transition-colors flex-shrink-0"
                         >
                           Read Digest
                           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
@@ -260,7 +260,7 @@ export default async function DigestPage({ searchParams }: Props) {
                 {hasPrev ? (
                   <a
                     href={page === 2 ? "/digest" : `/digest?page=${page - 1}`}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-rip-red transition-colors"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-brand-primary transition-colors"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
                     Newer
@@ -274,7 +274,7 @@ export default async function DigestPage({ searchParams }: Props) {
                 {hasNext ? (
                   <a
                     href={`/digest?page=${page + 1}`}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-rip-red transition-colors"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-brand-primary transition-colors"
                   >
                     Older
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>

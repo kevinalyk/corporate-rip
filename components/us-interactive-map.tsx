@@ -7,10 +7,10 @@ import { geoContains } from "d3-geo"
 const GEO_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
 
 // State fill constants — dark intel/dashboard palette
-// Dark navy tiles so future RIP red activity dots pop sharply against them
+// Dark navy tiles so future brand indigo activity dots pop sharply against them
 const FILL_DEFAULT  = "#1c2133"   // dark navy — matches dark sidebar tone
 const FILL_HOVER    = "#2a3150"   // lifted navy on hover
-const FILL_SELECTED = "#4f46e5"   // solid RIP red for selected state
+const FILL_SELECTED = "#4f46e5"   // solid brand indigo for selected state
 const STROKE_DEFAULT  = "#3d4b6e" // visible blue-grey border between states
 const STROKE_SELECTED = "#ff6472" // lighter red border on selected state
 
@@ -135,17 +135,17 @@ export function USInteractiveMap({ selectedState, onStateSelect, activityData = 
     <div className="relative w-full h-full">
       {/* Pulse animation keyframes injected inline */}
       <style>{`
-        @keyframes rip-pulse {
+        @keyframes brand-pulse {
           0%   { r: 5; opacity: 0.9; }
           70%  { r: 13; opacity: 0; }
           100% { r: 13; opacity: 0; }
         }
-        @keyframes rip-pulse-ring {
+        @keyframes brand-pulse-ring {
           0%   { r: 5; opacity: 0.6; }
           100% { r: 18; opacity: 0; }
         }
-        .rip-dot-pulse { animation: rip-pulse 1.8s ease-out infinite; }
-        .rip-dot-ring  { animation: rip-pulse-ring 1.8s ease-out infinite 0.3s; }
+        .brand-dot-pulse { animation: brand-pulse 1.8s ease-out infinite; }
+        .brand-dot-ring  { animation: brand-pulse-ring 1.8s ease-out infinite 0.3s; }
       `}</style>
 
       {/* Subtle grid overlay — gives the canvas an intel/ops-center feel */}
@@ -279,7 +279,7 @@ export function USInteractiveMap({ selectedState, onStateSelect, activityData = 
                 strokeWidth={1.2}
                 style={{
                   pointerEvents: "none",
-                  animation: `rip-pulse-ring 1.8s ease-out infinite ${delay}s`,
+                  animation: `brand-pulse-ring 1.8s ease-out infinite ${delay}s`,
                 }}
               />
               <circle
@@ -288,7 +288,7 @@ export function USInteractiveMap({ selectedState, onStateSelect, activityData = 
                 fillOpacity={0.85}
                 style={{
                   pointerEvents: "none",
-                  animation: `rip-pulse 1.8s ease-out infinite ${delay}s`,
+                  animation: `brand-pulse 1.8s ease-out infinite ${delay}s`,
                 }}
               />
               <circle

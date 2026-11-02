@@ -12,7 +12,7 @@ export default function NotFound() {
         height={56}
         className="mb-8 opacity-90"
       />
-      <p className="text-sm font-semibold tracking-widest text-rip-red mb-3">404</p>
+      <p className="text-sm font-semibold tracking-widest text-brand-primary mb-3">404</p>
       <h1 className="text-3xl font-bold tracking-tight mb-4 text-balance">Page not found</h1>
       <p className="text-muted-foreground leading-relaxed max-w-md mb-8 text-pretty">
         The page you&apos;re looking for doesn&apos;t exist or may have moved. Check the URL, or head back to a page

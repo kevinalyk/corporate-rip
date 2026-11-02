@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
       orderBy: { email: "asc" },
     })
 
-    // Filter out RIP seeds (shouldn't be in personal inbox)
+    // Filter out brandinbox.ai seeds (shouldn't be in personal inbox)
     const filteredSeeds = assignedSeeds.filter(
       (seed) => !["rip", "RIP"].includes(seed.email.split("@")[0])
     )

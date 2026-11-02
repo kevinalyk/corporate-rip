@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     const shouldLock = !isRIPEmployee // Lock client-owned seeds
 
     if (!isRIPEmployee && userRecord.clientId) {
-      // Get the client name for non-RIP users
+      // Get the client name for non-brandinbox.ai users
       const client = await prisma.client.findUnique({
         where: { id: userRecord.clientId },
         select: { name: true },

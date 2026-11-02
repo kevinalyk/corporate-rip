@@ -18,7 +18,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Require "all" (Professional) or "enterprise" plan, or internal RIP client
+    // Require "all" (Professional) or "enterprise" plan, or internal brandinbox.ai client
     const client = await prisma.client.findUnique({
       where: { id: clientId },
       select: { subscriptionPlan: true },

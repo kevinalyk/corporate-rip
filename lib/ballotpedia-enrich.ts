@@ -207,7 +207,7 @@ export async function enrichEntityFromBallotpedia(
   } else {
     const res = await fetch(ballotpediaUrl, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; RIPTool/1.0; +https://app.rip-tool.com)",
+        "User-Agent": "Mozilla/5.0 (compatible; brandinbox/1.0; +https://brandinbox.ai)",
         Accept: "text/html",
       },
     })
@@ -264,7 +264,7 @@ export async function enrichEntityFromBallotpedia(
     try {
       const imgRes = await fetch(imageSrc, {
         headers: {
-          "User-Agent": "Mozilla/5.0 (compatible; RIPTool/1.0; +https://app.rip-tool.com)",
+          "User-Agent": "Mozilla/5.0 (compatible; brandinbox/1.0; +https://brandinbox.ai)",
           Referer: ballotpediaUrl,
         },
       })

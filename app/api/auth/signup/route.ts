@@ -254,7 +254,7 @@ export async function POST(request: NextRequest) {
       email: normalizedEmail,
       organizationName: result.client.name,
       plan: matchedTrialCode ? `${matchedTrialCode.trialLengthDays}-Day Free Trial (pending card on file)` : "Free",
-      loginUrl: "https://app.rip-tool.com/login",
+      loginUrl: "https://brandinbox.ai/login",
     }).catch((err) => console.error("[Signup] Welcome email failed:", err))
 
     // Fire admin notification non-blocking — don't let email failure affect signup

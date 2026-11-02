@@ -198,7 +198,7 @@ async function findOrCreateDomainForEmail(fromEmail: string, clientId: string | 
 }
 
 /**
- * Scan seed emails for new campaigns (EXCLUDING RIP-locked emails)
+ * Scan seed emails for new campaigns (EXCLUDING brandinbox.ai-locked emails)
  */
 export async function scanForNewCampaigns(options: {
   daysToScan?: number
@@ -228,11 +228,11 @@ export async function scanForNewCampaigns(options: {
         success: false,
         newCampaigns: 0,
         totalEmails: 0,
-        error: "No active seed emails found (excluding RIP-locked emails)",
+        error: "No active seed emails found (excluding brandinbox.ai-locked emails)",
       }
     }
 
-    console.log(`📧 Found ${seedEmails.length} active seed emails to scan (excluding RIP-locked)`)
+    console.log(`📧 Found ${seedEmails.length} active seed emails to scan (excluding brandinbox.ai-locked)`)
 
     // Calculate the date range for scanning
     const startDate = new Date()
@@ -691,7 +691,7 @@ async function fetchRecentEmailsIMAP(
 
 /**
  * Scan ALL locked seed emails for competitive insights
- * - RIP-locked seeds: used for inbox/spam counting, source="seed"
+ * - brandinbox.ai-locked seeds: used for inbox/spam counting, source="seed"
  * - Other client-locked seeds: assigned to that client, source="personal"
  */
 export async function scanForCompetitiveInsights(options: {
@@ -717,7 +717,7 @@ export async function scanForCompetitiveInsights(options: {
       }`,
     )
 
-    // Get RIP client
+    // Get brandinbox.ai client
     const ripClient = await prisma.client.findFirst({
       where: {
         OR: [{ slug: "rip" }, { name: { contains: "RIP", mode: "insensitive" } }],
@@ -730,11 +730,11 @@ export async function scanForCompetitiveInsights(options: {
         success: false,
         newInsights: 0,
         totalEmails: 0,
-        error: "RIP client not found",
+        error: "brandinbox.ai client not found",
       }
     }
 
-    // Get ALL locked seed emails (both RIP and other clients) — exclude domain health seeds
+    // Get ALL locked seed emails (both brandinbox.ai and other clients) — exclude domain health seeds
     const allLockedSeedEmails = await prisma.seedEmail.findMany({
       where: {
         active: true,
@@ -754,7 +754,7 @@ export async function scanForCompetitiveInsights(options: {
       }
     }
 
-    // Separate RIP seeds from other client seeds
+    // Separate brandinbox.ai seeds from other client seeds
     const ripSeedEmails = allLockedSeedEmails.filter(
       (s) => s.assignedToClient === ripClient.id || s.assignedToClient?.toLowerCase() === "rip"
     )
@@ -762,7 +762,7 @@ export async function scanForCompetitiveInsights(options: {
       (s) => s.assignedToClient !== ripClient.id && s.assignedToClient?.toLowerCase() !== "rip"
     )
 
-    console.log(`🔒 Found ${allLockedSeedEmails.length} locked seed emails (${ripSeedEmails.length} RIP, ${otherClientSeedEmails.length} other clients)`)
+    console.log(`🔒 Found ${allLockedSeedEmails.length} locked seed emails (${ripSeedEmails.length} brandinbox.ai, ${otherClientSeedEmails.length} other clients)`)
 
     // Calculate the date range for scanning
     const startDate = new Date()
@@ -774,7 +774,7 @@ export async function scanForCompetitiveInsights(options: {
       string,
       Array<{
         seedEmail: string
-        seedClientId?: string // clientId if this seed is assigned to a non-RIP client
+        seedClientId?: string // clientId if this seed is assigned to a non-brandinbox.ai client
         placement: "inbox" | "spam" | "social" | "promotions" | "other"
         subject: string
         senderName: string
@@ -792,7 +792,7 @@ export async function scanForCompetitiveInsights(options: {
     const BATCH_SIZE = 10
     const allEmailResults: Array<{ seedEmail: any; emails: Email[] }> = []
 
-    // Build a map of seed email address → assigned client ID (for non-RIP seeds)
+    // Build a map of seed email address → assigned client ID (for non-brandinbox.ai seeds)
     // assignedToClient may store a name ("Test Client"), slug ("test_client"), or real id —
     // resolve it to the actual Client.id in all cases.
     const seedEmailToClientId = new Map<string, string>()
@@ -823,7 +823,7 @@ export async function scanForCompetitiveInsights(options: {
     const ripSeedEmailAddresses = ripSeedEmails.map((s) => s.email)
     const allSeedEmailAddresses = allLockedSeedEmails.map((s) => s.email)
 
-    // Process ALL locked seed emails in batches (both RIP and other clients)
+    // Process ALL locked seed emails in batches (both brandinbox.ai and other clients)
     for (let i = 0; i < allLockedSeedEmails.length; i += BATCH_SIZE) {
       const batch = allLockedSeedEmails.slice(i, i + BATCH_SIZE)
 
@@ -870,7 +870,7 @@ export async function scanForCompetitiveInsights(options: {
         }
 
         // For personal/forwarded emails, store the actual personal address (from the To: header)
-        // instead of inbox@rip-tool.com so seenBySeedEmails reflects the real recipient.
+        // instead of inbox@brandinbox.ai so seenBySeedEmails reflects the real recipient.
         let effectiveSeedEmail = seedEmail.email
         if (email.to) {
           const toAddr = email.to.split(",")[0].trim().toLowerCase()
@@ -880,12 +880,12 @@ export async function scanForCompetitiveInsights(options: {
           }
         }
 
-        // Check if this seed email is assigned to a non-RIP client
+        // Check if this seed email is assigned to a non-brandinbox.ai client
         const seedClientId = seedEmailToClientId.get(seedEmail.email.toLowerCase())
 
         allEmailsByFingerprint.get(fingerprint)!.push({
           seedEmail: effectiveSeedEmail,
-          seedClientId, // will be undefined for RIP seeds
+          seedClientId, // will be undefined for brandinbox.ai seeds
           placement: email.placement,
           subject: sanitizedSubject,
           senderName: email.from.name,
@@ -988,7 +988,7 @@ export async function scanForCompetitiveInsights(options: {
         firstEmail.emailContent,
       )
 
-      // Resolve clientId: first check if any email came from a non-RIP seed assignment
+      // Resolve clientId: first check if any email came from a non-brandinbox.ai seed assignment
       // If not, fall back to personal email domain resolution
       const seedAssignedClientId = emails.find((e) => e.seedClientId)?.seedClientId
       const personalDomainClientId = await resolvePersonalClientId(emails)
@@ -1051,8 +1051,8 @@ async function createCampaignsFromDetected(detectedCampaigns: DetectedCampaign[]
       let clientId: string | null = null
 
       for (const email of detected.emails) {
-        // Only extract client slug from TO field if this email was received at inbox@rip-tool.com
-        if (email.seedEmail === "inbox@rip-tool.com" && email.to) {
+        // Only extract client slug from TO field if this email was received at inbox@brandinbox.ai
+        if (email.seedEmail === "inbox@brandinbox.ai" && email.to) {
           const clientSlug = extractClientSlugFromRecipient(email.to)
           if (clientSlug) {
             const client = await prisma.client.findUnique({

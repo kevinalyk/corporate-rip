@@ -10,7 +10,7 @@ function stripHtml(html: string): string {
 }
 
 export default async function Image({ params }: { params: { slug: string } }) {
-  let title = "RIP Tool News"
+  let title = "brandinbox.ai News"
   let excerpt = "Competitive Intelligence for Political Campaigns"
   let publishedAt = ""
 
@@ -70,7 +70,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
             position: "relative",
           }}
         >
-          {/* Top: RIP badge */}
+          {/* Top: brandinbox.ai badge */}
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <div
               style={{
@@ -83,7 +83,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
                 borderRadius: "4px",
               }}
             >
-              RIP TOOL
+              BRANDINBOX.AI
             </div>
             <div style={{ color: "#6b7280", fontSize: "16px", fontWeight: "500" }}>NEWS</div>
           </div>
@@ -129,7 +129,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
               <div style={{ color: "#6b7280", fontSize: "16px" }}>{publishedAt}</div>
             )}
             <div style={{ color: "#4b5563", fontSize: "16px", marginLeft: "auto" }}>
-              app.rip-tool.com
+              brandinbox.ai
             </div>
           </div>
         </div>

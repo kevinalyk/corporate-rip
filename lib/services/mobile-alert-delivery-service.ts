@@ -124,7 +124,7 @@ export function buildAnnouncementPushMessage(
   return {
     to: expoPushToken,
     sound: "default",
-    title: "What’s New in Inbox.GOP",
+    title: "What’s New in brandinbox.ai",
     body: announcement.title,
     data: { announcementSlug: announcement.slug },
   }
@@ -149,8 +149,8 @@ export function buildAccountAccessPushMessage(
     body: covered
       ? input.shouldCancelAppleSubscription
         ? `${input.clientName}'s ${input.planName || "web"} plan now includes your mobile access. Cancel Personal through Apple to avoid paying twice.`
-        : `${input.clientName}'s ${input.planName || "web"} plan now includes your full Inbox.GOP mobile access.`
-      : `You can now use your free Inbox.GOP web workspace for ${input.clientName}.`,
+        : `${input.clientName}'s ${input.planName || "web"} plan now includes your full brandinbox.ai mobile access.`
+      : `You can now use your free brandinbox.ai web workspace for ${input.clientName}.`,
     data: {
       accountAccessKind: input.kind,
       shouldCancelAppleSubscription: input.shouldCancelAppleSubscription,

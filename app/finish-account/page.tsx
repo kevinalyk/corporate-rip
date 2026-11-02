@@ -70,12 +70,12 @@ export default function FinishAccountPage() {
     <main className="min-h-dvh bg-background px-4 py-10">
       <div className="mx-auto max-w-5xl space-y-8">
         <div className="mx-auto max-w-2xl text-center space-y-3">
-          <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-rip-red/10 text-rip-red">
+          <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-brand-primary/10 text-brand-primary">
             <Smartphone className="h-7 w-7" />
           </div>
           <h1 className="text-3xl font-bold">Finish setting up your web account</h1>
           <p className="text-muted-foreground">
-            Your Inbox.GOP mobile account includes our free web experience. Confirm your workspace, join an invited organization, or upgrade your web plan.
+            Your brandinbox.ai mobile account includes our free web experience. Confirm your workspace, join an invited organization, or upgrade your web plan.
           </p>
         </div>
 
@@ -147,7 +147,7 @@ function SetupOption(props: {
   return (
     <Card className="flex h-full flex-col">
       <CardHeader>
-        <div className="mb-2 text-rip-red">{props.icon}</div>
+        <div className="mb-2 text-brand-primary">{props.icon}</div>
         <CardTitle>{props.title}</CardTitle>
         <CardDescription>{props.description}</CardDescription>
       </CardHeader>

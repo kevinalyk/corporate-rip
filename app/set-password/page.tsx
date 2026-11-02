@@ -110,7 +110,7 @@ function SetPasswordForm() {
   if (validating) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-rip-red" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
       </div>
     )
   }
@@ -126,7 +126,7 @@ function SetPasswordForm() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="w-full bg-rip-red hover:bg-rip-red/90" onClick={() => router.push("/login")}>
+            <Button className="w-full bg-brand-primary hover:bg-brand-primary/90" onClick={() => router.push("/login")}>
               Go to Login
             </Button>
           </CardContent>
@@ -140,7 +140,7 @@ function SetPasswordForm() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
-            <Image src="/images/IconOnly_Transparent_NoBuffer.png" alt="Inbox.GOP" width={60} height={60} />
+            <Image src="/images/IconOnly_Transparent_NoBuffer.png" alt="brandinbox.ai" width={60} height={60} />
           </div>
           <div>
             <CardTitle className="text-2xl">Set Your Password</CardTitle>
@@ -176,7 +176,7 @@ function SetPasswordForm() {
                 minLength={12}
               />
             </div>
-            <Button type="submit" className="w-full bg-rip-red hover:bg-rip-red/90 text-white" disabled={loading}>
+            <Button type="submit" className="w-full bg-brand-primary hover:bg-brand-primary/90 text-white" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -198,7 +198,7 @@ export default function SetPasswordPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center bg-background">
-          <Loader2 className="h-8 w-8 animate-spin text-rip-red" />
+          <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
         </div>
       }
     >

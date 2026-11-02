@@ -1384,7 +1384,7 @@ export async function processCompetitiveInsights(
     })
 
     if (!ripClient) {
-      console.log(`[v0] processCompetitiveInsights "${subject}" - EARLY RETURN: no RIP client found`)
+      console.log(`[v0] processCompetitiveInsights "${subject}" - EARLY RETURN: no brandinbox.ai client found`)
       return false
     }
 
@@ -1404,11 +1404,11 @@ export async function processCompetitiveInsights(
 
     const ripEmailAddresses = new Set(ripSeedEmails.map((se) => se.email))
 
-    // Filter results to only RIP seeds for inbox/spam counting
+    // Filter results to only brandinbox.ai seeds for inbox/spam counting
     const ripResults = results.filter((r) => ripEmailAddresses.has(r.seedEmail))
 
-    // If no RIP results AND no clientId (personal assignment), skip
-    // But if we have a clientId, we should still create the campaign even without RIP results
+    // If no brandinbox.ai results AND no clientId (personal assignment), skip
+    // But if we have a clientId, we should still create the campaign even without brandinbox.ai results
     if (ripResults.length === 0 && !clientId) {
       return false
     }
@@ -1426,7 +1426,7 @@ export async function processCompetitiveInsights(
     const totalCount = ripResults.length
     const inboxRate = totalCount > 0 ? (inboxCount / totalCount) * 100 : 0
 
-    // For sanitization, include all seed emails from results (both RIP and personal client seeds)
+    // For sanitization, include all seed emails from results (both brandinbox.ai and personal client seeds)
     const allResultSeedEmails = results.map((r) => r.seedEmail)
     const seedEmailsList = [...new Set([...ripEmailAddresses, ...allResultSeedEmails])]
 
@@ -1547,7 +1547,7 @@ export async function processCompetitiveInsights(
           ? await extractCTALinks(emailContent, seedEmailsList, sanitizedSubject)
           : []
 
-      // Only count RIP seed results for inbox/spam statistics
+      // Only count brandinbox.ai seed results for inbox/spam statistics
       const alreadySeen = new Set<string>(Array.isArray(existing.seenBySeedEmails) ? existing.seenBySeedEmails as string[] : [])
       const newRipResults = ripResults.filter((r) => !alreadySeen.has(r.seedEmail))
       const newInbox = newRipResults.filter((r) => r.placement === "inbox").length
@@ -1767,7 +1767,7 @@ export async function processCompetitiveInsights(
           })
           if (raceExisting) {
             const raceAlreadySeen = new Set<string>(Array.isArray(raceExisting.seenBySeedEmails) ? raceExisting.seenBySeedEmails as string[] : [])
-            // Use RIP results for counting
+            // Use brandinbox.ai results for counting
             const raceNewRipResults = ripResults.filter((r) => !raceAlreadySeen.has(r.seedEmail))
             const raceNewInbox = raceNewRipResults.filter((r) => r.placement === "inbox").length
             const raceNewSpam = raceNewRipResults.filter((r) => r.placement === "spam").length

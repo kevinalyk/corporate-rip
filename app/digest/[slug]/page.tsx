@@ -9,7 +9,7 @@ import DigestArticleClient from "./digest-article-client"
 import AdBanner from "@/components/ad-banner"
 import { shouldShowAd } from "@/lib/ads"
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 interface Props {
   params: { slug: string }
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       select: { title: true, slug: true, summary: true, body: true, publishedAt: true, updatedAt: true, imageUrl: true, tags: true },
     })
 
-    if (!article) return { title: "Article Not Found - Inbox.GOP" }
+    if (!article) return { title: "Article Not Found - brandinbox.ai" }
 
     const description = article.summary || stripHtml(article.body).slice(0, 160).trim()
     const url = `${BASE_URL}/digest/${article.slug}`
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const ogImageUrl = `${url}/opengraph-image`
 
     return {
-      title: `${article.title} | Inbox.GOP`,
+      title: `${article.title} | brandinbox.ai`,
       description,
       robots: { index: true, follow: true },
       alternates: { canonical: url },
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title: article.title,
         description,
         url,
-        siteName: "Inbox.GOP",
+        siteName: "brandinbox.ai",
         type: "article",
         publishedTime,
         modifiedTime: article.updatedAt?.toISOString() ?? publishedTime,
@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   } catch (err) {
     console.error("[DigestSlug] generateMetadata error:", err)
-    return { title: "Intelligence Digest - Inbox.GOP" }
+    return { title: "Intelligence Digest - brandinbox.ai" }
   }
 }
 
@@ -134,16 +134,16 @@ export default async function DigestArticlePage({ params }: Props) {
         dateModified: initialArticle.updatedAt,
         author: {
           "@type": "Organization",
-          name: "Inbox.GOP Research Team",
+          name: "brandinbox.ai Research Team",
           url: BASE_URL,
         },
         publisher: {
           "@type": "Organization",
-          name: "Inbox.GOP",
+          name: "brandinbox.ai",
           url: BASE_URL,
           logo: {
             "@type": "ImageObject",
-            url: `${BASE_URL}/images/rip-wordmark.png`,
+            url: `${BASE_URL}/images/FullLogo_Transparent.png`,
             width: 600,
             height: 60,
           },
@@ -161,7 +161,7 @@ export default async function DigestArticlePage({ params }: Props) {
         isAccessibleForFree: true,
         isPartOf: {
           "@type": "Periodical",
-          name: "Inbox.GOP Intelligence Digest",
+          name: "brandinbox.ai Intelligence Digest",
           url: `${BASE_URL}/digest`,
         },
       }

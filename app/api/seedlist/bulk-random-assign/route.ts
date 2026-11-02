@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
         select: { id: true, name: true },
       })
     } else {
-      // Get all clients except RIP
+      // Get all clients except brandinbox.ai
       targetClients = await prisma.client.findMany({
         where: {
           id: { not: "RIP" },

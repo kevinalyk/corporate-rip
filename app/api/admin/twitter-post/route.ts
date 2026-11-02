@@ -176,7 +176,7 @@ export async function runTwitterPost(options: { dryRun?: boolean } = {}): Promis
     return { success: false, error: "Twitter API credentials not configured", status: 500 }
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000)
 
   // ── Fetch last posted party for alternation logic ─────────────────────

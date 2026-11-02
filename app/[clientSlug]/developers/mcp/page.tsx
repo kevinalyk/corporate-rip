@@ -12,7 +12,7 @@ export default function ClientMcpPage() {
   const clientSlug = params.clientSlug as string
   const { user, loading } = useCurrentUser()
 
-  // Pilot: super admins plus users of RIP and Red Spark Strategy. The plan gate
+  // Pilot: super admins plus users of brandinbox.ai and Red Spark Strategy. The plan gate
   // and pilot allowlist are enforced server-side and surfaced in the content.
   const allowed = !loading && !!user && (clientSlug === "rip" || clientSlug === "redsparkstrategy")
 
@@ -25,7 +25,7 @@ export default function ClientMcpPage() {
   if (!allowed) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-rip-red" />
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-brand-primary" />
       </div>
     )
   }

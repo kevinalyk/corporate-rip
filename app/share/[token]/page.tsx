@@ -47,7 +47,7 @@ async function incrementViewCount(token: string) {
   }
 }
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 export async function generateMetadata({ params }: { params: { token: string } }): Promise<Metadata> {
   try {
@@ -75,16 +75,16 @@ export async function generateMetadata({ params }: { params: { token: string } }
 
     if (!campaign) {
       return {
-        title: "Shared Campaign - Inbox.GOP",
-        description: "View this shared campaign on Inbox.GOP",
+        title: "Shared Campaign - brandinbox.ai",
+        description: "View this shared campaign on brandinbox.ai",
       }
     }
 
     const entityName = campaign.entity?.name || (isSms ? (campaign as any).phoneNumber : (campaign as any).senderName)
-    const title = `${entityName} - Inbox.GOP`
+    const title = `${entityName} - brandinbox.ai`
     const description = isSms
       ? (campaign as any).message?.slice(0, 160)
-      : (campaign as any).subject?.slice(0, 160) || "View this campaign on RIP Tool"
+      : (campaign as any).subject?.slice(0, 160) || "View this campaign on brandinbox.ai"
 
     // Use the pre-generated Blob URL directly when available so Twitter gets a plain image URL
     // with no redirects. Fall back to the dynamic OG route if not yet generated.
@@ -97,14 +97,14 @@ export async function generateMetadata({ params }: { params: { token: string } }
       openGraph: {
         title,
         description,
-        siteName: "RIP Tool",
+        siteName: "brandinbox.ai",
         type: "website",
         images: [
           {
             url: ogImageUrl,
             width: 1200,
             height: 630,
-            alt: `${entityName} on RIP Tool`,
+            alt: `${entityName} on brandinbox.ai`,
           },
         ],
       },
@@ -118,8 +118,8 @@ export async function generateMetadata({ params }: { params: { token: string } }
   } catch (error) {
     console.error("[OG] Error generating share metadata:", error)
     return {
-      title: "Shared Campaign | RIP Tool",
-      description: "View this shared campaign on RIP Tool",
+      title: "Shared Campaign | brandinbox.ai",
+      description: "View this shared campaign on brandinbox.ai",
     }
   }
 }

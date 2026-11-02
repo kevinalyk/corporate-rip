@@ -4,7 +4,7 @@ import { nanoid } from "nanoid"
 import { sendFollowingDigest, type DigestEntitySection, type DigestMessage } from "@/lib/mailgun"
 import { nameToSlug } from "@/lib/directory-utils"
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 /**
  * Daily Following Digest — fires at 7 AM ET (12:00 UTC)

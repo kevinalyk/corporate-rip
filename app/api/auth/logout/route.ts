@@ -23,7 +23,7 @@ export async function POST() {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    domain: ".rip-tool.com",
+    domain: ".brandinbox.ai",
   })
 
   return response

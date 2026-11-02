@@ -5,7 +5,7 @@ import { nanoid } from "nanoid"
 import { sendFollowingDigest, type DigestEntitySection, type DigestMessage } from "@/lib/mailgun"
 import { nameToSlug } from "@/lib/directory-utils"
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 /**
  * POST /api/admin/trigger-digest
@@ -13,7 +13,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
  * Manually fires the following digest — identical logic to the cron job.
  *
  * Body (JSON):
- *   email?      — send only to this address instead of all RIP users
+ *   email?      — send only to this address instead of all brandinbox.ai users
  *   dateOffset? — how many days back to look (default 1 = yesterday)
  *
  * Requires: super_admin

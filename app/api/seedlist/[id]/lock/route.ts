@@ -44,7 +44,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     const updateData: { locked: boolean; assignedToClient?: string; purpose?: string | null } = { locked }
 
     if (locked && !seedEmail.assignedToClient) {
-      // Find the RIP client
+      // Find the brandinbox.ai client
       const ripClient = await prisma.client.findFirst({
         where: {
           OR: [{ slug: "rip" }, { name: { contains: "RIP", mode: "insensitive" } }],
@@ -54,7 +54,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       if (ripClient) {
         updateData.assignedToClient = ripClient.id
         console.log(
-          `[v0] Assigning seed email ${params.id} to RIP client ${ripClient.id} because it's being locked with no client`,
+          `[v0] Assigning seed email ${params.id} to brandinbox.ai client ${ripClient.id} because it's being locked with no client`,
         )
       }
     }

@@ -53,7 +53,7 @@ export default function Image() {
               borderRadius: "4px",
             }}
           >
-            RIP TOOL
+            BRANDINBOX.AI
           </div>
 
           <div
@@ -66,7 +66,7 @@ export default function Image() {
               maxWidth: "920px",
             }}
           >
-            Republican Inboxing Protocol
+            brandinbox.ai
           </div>
 
           <div
@@ -81,7 +81,7 @@ export default function Image() {
             Competitive intelligence for Republican political campaigns, committees, and organizations.
           </div>
 
-          <div style={{ color: "#4b5563", fontSize: "16px", marginTop: "12px" }}>app.rip-tool.com</div>
+          <div style={{ color: "#4b5563", fontSize: "16px", marginTop: "12px" }}>brandinbox.ai</div>
         </div>
       </div>
     ),

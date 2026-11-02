@@ -12,16 +12,16 @@ import AdBanner from "@/components/ad-banner"
 import { shouldShowAd } from "@/lib/ads"
 import { NewsArticleImage } from "@/components/news-article-image"
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
 export const metadata: Metadata = {
-  title: "What's New - Inbox.GOP",
-  description: "Updates, improvements, and new features from the Inbox.GOP team.",
+  title: "What's New - brandinbox.ai",
+  description: "Updates, improvements, and new features from the brandinbox.ai team.",
   openGraph: {
-    title: "What's New - Inbox.GOP",
-    description: "Updates, improvements, and new features from the RIP Tool team — built for the Republican Inboxing Protocol.",
+    title: "What's New - brandinbox.ai",
+    description: "Updates, improvements, and new features from the brandinbox.ai team — built for the brandinbox.ai.",
     url: `${BASE_URL}/news`,
-    siteName: "RIP Tool",
+    siteName: "brandinbox.ai",
     type: "website",
   },
 }
@@ -87,11 +87,11 @@ export default async function NewsPage() {
         <div className="flex items-center justify-between mb-10">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <Megaphone size={22} className="text-rip-red" />
+              <Megaphone size={22} className="text-brand-primary" />
               <h1 className="text-2xl font-bold tracking-tight">{"What's New"}</h1>
             </div>
             <p className="text-sm text-muted-foreground">
-              Updates, improvements, and new features from the RIP Tool team
+              Updates, improvements, and new features from the brandinbox.ai team
             </p>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default async function NewsPage() {
               return (
                 <article
                   key={a.id}
-                  className="rounded-xl border border-border bg-card overflow-hidden hover:border-rip-red/40 hover:shadow-md transition-all"
+                  className="rounded-xl border border-border bg-card overflow-hidden hover:border-brand-primary/40 hover:shadow-md transition-all"
                 >
                   {a.imageUrl && (
                     <NewsArticleImage
@@ -125,7 +125,7 @@ export default async function NewsPage() {
                       {format(new Date(a.publishedAt), "MMMM d, yyyy")}
                     </time>
                     <h2 className="text-lg font-bold leading-snug mb-2 text-balance">
-                      <a href={`/news/${a.slug}`} className="hover:underline hover:text-rip-red transition-colors">
+                      <a href={`/news/${a.slug}`} className="hover:underline hover:text-brand-primary transition-colors">
                         {a.title}
                       </a>
                     </h2>
@@ -135,7 +135,7 @@ export default async function NewsPage() {
                     <a
                       href={`/news/${a.slug}`}
                       aria-label={`Continue reading ${a.title}`}
-                      className="inline-flex items-center gap-2 bg-rip-red hover:bg-rip-red/90 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                      className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
                     >
                       Continue Reading
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>

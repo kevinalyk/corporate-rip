@@ -183,7 +183,7 @@ function CellDisplay({ value }: { value: CellValue }) {
     if (value) {
       return (
         <div className="flex justify-center">
-          <Check className="h-5 w-5 text-rip-red" />
+          <Check className="h-5 w-5 text-brand-primary" />
         </div>
       )
     }
@@ -309,7 +309,7 @@ export function CIPricingContent() {
     }
 
     if (plan === "enterprise") {
-      window.location.href = "mailto:kevin@rip-tool.com,ryan@rip-tool.com?subject=Enterprise Plan Inquiry"
+      window.location.href = "mailto:kevin@brandinbox.ai,ryan@brandinbox.ai?subject=Enterprise Plan Inquiry"
       return
     }
 
@@ -629,7 +629,7 @@ export function CIPricingContent() {
         <p>All plans include access to our comprehensive political campaign database.</p>
         <p className="mt-1">
           Questions?{" "}
-          <a href="mailto:kevin@rip-tool.com,ryan@rip-tool.com" className="text-rip-red hover:underline">
+          <a href="mailto:kevin@brandinbox.ai,ryan@brandinbox.ai" className="text-brand-primary hover:underline">
             Contact support
           </a>
         </p>

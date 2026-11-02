@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
       })
       invitedUser = existingUser
       existingMobileAccount = true
-      invitationLink = `${process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"}/accept-invitation?token=${invitationToken}`
+      invitationLink = `${process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"}/accept-invitation?token=${invitationToken}`
     } else {
       const userId = crypto.randomUUID()
       const newUser = await sql`
@@ -142,16 +142,16 @@ export async function POST(request: NextRequest) {
         INSERT INTO "UserInvitation" (token, userid, expiresat)
         VALUES (${invitationToken}, ${newUser[0].id}, ${expiresAt})
       `
-      invitationLink = `${process.env.NEXT_PUBLIC_APP_URL || "https://app.rip-tool.com"}/set-password?token=${invitationToken}`
+      invitationLink = `${process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"}/set-password?token=${invitationToken}`
     }
 
     const mailgunDomain = process.env.MAILGUN_DOMAIN!
     const mailgunApiKey = process.env.MAILGUN_API_KEY!
 
     const formData = new FormData()
-    formData.append("from", `Inbox.GOP <hello@${mailgunDomain}>`)
+    formData.append("from", `brandinbox.ai <hello@${mailgunDomain}>`)
     formData.append("to", normalizedEmail)
-    formData.append("subject", "You've been invited to Inbox.GOP")
+    formData.append("subject", "You've been invited to brandinbox.ai")
     formData.append(
       "html",
       `
@@ -167,9 +167,9 @@ export async function POST(request: NextRequest) {
         </head>
         <body>
           <div class="container">
-            <h2>Welcome to Inbox.GOP!</h2>
+            <h2>Welcome to brandinbox.ai!</h2>
             <p>Hi ${firstName},</p>
-            <p>You've been invited to join Inbox.GOP. Click the button below to ${existingMobileAccount ? "accept the invitation with your existing account" : "set your password and get started"}:</p>
+            <p>You've been invited to join brandinbox.ai. Click the button below to ${existingMobileAccount ? "accept the invitation with your existing account" : "set your password and get started"}:</p>
             <a href="${invitationLink}" class="button">${existingMobileAccount ? "Accept Invitation" : "Set Your Password"}</a>
             <p>Or copy and paste this link into your browser:</p>
             <p style="word-break: break-all; color: #0070f3;">${invitationLink}</p>
