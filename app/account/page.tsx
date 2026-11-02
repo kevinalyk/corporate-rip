@@ -15,6 +15,8 @@ type BrandUser = {
   lastName: string
   company: string | null
   jobTitle: string | null
+  role?: string
+  clientSlug?: string | null
   createdAt: string
 }
 
@@ -44,6 +46,12 @@ export default function AccountPage() {
   useEffect(() => {
     if (user === null) {
       window.location.href = "/login"
+      return
+    }
+    if (user?.clientSlug) {
+      window.location.replace(`/${user.clientSlug}/ci/campaigns`)
+    } else if (user?.role === "super_admin") {
+      window.location.replace("/rip/ci/campaigns")
     }
   }, [user])
 
