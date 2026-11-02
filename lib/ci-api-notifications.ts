@@ -41,7 +41,7 @@ export async function sendCiEntityCreatedByApiNotification(params: {
     timeZone: "America/New_York",
   }).format(createdAt)
 
-  const entityUrl = `https://brandinbox.ai/rip/admin/ci-entities?entityId=${entityId}`
+  const entityUrl = `https://brandinbox.ai/rip/ci-entities?entityId=${entityId}`
 
   const html = `
     <!DOCTYPE html>

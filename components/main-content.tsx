@@ -90,8 +90,6 @@ import { Footer } from "@/components/footer"
 import { Alert, AlertDescription } from "@/components/ui/alert" // Added for UserSettingsContent
 
 import { BillingContent } from "./billing-content"
-// Import AdminContent
-import { AdminContent } from "@/components/admin-content"
 
 const getRoleDisplay = (role: string) => {
   const roleMap: { [key: string]: string } = {
@@ -213,7 +211,6 @@ export function MainContent({ collapsed, activeTab, clientSlug, isAdminView = fa
           {activeTab === "usersettings" && <UserSettingsContent />}
           {activeTab === "clients" && <ClientsContent />}
           {activeTab === "blockeddomains" && <BlockedDomainsContent />}
-          {activeTab === "admin" && <AdminContent />}
         </div>
       </main>
       <Footer />

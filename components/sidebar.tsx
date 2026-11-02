@@ -16,8 +16,6 @@ import {
   Moon,
   Sun,
   UserCog,
-  Shield,
-  ShieldAlert,
   ShieldCheck,
   BarChart3,
   Lightbulb,
@@ -38,15 +36,12 @@ import {
   MailCheck,
   Code,
   Key,
-  Activity,
   Smartphone,
   Rocket,
   Newspaper,
-  ScrollText,
   TrendingUp,
   Type,
   Tags,
-  MessageSquareOff,
   Bot,
 } from "lucide-react"
 import useSWR from "swr"
@@ -114,7 +109,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
     radar: false,
     reports: false,
     inbox: false,
-    admin: false,
     developers: false,
     account: false,
   })
@@ -183,8 +177,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
       setExpandedSections((prev) => ({ ...prev, reports: true }))
     } else if (pathname.includes("/inbox/")) {
       setExpandedSections((prev) => ({ ...prev, inbox: true }))
-    } else if (pathname.includes("/admin/")) {
-      setExpandedSections((prev) => ({ ...prev, admin: true }))
     } else if (pathname.includes("/developers/")) {
       setExpandedSections((prev) => ({ ...prev, developers: true }))
     }
@@ -561,134 +553,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
                       active={pathname.includes("/inbox/spam-test")}
                       collapsed={false}
                       onClick={() => navigate(`/${getClientSlug()}/inbox/spam-test`)}
-                    />
-                  </div>
-                )}
-              </>
-            )}
-
-            {userRole === "super_admin" && (selectedClientSlug === "rip" || !selectedClientSlug) && (
-              <>
-                <NavSection
-                  icon={<Shield size={20} />}
-                  label="Admin"
-                  collapsed={collapsed}
-                  expanded={expandedSections.admin}
-                  onToggle={() => toggleSection("admin")}
-                />
-                {expandedSections.admin && !collapsed && (
-                  <div className="ml-4 space-y-1">
-                    <NavItem
-                      icon={<Settings size={18} />}
-                      label="Admin Tools"
-                      active={pathname === "/rip/admin/tools"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/tools")}
-                    />
-                    <NavItem
-                      icon={<Users size={18} />}
-                      label="Accounts"
-                      active={pathname === "/rip/admin/accounts"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/accounts")}
-                    />
-                    <NavItem
-                      icon={<Building2 size={18} />}
-                      label="CI Entities"
-                      active={pathname === "/rip/admin/ci-entities"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/ci-entities")}
-                    />
-                    <NavItem
-                      icon={<Key size={18} />}
-                      label="Automation API"
-                      active={pathname === "/rip/admin/automation-api"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/automation-api")}
-                    />
-                    <NavItem
-                      icon={<Shield size={18} />}
-                      label="Blocked Domains"
-                      active={pathname === "/rip/admin/blocked-domains"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/blocked-domains")}
-                    />
-                    <NavItem
-                      icon={<ShieldCheck size={18} />}
-                      label="Compliance"
-                      active={pathname === "/rip/admin/compliance"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/compliance")}
-                    />
-                    <NavItem
-                      icon={<ScrollText size={18} />}
-                      label="Changelog"
-                      active={pathname === "/rip/admin/changelog"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/changelog")}
-                    />
-                    <NavItem
-                      icon={<ShieldAlert size={18} />}
-                      label="Name Redaction"
-                      active={pathname === "/rip/admin/name-redaction"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/name-redaction")}
-                    />
-                    <NavItem
-                      icon={<Globe size={18} />}
-                      label="Personal Assignments"
-                      active={pathname === "/rip/admin/personal-assignments"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/personal-assignments")}
-                    />
-                    <NavItem
-                      icon={<Mail size={18} />}
-                      label="Sender Providers"
-                      active={pathname === "/rip/admin/sender-providers"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/sender-providers")}
-                    />
-                    <NavItem
-                      icon={<ScanSearch size={18} />}
-                      label="Seed Insights"
-                      active={pathname === "/rip/admin/seed-insights"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/seed-insights")}
-                    />
-                    <NavItem
-                      icon={<Inbox size={18} />}
-                      label="WinRed Inbox"
-                      active={pathname === "/rip/admin/winred-inbox"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/winred-inbox")}
-                    />
-                    <NavItem
-                      icon={<LayoutDashboard size={18} />}
-                      label="Dashboard"
-                      active={pathname === "/rip/admin/dashboard"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/dashboard")}
-                    />
-                    <NavItem
-                      icon={<Activity size={18} />}
-                      label="Site Traffic"
-                      active={pathname === "/rip/admin/site-traffic"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/site-traffic")}
-                    />
-                    <NavItem
-                      icon={<TrendingUp size={18} />}
-                      label="SEO Dashboard"
-                      active={pathname === "/rip/admin/seo-dashboard"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/seo-dashboard")}
-                    />
-                    <NavItem
-                      icon={<MessageSquareOff size={18} />}
-                      label="Cancellation Feedback"
-                      active={pathname === "/rip/admin/cancellation-feedback"}
-                      collapsed={false}
-                      onClick={() => navigate("/rip/admin/cancellation-feedback")}
                     />
                   </div>
                 )}
