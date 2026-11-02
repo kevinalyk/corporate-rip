@@ -8,29 +8,6 @@ import {
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://brandinbox.ai"
 
-const ALL_DIGEST_TAGS = [
-  "2026-elections",
-  "senate",
-  "house",
-  "polling",
-  "endorsements",
-  "primaries",
-  "dem-watch",
-  "fundraising",
-  "generic-ballot",
-  "senate-battleground",
-  "pennsylvania",
-  "georgia",
-  "arizona",
-  "michigan",
-  "wisconsin",
-  "nevada",
-  "north-carolina",
-  "texas",
-  "ohio",
-  "florida",
-]
-
 function nameToSlug(name: string): string {
   return name
     .toLowerCase()
@@ -190,39 +167,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // If DB is unavailable during build, skip news pages
   }
 
-  // Digest static pages: index + all tag pages
-  const digestStaticPages: MetadataRoute.Sitemap = [
-    {
-      url: `${APP_URL}/digest`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    ...ALL_DIGEST_TAGS.map((tag) => ({
-      url: `${APP_URL}/digest/tag/${tag}`,
-      lastModified: new Date(),
-      changeFrequency: "daily" as const,
-      priority: 0.7,
-    })),
-  ]
-
-  // Dynamic digest articles
-  let digestPages: MetadataRoute.Sitemap = []
-  try {
-    const articles = await prisma.digestArticle.findMany({
-      select: { slug: true, updatedAt: true, publishedAt: true },
-      orderBy: { publishedAt: "desc" },
-    })
-
-    digestPages = articles.map((article) => ({
-      url: `${APP_URL}/digest/${article.slug}`,
-      lastModified: article.updatedAt ?? article.publishedAt,
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    }))
-  } catch {
-    // If DB is unavailable during build, skip digest pages
-  }
-
-  return [...staticPages, ...digestStaticPages, ...landingPages, ...entityPages, ...newsPages, ...digestPages]
+  return [...staticPages, ...landingPages, ...entityPages, ...newsPages]
 }

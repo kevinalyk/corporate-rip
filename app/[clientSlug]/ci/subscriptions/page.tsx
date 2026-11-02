@@ -105,7 +105,6 @@ export default function CISubscriptionsPage() {
                   "Get notified when followed entities send campaigns",
                   "Filter your feed by followed entities only",
                   "Full send history with no time limit",
-                  "Receive daily digest emails for followed entities",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2">
                     <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
