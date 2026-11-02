@@ -26,11 +26,9 @@ import {
   ChevronUp,
   LayoutDashboard,
   Inbox,
-  ExternalLink,
   Building,
   Star,
   Globe,
-  Megaphone,
   ScanSearch,
   MailCheck,
   Code,
@@ -283,28 +281,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
         >
           <Separator className="mb-4 bg-sidebar-border" />
           <div className="space-y-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cn(
-                "w-full justify-start gap-3 px-3 min-h-11 md:min-h-0",
-                pathname.startsWith("/news") && "bg-brand-primary/10 text-brand-primary hover:bg-brand-primary/20 hover:text-brand-primary",
-                collapsed && "justify-center",
-              )}
-              onClick={() => navigate("/news")}
-            >
-              <Megaphone size={20} />
-              {!collapsed && <span>{"What's New"}</span>}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cn("w-full justify-start gap-3 px-3 min-h-11 md:min-h-0", collapsed && "justify-center")}
-              onClick={() => window.open("https://directory.gop", "_blank")}
-            >
-              <ExternalLink size={20} />
-              {!collapsed && <span>GOP Directory</span>}
-            </Button>
             {mounted && (
               <Button
                 variant="ghost"
