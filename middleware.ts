@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { verifyToken } from "./lib/auth"
+import { BRAND_COOKIE, verifyBrandSession } from "./lib/brand-token"
 
 // This function must be marked `async` since we're using async JWT verification
 export async function middleware(request: NextRequest) {
@@ -114,10 +115,11 @@ export async function middleware(request: NextRequest) {
 
   // Check for auth cookie
   const token = request.cookies.get("auth_token")?.value
+  const brandToken = request.cookies.get(BRAND_COOKIE)?.value
 
-  if (token) {
+  if (token || brandToken) {
     try {
-      const payload = await verifyToken(token)
+      const payload = (token ? await verifyToken(token) : null) ?? (brandToken ? await verifyBrandSession(brandToken) : null)
       if (payload) {
 
         const userRole = payload.role as string

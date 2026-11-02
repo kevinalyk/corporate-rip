@@ -1,35 +1,17 @@
-import { jwtVerify, SignJWT } from "jose"
 import { cookies } from "next/headers"
 import type { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { BRAND_COOKIE, BRAND_SESSION_SECONDS, createBrandToken, verifyBrandSession } from "@/lib/brand-token"
 
-export const BRAND_COOKIE = "brand_token"
-const BRAND_AUDIENCE = "brandinbox"
-const SESSION_SECONDS = 60 * 60 * 24 * 7
+export { BRAND_COOKIE, createBrandToken }
 
-const secretKey = new TextEncoder().encode(process.env.JWT_SECRET || "your-secret-key-change-this-in-production")
+const SESSION_SECONDS = BRAND_SESSION_SECONDS
 
-// The audience claim keeps a brand session from ever being accepted as a RIP
-// session (and vice versa), even though both are signed with the same secret.
-export async function createBrandToken(userId: string) {
-  return new SignJWT({ userId })
-    .setProtectedHeader({ alg: "HS256" })
-    .setAudience(BRAND_AUDIENCE)
-    .setIssuedAt()
-    .setExpirationTime(`${SESSION_SECONDS}s`)
-    .sign(secretKey)
-}
-
-async function verifyBrandToken(token: string): Promise<string | null> {
-  try {
-    const { payload } = await jwtVerify(token, secretKey, {
-      algorithms: ["HS256"],
-      audience: BRAND_AUDIENCE,
-    })
-    return typeof payload.userId === "string" ? payload.userId : null
-  } catch {
-    return null
-  }
+// Where a signed-in brand user lands: their client's CI workspace, or RIP's for super admins.
+export function getBrandHomePath(user: { role: string; client?: { slug: string } | null }) {
+  if (user.client?.slug) return `/${user.client.slug}/ci/campaigns`
+  if (user.role === "super_admin") return "/rip/ci/campaigns"
+  return "/account"
 }
 
 export function setBrandCookie(response: NextResponse, token: string) {
@@ -63,9 +45,13 @@ export function toPublicBrandUser(user: {
   lastName: string
   company: string | null
   jobTitle: string | null
+  role?: string
+  client?: { slug: string } | null
   createdAt: Date
 }) {
   return {
+    role: user.role,
+    clientSlug: user.client?.slug ?? null,
     id: user.id,
     email: user.email,
     firstName: user.firstName,
@@ -83,10 +69,13 @@ export async function getCurrentBrandUser() {
   const token = cookieStore.get(BRAND_COOKIE)?.value
   if (!token) return null
 
-  const userId = await verifyBrandToken(token)
-  if (!userId) return null
+  const session = await verifyBrandSession(token)
+  if (!session) return null
 
-  const user = await prisma.brandUser.findUnique({ where: { id: userId } })
+  const user = await prisma.brandUser.findUnique({
+    where: { id: session.userId },
+    include: { client: { select: { id: true, name: true, slug: true } } },
+  })
   if (!user || user.blocked) return null
 
   return user

@@ -79,7 +79,7 @@ export async function POST(request: Request) {
     })
 
     const response = NextResponse.json({ user: toPublicBrandUser(user) }, { status: 201 })
-    setBrandCookie(response, await createBrandToken(user.id))
+    setBrandCookie(response, await createBrandToken(user))
     return response
   } catch (error) {
     console.error("[Brand] Signup failed:", error)
