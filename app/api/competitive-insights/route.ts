@@ -65,11 +65,17 @@ export async function GET(request: NextRequest) {
 
     let subscribedEntityIds: string[] = []
     if (subscriptionsOnly) {
-      const subscriptions = await prisma.ciEntitySubscription.findMany({
-        where: { userId: authResult.user.id },
-        select: { entityId: true },
-      })
-      subscribedEntityIds = subscriptions.map((sub) => sub.entityId)
+      // Brand accounts follow through BrandEntitySubscription; RIP users use CiEntitySubscription.
+      const subscriptions = authResult.user.brand
+        ? await prisma.brandEntitySubscription.findMany({
+            where: { userId: authResult.user.id },
+            select: { entityId: true },
+          })
+        : await prisma.ciEntitySubscription.findMany({
+            where: { userId: authResult.user.id },
+            select: { entityId: true },
+          })
+      subscribedEntityIds = subscriptions.map((sub: { entityId: string }) => sub.entityId)
 
       if (subscribedEntityIds.length === 0) {
         return NextResponse.json({
