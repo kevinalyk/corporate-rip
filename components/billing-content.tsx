@@ -1,5 +1,6 @@
 "use client"
 
+import { PageHeader } from "@/components/page-header"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -332,12 +333,9 @@ export function BillingContent({ clientSlug }: BillingContentProps) {
   const isScheduledForDowngrade = client.scheduledDowngradePlan && client.scheduledDowngradePlan !== "free"
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
+    <div>
       <div className="space-y-6">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">Billing & Usage</h2>
-          <p className="text-muted-foreground">Manage your subscription and monitor usage</p>
-        </div>
+        <PageHeader title="Billing & Usage" description="Manage your subscription and monitor usage" className="mb-0" />
 
         {client.pendingTrialCodeId && (
           <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">

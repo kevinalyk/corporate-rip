@@ -1,5 +1,6 @@
 "use client"
 
+import { PageHeader } from "@/components/page-header"
 import { useState } from "react"
 import { useParams, notFound } from "next/navigation"
 import dynamic from "next/dynamic"
@@ -111,18 +112,14 @@ export default function CIMapPage() {
 
   return (
     <AppLayout clientSlug={clientSlug} isAdminView={false}>
-      <div className="flex flex-col h-full min-h-screen bg-background">
+      <div className="flex flex-col h-full bg-background">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-border">
-          <div className="flex items-center gap-3">
-            <MapPin className="h-5 w-5 text-brand-primary" />
-            <div>
-              <h1 className="text-xl font-semibold tracking-tight">Interactive Map</h1>
-              <p className="text-sm text-muted-foreground">
-                Pulsing dots show states with activity in the last 3 hours.
-              </p>
-            </div>
-          </div>
+        <div className="flex items-end justify-between mb-6">
+          <PageHeader
+            title="Interactive Map"
+            description="Pulsing dots show states with activity in the last 3 hours."
+            className="mb-0"
+          />
           <div className="flex items-center gap-3">
             {/* Live summary badges */}
             {!isLoading && totalActive > 0 && (

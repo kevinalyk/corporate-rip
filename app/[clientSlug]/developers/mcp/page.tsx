@@ -32,7 +32,7 @@ export default function ClientMcpPage() {
 
   return (
     <AppLayout isAdminView={true}>
-      <div className="container mx-auto px-4 py-8">
+      <div className="mx-auto">
         <ClientMcpContent clientSlug={clientSlug} />
       </div>
     </AppLayout>

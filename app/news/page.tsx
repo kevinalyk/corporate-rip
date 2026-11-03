@@ -83,7 +83,7 @@ export default async function NewsPage() {
         content immediately. NewsPageClient mounts once below and handles
         admin-only controls (create/edit/delete dialogs) after hydration.
       */}
-      <div className="container mx-auto py-8 px-4 max-w-3xl">
+      <div className="mx-auto max-w-3xl">
         <div className="flex items-center justify-between mb-10">
           <div>
             <div className="flex items-center gap-3 mb-1">

@@ -3,25 +3,102 @@
 import type React from "react"
 
 import { useEffect, useState } from "react"
-import { Menu, X } from "lucide-react"
-import { Sidebar } from "@/components/sidebar"
+import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
+import useSWR from "swr"
+import { useTheme } from "next-themes"
+import {
+  Bot,
+  Building,
+  Building2,
+  ChevronDown,
+  Code,
+  CreditCard,
+  LayoutDashboard,
+  LogOut,
+  Mail,
+  Menu,
+  Moon,
+  Plug,
+  Settings,
+  Smartphone,
+  Star,
+  Sun,
+  UserCog,
+  Users,
+  X,
+  BarChart3,
+} from "lucide-react"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Logo } from "@/components/logo"
 import { BrandWordmark } from "@/components/brand-wordmark"
 import { TrialStatusBanner } from "@/components/trial-status-banner"
+import { useCurrentUser } from "@/lib/hooks/use-current-user"
 
 interface AppLayoutProps {
   children: React.ReactNode
   clientSlug?: string
   isAdminView?: boolean
+  /** Kept so existing callers compile; the top navigation has no collapsed state. */
   defaultCollapsed?: boolean
 }
 
-// AppLayout renders the persistent shell: desktop sidebar, mobile drawer, and top bar.
-function AppLayout({ children, clientSlug, isAdminView = false, defaultCollapsed = false }: AppLayoutProps) {
-  const [collapsed, setCollapsed] = useState(defaultCollapsed)
-  const [mobileOpen, setMobileOpen] = useState(false)
+interface ClientOption {
+  id: string
+  name: string
+  slug: string
+}
 
+interface NavLinkItem {
+  label: string
+  href: string
+  icon: React.ElementType
+  active: boolean
+}
+
+// First path segments that are not a client slug, so they never overwrite the selected client.
+const NON_CLIENT_PATHS = ["news", "login", "share", "directory", "digest", "about", "privacy", "terms", "lookup", "admin"]
+
+// The Developers section is a pilot limited to these clients.
+const DEVELOPER_PILOT_SLUGS = ["rip", "redsparkstrategy"]
+
+const jsonFetcher = (url: string) =>
+  fetch(url, { credentials: "include" }).then((res) => (res.ok ? res.json() : null))
+
+function AppLayout({ children, clientSlug, isAdminView = false }: AppLayoutProps) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const { theme, setTheme } = useTheme()
+  const { user: currentUser, loading: userLoading } = useCurrentUser()
+  const [mounted, setMounted] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [lastClientSlug, setLastClientSlug] = useState<string | null>(null)
+
+  const userRole: string | null = currentUser?.role ?? null
+  const isSuperAdmin = userRole === "super_admin"
+  const isSignedOut = !userLoading && !userRole
+
+  const firstSegment = pathname.split("/").filter(Boolean)[0]
+  const pathSlug = firstSegment && !NON_CLIENT_PATHS.includes(firstSegment) ? firstSegment : null
+
+  useEffect(() => setMounted(true), [])
+
+  useEffect(() => {
+    if (pathSlug) setLastClientSlug(pathSlug)
+  }, [pathSlug])
+
+  // Close the mobile menu on navigation and on Escape.
+  useEffect(() => setMobileOpen(false), [pathname])
   useEffect(() => {
     if (!mobileOpen) return
     const onKeyDown = (event: KeyboardEvent) => {
@@ -31,76 +108,362 @@ function AppLayout({ children, clientSlug, isAdminView = false, defaultCollapsed
     return () => window.removeEventListener("keydown", onKeyDown)
   }, [mobileOpen])
 
-  return (
-    <div className="flex h-screen h-dvh bg-background">
-      {/* ── Desktop sidebar — hidden on mobile via its own root class ─ */}
-      <Sidebar
-        collapsed={collapsed}
-        setCollapsed={setCollapsed}
-        clientSlug={clientSlug}
-        isAdminView={isAdminView}
-        className="hidden md:flex"
-      />
+  const activeSlug =
+    pathSlug ??
+    (clientSlug && clientSlug !== "admin" ? clientSlug : null) ??
+    lastClientSlug ??
+    currentUser?.client?.slug ??
+    (isAdminView ? "admin" : "admin")
 
-      {/* ── Mobile overlay backdrop ─────────────────────────────────── */}
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/60 md:hidden"
-          onClick={() => setMobileOpen(false)}
-          aria-hidden="true"
-        />
-      )}
+  const { data: clients } = useSWR<ClientOption[] | null>(isSuperAdmin ? "/api/clients" : null, jsonFetcher, {
+    revalidateOnFocus: false,
+  })
 
-      {/* ── Mobile sidebar drawer ───────────────────────────────────── */}
-      <Sidebar
-        collapsed={false}
-        setCollapsed={() => {}}
-        clientSlug={clientSlug}
-        isAdminView={isAdminView}
-        onNavigate={() => setMobileOpen(false)}
-        className={`md:hidden transition-transform duration-300 ease-in-out ${
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      />
+  const showDevelopers = userRole !== null && DEVELOPER_PILOT_SLUGS.includes(activeSlug)
+  const { data: mcpStatus } = useSWR<{ eligible: boolean } | null>(
+    showDevelopers ? `/api/client-mcp/status?clientSlug=${activeSlug}` : null,
+    jsonFetcher,
+    { revalidateOnFocus: false },
+  )
 
-      {/* ── Main content area ───────────────────────────────────────── */}
-      <div
-        className={`flex flex-col flex-1 min-w-0 overflow-hidden transition-all duration-300 ${
-          collapsed ? "md:pl-16" : "md:pl-64"
-        }`}
-      >
-        {/* Mobile top bar. Safe-area inset is added ON TOP of the normal py-3 padding
-            (not a replacement for it) via an explicit calc() — the standalone
-            `.pt-safe` utility in globals.css sets `padding-top` outright, which would
-            otherwise clobber py-3's padding-top entirely once both classes target the
-            same property. */}
-        <header
-          className="flex md:hidden items-center gap-3 px-4 pb-3 border-b border-border bg-background sticky top-0 z-30"
-          style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top, 0px))" }}
-        >
-          <Logo collapsed={false} variant="icon" />
-          <div className="flex-1 flex items-center justify-center min-w-0">
-            <BrandWordmark className="text-xl" />
+  const primaryLinks: NavLinkItem[] = [
+    {
+      label: "Feed",
+      href: `/${activeSlug}/ci/campaigns`,
+      icon: LayoutDashboard,
+      active: pathname.includes("/ci/campaigns"),
+    },
+    {
+      label: "Following",
+      href: `/${activeSlug}/ci/subscriptions`,
+      icon: Star,
+      active: pathname.includes("/ci/subscriptions"),
+    },
+    {
+      label: "Personal Email",
+      href: `/${activeSlug}/ci/personal`,
+      icon: Mail,
+      active: pathname.includes("/ci/personal") && !pathname.includes("/ci/personal-numbers"),
+    },
+    {
+      label: "Personal Numbers",
+      href: `/${activeSlug}/ci/personal-numbers`,
+      icon: Smartphone,
+      active: pathname.includes("/ci/personal-numbers"),
+    },
+  ]
+
+  if (isSuperAdmin) {
+    primaryLinks.push({
+      label: "Directory",
+      href: "/directory",
+      icon: Building2,
+      active: pathname === "/directory" || pathname.startsWith("/directory/"),
+    })
+  }
+
+  const developerLinks: NavLinkItem[] = []
+  if (showDevelopers) {
+    if (mcpStatus?.eligible) {
+      developerLinks.push({
+        label: "MCP Access",
+        href: `/${activeSlug}/developers/mcp`,
+        icon: Bot,
+        active: pathname === `/${activeSlug}/developers/mcp`,
+      })
+    }
+    if (isSuperAdmin) {
+      developerLinks.push({
+        label: "MCP Usage",
+        href: `/${activeSlug}/developers/mcp-usage`,
+        icon: BarChart3,
+        active: pathname === `/${activeSlug}/developers/mcp-usage`,
+      })
+    }
+  }
+
+  const accountLinks: NavLinkItem[] = [
+    { label: "Settings", href: `/${activeSlug}/account/settings`, icon: Settings, active: pathname.includes("/account/settings") },
+    { label: "Users", href: `/${activeSlug}/account/users`, icon: Users, active: pathname.includes("/account/users") },
+    { label: "Billing", href: `/${activeSlug}/account/billing`, icon: CreditCard, active: pathname.includes("/account/billing") },
+    { label: "Integrations", href: `/${activeSlug}/account/integrations`, icon: Plug, active: pathname.includes("/account/integrations") },
+  ]
+
+  const accountActive = accountLinks.some((l) => l.active)
+  const developersActive = developerLinks.some((l) => l.active)
+
+  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark")
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" })
+    } catch (error) {
+      console.error("Logout error:", error)
+    }
+    router.push("/login")
+  }
+
+  const handleClientSwitch = (newSlug: string) => {
+    const parts = pathname.split("/").filter(Boolean)
+    if (pathSlug) {
+      parts[0] = newSlug
+      router.push(`/${parts.join("/")}`)
+    } else {
+      router.push(`/${newSlug}/ci/campaigns`)
+    }
+  }
+
+  const clientSwitcher =
+    isSuperAdmin && clients && clients.length > 0 ? (
+      <Select value={pathSlug ?? activeSlug} onValueChange={handleClientSwitch}>
+        <SelectTrigger className="h-9 w-full bg-transparent lg:w-[180px]" aria-label="Switch client">
+          <div className="flex min-w-0 items-center gap-2">
+            <Building size={14} className="shrink-0 text-brand-secondary" />
+            <SelectValue placeholder="Select client" />
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMobileOpen((o) => !o)}
-            className="h-11 w-11"
+        </SelectTrigger>
+        <SelectContent>
+          {clients.map((client) => (
+            <SelectItem key={client.id} value={client.slug}>
+              {client.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    ) : null
+
+  return (
+    <div className="flex min-h-dvh flex-col bg-background">
+      <header
+        className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80"
+        style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
+      >
+        <div className="mx-auto flex h-14 w-full max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+          <Link
+            href={isSignedOut ? "/login" : `/${activeSlug}/ci/campaigns`}
+            className="flex shrink-0 items-center gap-2"
+            aria-label="brandinbox.ai home"
           >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-          </Button>
-        </header>
+            <Logo variant="icon" className="[&_img]:h-8 [&_img]:w-8" />
+            <BrandWordmark className="text-lg" />
+          </Link>
 
-        {!isAdminView && <TrialStatusBanner />}
+          {!isSignedOut && (
+            <nav className="hidden h-full items-stretch gap-1 lg:flex" aria-label="Primary">
+              {primaryLinks.map((item) => (
+                <TopNavLink key={item.label} item={item} />
+              ))}
+              {developerLinks.length > 0 && (
+                <MenuGroup label="Developers" icon={Code} active={developersActive} items={developerLinks} />
+              )}
+            </nav>
+          )}
 
-        <main className="flex-1 overflow-auto">
-          {children}
-        </main>
-      </div>
+          <div className="ml-auto flex items-center gap-2">
+            {!isSignedOut && <div className="hidden lg:block">{clientSwitcher}</div>}
+
+            {mounted && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hidden h-9 w-9 lg:inline-flex"
+                onClick={toggleTheme}
+                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              </Button>
+            )}
+
+            {isSignedOut ? (
+              <Button size="sm" onClick={() => router.push("/login")}>
+                Log in
+              </Button>
+            ) : (
+              <>
+                <div className="hidden lg:block">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={cn("h-9 gap-2 px-3", accountActive && "bg-accent text-accent-foreground")}
+                      >
+                        <UserCog size={16} />
+                        Account
+                        <ChevronDown size={14} className="opacity-60" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      {currentUser?.email && (
+                        <>
+                          <DropdownMenuLabel className="truncate text-xs font-normal text-muted-foreground">
+                            {currentUser.email}
+                          </DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                        </>
+                      )}
+                      {accountLinks.map((item) => (
+                        <DropdownMenuItem
+                          key={item.label}
+                          onSelect={() => router.push(item.href)}
+                          className={cn(item.active && "bg-accent")}
+                        >
+                          <item.icon size={16} />
+                          {item.label}
+                        </DropdownMenuItem>
+                      ))}
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onSelect={handleLogout}>
+                        <LogOut size={16} />
+                        Log out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-10 w-10 lg:hidden"
+                  aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                  aria-expanded={mobileOpen}
+                  onClick={() => setMobileOpen((open) => !open)}
+                >
+                  {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+
+        {mobileOpen && !isSignedOut && (
+          <div className="max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-t border-border bg-background lg:hidden">
+            <nav className="mx-auto flex w-full max-w-7xl flex-col gap-1 px-4 py-3 sm:px-6" aria-label="Mobile">
+              {clientSwitcher && <div className="pb-2">{clientSwitcher}</div>}
+              {primaryLinks.map((item) => (
+                <MobileNavLink key={item.label} item={item} />
+              ))}
+              {developerLinks.length > 0 && (
+                <>
+                  <MobileSectionLabel>Developers</MobileSectionLabel>
+                  {developerLinks.map((item) => (
+                    <MobileNavLink key={item.label} item={item} />
+                  ))}
+                </>
+              )}
+              <MobileSectionLabel>Account</MobileSectionLabel>
+              {accountLinks.map((item) => (
+                <MobileNavLink key={item.label} item={item} />
+              ))}
+              <div className="mt-2 flex flex-col gap-1 border-t border-border pt-2">
+                {mounted && (
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
+                    className="flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  >
+                    {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+                    {theme === "dark" ? "Light mode" : "Dark mode"}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-medium text-brand-primary hover:bg-brand-primary/10"
+                >
+                  <LogOut size={18} />
+                  Log out
+                </button>
+              </div>
+            </nav>
+          </div>
+        )}
+      </header>
+
+      {!isAdminView && <TrialStatusBanner />}
+
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8">{children}</main>
     </div>
   )
+}
+
+function TopNavLink({ item }: { item: NavLinkItem }) {
+  return (
+    <Link
+      href={item.href}
+      aria-current={item.active ? "page" : undefined}
+      className={cn(
+        "relative flex items-center gap-2 px-3 text-sm font-medium transition-colors",
+        item.active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+      )}
+    >
+      <item.icon size={16} className={item.active ? "text-brand-primary" : undefined} />
+      {item.label}
+      {item.active && <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-brand-primary" />}
+    </Link>
+  )
+}
+
+function MenuGroup({
+  label,
+  icon: Icon,
+  active,
+  items,
+}: {
+  label: string
+  icon: React.ElementType
+  active: boolean
+  items: NavLinkItem[]
+}) {
+  const router = useRouter()
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className={cn(
+            "relative flex items-center gap-2 px-3 text-sm font-medium transition-colors",
+            active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          <Icon size={16} className={active ? "text-brand-primary" : undefined} />
+          {label}
+          <ChevronDown size={14} className="opacity-60" />
+          {active && <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-brand-primary" />}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-48">
+        {items.map((item) => (
+          <DropdownMenuItem key={item.label} onSelect={() => router.push(item.href)}>
+            <item.icon size={16} />
+            {item.label}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+function MobileNavLink({ item }: { item: NavLinkItem }) {
+  return (
+    <Link
+      href={item.href}
+      aria-current={item.active ? "page" : undefined}
+      className={cn(
+        "flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors",
+        item.active
+          ? "bg-accent text-accent-foreground"
+          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+      )}
+    >
+      <item.icon size={18} className={item.active ? "text-brand-primary" : undefined} />
+      {item.label}
+    </Link>
+  )
+}
+
+function MobileSectionLabel({ children }: { children: React.ReactNode }) {
+  return <p className="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{children}</p>
 }
 
 export default AppLayout

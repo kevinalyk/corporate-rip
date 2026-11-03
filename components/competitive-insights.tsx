@@ -1,5 +1,6 @@
 "use client"
 
+import { PageHeader } from "@/components/page-header"
 import type React from "react"
 
 import { useState, useEffect, useRef, useMemo } from "react"
@@ -1501,7 +1502,7 @@ export function CompetitiveInsights({
   }
 
   return (
-    <div className="container mx-auto px-4 py-6 relative">
+    <div className="relative">
       {ciAccessLevel === "none" && (
         <PaywallOverlay
           requiredPlan="starter"
@@ -1512,33 +1513,31 @@ export function CompetitiveInsights({
       )}
 
       {!hideHeader && (
-        <div className="mb-6 flex items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              {isReportingView ? "Analytics" : subscriptionsOnly ? "Following" : "Feed"}
-            </h1>
-            {!isReportingView && (
-              <p className="text-muted-foreground">
-                {subscriptionsOnly
-                  ? "Messages from the candidates and organizations you follow"
-                  : "Track and analyze political campaigns from across the spectrum"}
-              </p>
-            )}
-          </div>
-          {isReportingView && (
-            <div className="flex items-center gap-1 text-xs border rounded-md overflow-hidden shrink-0">
-              {([7, 30, 90, 365] as const).map((d) => (
-                <button
-                  key={d}
-                  onClick={() => setChartDays(d)}
-                  className={`px-3 py-1.5 transition-colors ${chartDays === d ? "bg-foreground text-background font-medium" : "hover:bg-muted text-muted-foreground"}`}
-                >
-                  {d === 365 ? "1Y" : `${d}D`}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        <PageHeader
+          title={isReportingView ? "Analytics" : subscriptionsOnly ? "Following" : "Feed"}
+          description={
+            isReportingView
+              ? undefined
+              : subscriptionsOnly
+                ? "Emails and texts from the brands you follow"
+                : "Every email and text from the brands in your market"
+          }
+          actions={
+            isReportingView ? (
+              <div className="flex items-center gap-1 text-xs border rounded-md overflow-hidden shrink-0">
+                {([7, 30, 90, 365] as const).map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => setChartDays(d)}
+                    className={`px-3 py-1.5 transition-colors ${chartDays === d ? "bg-foreground text-background font-medium" : "hover:bg-muted text-muted-foreground"}`}
+                  >
+                    {d === 365 ? "1Y" : `${d}D`}
+                  </button>
+                ))}
+              </div>
+            ) : undefined
+          }
+        />
       )}
 
 
@@ -1628,9 +1627,9 @@ export function CompetitiveInsights({
           >
             <div className={`${subscriptionPlan === "free" && !hasAdminAccess ? "relative" : ""}`}>
               {/* Top row - Search bar centered (hidden on reporting view) */}
-              <div className={`flex justify-center mb-6 ${isReportingView ? "hidden" : ""}`}>
+              <div className={`flex mb-4 ${isReportingView ? "hidden" : ""}`}>
                 <div
-                  className={`w-full max-w-2xl relative ${subscriptionPlan === "free" && !hasAdminAccess ? "blur-sm pointer-events-none" : ""}`}
+                  className={`w-full relative ${subscriptionPlan === "free" && !hasAdminAccess ? "blur-sm pointer-events-none" : ""}`}
                   ref={searchRef}
                 >
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 z-10" />
@@ -1907,54 +1906,17 @@ export function CompetitiveInsights({
                 })()}
 
                 <Select
-                  value={mobileFiltersOpen ? draftPartyFilter : selectedPartyFilter}
-                  onValueChange={mobileFiltersOpen ? setDraftPartyFilter : setSelectedPartyFilter}
-                  disabled={shouldShowPaywall || shouldShowPreview}
-                >
-                  <SelectTrigger className="w-full md:w-[180px]">
-                    <SelectValue placeholder="Filter by party" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Parties</SelectItem>
-                    <SelectItem value="republican">Republican</SelectItem>
-                    <SelectItem value="democrat">Democrat</SelectItem>
-                    <SelectItem value="third party">Independent</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select
                   value={mobileFiltersOpen ? draftEntityTypeFilter : selectedEntityTypeFilter}
                   onValueChange={mobileFiltersOpen ? setDraftEntityTypeFilter : setSelectedEntityTypeFilter}
                   disabled={shouldShowPaywall || shouldShowPreview}
                 >
                   <SelectTrigger className="w-full md:w-[160px]">
-                    <SelectValue placeholder="Entity type" />
+                    <SelectValue placeholder="Category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="politician">Politicians</SelectItem>
-                    <SelectItem value="pac">PACs</SelectItem>
-                    <SelectItem value="organization">Organizations</SelectItem>
-                    <SelectItem value="nonprofit">Nonprofits</SelectItem>
-                    <SelectItem value="state_party">State Parties</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={mobileFiltersOpen ? draftStateFilter : selectedStateFilter}
-                  onValueChange={mobileFiltersOpen ? setDraftStateFilter : setSelectedStateFilter}
-                  disabled={shouldShowPaywall || shouldShowPreview}
-                >
-                  <SelectTrigger className="w-full md:w-[180px]">
-                    <SelectValue placeholder="Filter by state" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[300px]">
-                    <SelectItem value="all">All States</SelectItem>
-                    {US_STATES.map((state) => (
-                      <SelectItem key={state} value={state}>
-                        {state}
-                      </SelectItem>
-                    ))}
+                    <SelectItem value="all">All Categories</SelectItem>
+                    <SelectItem value="media">Media</SelectItem>
+                    <SelectItem value="retail">Retail</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -2005,8 +1967,6 @@ export function CompetitiveInsights({
                       {[
                         { value: "email", label: "Email" },
                         { value: "sms", label: "SMS" },
-                        { value: "third_party", label: "Third Party" },
-                        { value: "house_file", label: "House File" },
                       ].map(({ value, label }) => (
                         <label
                           key={value}
@@ -2059,26 +2019,6 @@ export function CompetitiveInsights({
                   )
                 })()}
 
-                {/* Platform Filter - Conditional rendering */}
-                {(currentUserClient === "winred" || currentUserClient === "RIP") && (
-                  <Select
-                    value={mobileFiltersOpen ? draftDonationPlatform : selectedDonationPlatform}
-                    onValueChange={mobileFiltersOpen ? setDraftDonationPlatform : setSelectedDonationPlatform}
-                  >
-                    <SelectTrigger className="w-full sm:w-[180px]">
-                      <SelectValue placeholder="All Platforms" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Platforms</SelectItem>
-                      <SelectItem value="winred">WinRed</SelectItem>
-                      <SelectItem value="actblue">ActBlue</SelectItem>
-                      <SelectItem value="anedot">Anedot</SelectItem>
-                      <SelectItem value="psq">PSQ</SelectItem>
-                      <SelectItem value="ngpvan">NGPVAN</SelectItem>
-                      <SelectItem value="substack">Substack</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
 
                 </div>{/* end row 1 */}
                 {/* Row 2: date range + actions */}
@@ -2406,19 +2346,6 @@ export function CompetitiveInsights({
                                   Third Party
                                 </Badge>
                               )}
-                              {campaign.entity?.party && (
-                                <Badge
-                                  variant={getPartyColor(campaign.entity.party)}
-                                  className={`text-xs capitalize ${getPartyBadgeClassName(campaign.entity.party)}`}
-                                >
-                                  {campaign.entity.party}
-                                </Badge>
-                              )}
-                              {campaign.entity?.state && (
-                                <Badge variant="outline" className="text-xs">
-                                  {campaign.entity.state}
-                                </Badge>
-                              )}
                               {campaign.type !== "sms" && (campaign.sendCount ?? 1) >= 2 && (resolvedPlan === "all" || resolvedPlan === "enterprise" || resolvedUser?.role === "super_admin") && (
                                 <Badge
                                   variant="outline"
@@ -2561,23 +2488,6 @@ export function CompetitiveInsights({
                                               <Info className="h-3 w-3 mr-1" />
                                               Third Party
                                             </Badge>
-                                          )}
-                                          {(campaign.entity.party || campaign.entity.state) && (
-                                            <div className="flex flex-wrap gap-1">
-                                              {campaign.entity.party && (
-                                                <Badge
-                                                  variant={getPartyColor(campaign.entity.party)}
-                                                  className={`text-xs capitalize ${getPartyBadgeClassName(campaign.entity.party)}`}
-                                                >
-                                                  {campaign.entity.party}
-                                                </Badge>
-                                              )}
-                                              {campaign.entity.state && (
-                                                <Badge variant="outline" className="text-xs">
-                                                  {campaign.entity.state}
-                                                </Badge>
-                                              )}
-                                            </div>
                                           )}
                                         </div>
                                         {campaign.type === "sms" ? (

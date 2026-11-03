@@ -1,5 +1,6 @@
 "use client"
 
+import { PageHeader } from "@/components/page-header"
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -101,13 +102,11 @@ export function PersonalEmailContent({ clientSlug }: PersonalEmailContentProps) 
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">Personal Email</h1>
-        <p className="text-muted-foreground">
-          Emails from seed accounts assigned to your organization appear here.
-        </p>
-      </div>
+    <div>
+      <PageHeader
+        title="Personal Email"
+        description="Emails from seed accounts assigned to your organization appear here."
+      />
 
       <Card className="mb-8">
         <CardHeader>

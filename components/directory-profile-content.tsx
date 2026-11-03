@@ -241,7 +241,7 @@ export function DirectoryProfileContent({ slug, initialData }: { slug: string; i
   return (
     <>
     <AppLayout clientSlug={clientSlug} defaultCollapsed={true}>
-      <div className="container mx-auto py-8 px-4 max-w-3xl">
+      <div className="mx-auto max-w-3xl">
 
         {/* Back navigation */}
         <div className="mb-6">
