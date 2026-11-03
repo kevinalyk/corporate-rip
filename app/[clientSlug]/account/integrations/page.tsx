@@ -1,5 +1,6 @@
 "use client"
 
+import { PageHeader } from "@/components/page-header"
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useParams, useSearchParams } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -512,14 +513,13 @@ export default function AccountIntegrationsPage() {
 
   return (
     <AppLayout clientSlug={clientSlug} isAdminView={isAdminRoute}>
-      <div className="container mx-auto py-8 px-4 max-w-4xl">
+      <div className="mx-auto max-w-4xl">
         <div className="space-y-6">
-          <div>
-            <h2 className="text-lg font-medium">Integrations</h2>
-            <p className="text-muted-foreground">
-              Connect third-party tools to your organization.
-            </p>
-          </div>
+          <PageHeader
+            title="Integrations"
+            description="Connect third-party tools to your organization."
+            className="mb-0"
+          />
 
           {!hasIntegrationsAccess ? (
             <div className="relative min-h-[420px]">

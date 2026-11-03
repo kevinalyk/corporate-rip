@@ -1,5 +1,6 @@
 "use client"
 
+import { PageHeader } from "@/components/page-header"
 import { useEffect, useState } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -122,14 +123,13 @@ export default function AccountSettingsPage() {
 
   return (
     <AppLayout clientSlug={clientSlug} isAdminView={isAdminRoute}>
-      <div className="container mx-auto py-8 px-4 max-w-4xl">
+      <div className="mx-auto max-w-4xl">
         <div className="space-y-6">
-          <div>
-            <h2 className="text-lg font-medium">Your Settings</h2>
-            <p className="text-muted-foreground">
-              Manage your personal preferences and notification settings.
-            </p>
-          </div>
+          <PageHeader
+            title="Settings"
+            description="Manage your personal preferences and notification settings."
+            className="mb-0"
+          />
 
           <Card>
             <CardHeader>

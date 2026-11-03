@@ -1,5 +1,6 @@
 "use client"
 
+import { PageHeader } from "@/components/page-header"
 import { useState } from "react"
 import useSWR from "swr"
 import { Loader2 } from "lucide-react"
@@ -60,12 +61,11 @@ export function ClientMcpUsageContent() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold">Client MCP Usage</h1>
-          <p className="text-sm text-muted-foreground">
-            Per-client usage of the client MCP, for working out future pricing. Nothing is billed today.
-          </p>
-        </div>
+        <PageHeader
+          title="Client MCP Usage"
+          description="Per-client usage of the client MCP, for working out future pricing. Nothing is billed today."
+          className="mb-0"
+        />
         <div className="flex gap-2" role="group" aria-label="Date range">
           {RANGES.map((r) => (
             <Button key={r} size="sm" variant={days === r ? "default" : "outline"} onClick={() => setDays(r)}>

@@ -1,5 +1,6 @@
 "use client"
 
+import { PageHeader } from "@/components/page-header"
 import { useState, useEffect, useMemo, useRef } from "react"
 import { useRouter } from "next/navigation"
 import dynamic from "next/dynamic"
@@ -420,14 +421,13 @@ export function CiDirectoryContent({
   // }), [staticTotalCount, totalCampaignCount])
 
   return (
-    <div className="flex flex-col h-full min-h-screen bg-background">
+    <div className="flex flex-col h-full bg-background">
       {/* Page header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 px-4 md:px-6 pt-4 md:pt-6 pb-4 border-b border-border">
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-6">
         <div className="min-w-0">
-          <h1 className="text-xl font-semibold tracking-tight">{pageHeading ?? "Directory"}</h1>
-          <p className="text-sm text-muted-foreground mt-0.5 max-w-4xl">
-            {pageSubtitle ??
-              "Our heat map shows you where the latest texts and emails were sent from and lets you browse all tracked campaigns and organizations in the system. Each red dot represents one email or SMS sent in the last 3 hours — more dots means more activity in that state."}
+          <h1 className="text-2xl font-semibold tracking-tight text-balance">{pageHeading ?? "Directory"}</h1>
+          <p className="mt-1 text-sm text-muted-foreground max-w-4xl text-pretty">
+            {pageSubtitle ?? "Browse every brand tracked in the system."}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">

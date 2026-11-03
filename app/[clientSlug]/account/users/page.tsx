@@ -1,5 +1,6 @@
 "use client"
 
+import { PageHeader } from "@/components/page-header"
 import { useEffect, useState } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { Loader2, Search, RefreshCw, UserPlus, MoreHorizontal, Edit, Trash } from "lucide-react"
@@ -319,12 +320,12 @@ export default function AccountUsersPage() {
 
   return (
     <AppLayout clientSlug={clientSlug} isAdminView={clientSlug === "admin"}>
-      <div className="container mx-auto py-8 px-4 max-w-7xl">
+      <div>
         <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-              <h2 className="text-lg font-medium">Users</h2>
-              <p className="text-sm text-muted-foreground">Manage user accounts and permissions</p>
+              <h1 className="text-2xl font-semibold tracking-tight text-balance">Users</h1>
+              <p className="mt-1 text-sm text-muted-foreground">Manage user accounts and permissions</p>
             </div>
             <div className="flex items-center gap-2">
               <Button

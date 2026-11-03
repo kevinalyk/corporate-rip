@@ -1,5 +1,6 @@
 "use client"
 
+import { PageHeader } from "@/components/page-header"
 import { useEffect, useState } from "react"
 import useSWR from "swr"
 import { Bot, Check, Copy, Key, Loader2, Plus, ShieldAlert, Trash2 } from "lucide-react"
@@ -143,15 +144,11 @@ export function ClientMcpContent({ clientSlug }: { clientSlug: string }) {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div>
-        <h1 className="flex items-center gap-2 text-2xl font-bold">
-          <Bot className="h-6 w-6" /> MCP Access
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Connect your AI assistant to the competitive intelligence feed. Read-only access to emails, text messages and
-          entities.
-        </p>
-      </div>
+      <PageHeader
+        title="MCP Access"
+        description="Connect your AI assistant to the brand feed. Read-only access to emails, text messages and entities."
+        className="mb-0"
+      />
 
       {!status.eligible && (
         <Alert>
