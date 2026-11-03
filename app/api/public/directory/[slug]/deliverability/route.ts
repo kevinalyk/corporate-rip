@@ -1,3 +1,4 @@
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import { type NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { verifyToken } from "@/lib/auth"
@@ -51,14 +52,14 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     if (entityId) {
       // Direct ID lookup — fast and accurate
-      entity = await prisma.ciEntity.findUnique({
-        where: { id: entityId },
+      entity = await prisma.ciEntity.findFirst({
+        where: { id: entityId, ...CORPORATE_ENTITY_WHERE },
         select: { id: true, name: true },
       })
     } else {
       // Slug-based lookup — used from the public directory pages
       const entities = await prisma.ciEntity.findMany({
-        where: { type: { not: "data_broker" } },
+        where: { ...CORPORATE_ENTITY_WHERE, type: { not: "data_broker" } },
         select: { id: true, name: true },
       })
       entity = entities.find((e) => nameToSlug(e.name) === slug) ?? null

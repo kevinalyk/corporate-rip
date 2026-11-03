@@ -1,3 +1,4 @@
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 
@@ -13,8 +14,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch the current entity to get its details if not provided
-    const currentEntity = await prisma.ciEntity.findUnique({
-      where: { id: entityId },
+    const currentEntity = await prisma.ciEntity.findFirst({
+      where: { id: entityId, ...CORPORATE_ENTITY_WHERE },
       select: { party: true, state: true, type: true },
     })
 
@@ -35,6 +36,7 @@ export async function GET(request: NextRequest) {
               mode: "insensitive",
             },
             type: { not: "data_broker" },
+            ...CORPORATE_ENTITY_WHERE,
           },
         })
       : 0
@@ -46,6 +48,7 @@ export async function GET(request: NextRequest) {
             id: { not: entityId },
             state: entityState,
             type: { not: "data_broker" },
+            ...CORPORATE_ENTITY_WHERE,
           },
         })
       : 0
@@ -62,6 +65,7 @@ export async function GET(request: NextRequest) {
                 mode: "insensitive",
               },
               type: { not: "data_broker" },
+            ...CORPORATE_ENTITY_WHERE,
             },
           })
         : 0

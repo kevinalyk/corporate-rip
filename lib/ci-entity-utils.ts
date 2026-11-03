@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client"
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import { generateObject } from "ai"
 import { z } from "zod"
 import { nanoid } from "nanoid"
@@ -472,6 +473,7 @@ export async function getAllEntitiesWithCounts(options?: {
 
     // Build where clause for filtering
     const where: any = {
+      ...CORPORATE_ENTITY_WHERE,
       // Never show data brokers in the public/user-facing directory
       type: { not: "data_broker" },
     }

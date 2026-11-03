@@ -5,6 +5,7 @@ import { verifyAuth } from "@/lib/auth"
 import { normalizeSubject } from "@/lib/campaign-detector"
 import { getEntityMappings } from "@/lib/ci-mapping-cache"
 import { getFreeTierCIWindow } from "@/lib/subscription-utils"
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 
 // Keep in sync with the mobile equivalent in lib/services/feed-service.ts (PLATFORM_DOMAINS)
 const DONATION_PLATFORM_DOMAINS: Record<string, string[]> = {
@@ -147,6 +148,7 @@ export async function GET(request: NextRequest) {
           isHidden: authResult.user.role === "super_admin" ? undefined : false,
           entityId: { not: null },
           entity: {
+            ...CORPORATE_ENTITY_WHERE,
             type: { not: "data_broker" },
             ...(senders.length > 0 && { name: { in: senders } }),
           },
@@ -188,7 +190,7 @@ export async function GET(request: NextRequest) {
             isDeleted: false,
             isHidden: authResult.user.role === "super_admin" ? undefined : false,
             entityId: { in: entitiesWithMappings },
-            entity: { type: { not: "data_broker" } },
+            entity: { ...CORPORATE_ENTITY_WHERE, type: { not: "data_broker" } },
           },
           select: { id: true, entityId: true, senderEmail: true },
         })
@@ -253,6 +255,7 @@ export async function GET(request: NextRequest) {
       isDeleted: false,
       entityId: { not: null },
       entity: {
+        ...CORPORATE_ENTITY_WHERE,
         type: { not: "data_broker" },
       },
       ...(dateFilter && { dateReceived: dateFilter }),
@@ -331,6 +334,7 @@ export async function GET(request: NextRequest) {
       isDeleted: false,
       entityId: { not: null },
       entity: {
+        ...CORPORATE_ENTITY_WHERE,
         type: { not: "data_broker" },
       },
       ...(dateFilter && { createdAt: dateFilter }),
@@ -406,7 +410,7 @@ export async function GET(request: NextRequest) {
           isDeleted: false,
           isHidden: authResult.user.role === "super_admin" ? undefined : false,
           entityId: { not: null },
-          entity: { type: { not: "data_broker" } },
+          entity: { ...CORPORATE_ENTITY_WHERE, type: { not: "data_broker" } },
           ...(thirdParty ? { entityId: { in: [...entitiesWithPhoneMappings] } } : {}),
         },
         select: { id: true, entityId: true, phoneNumber: true },

@@ -2,6 +2,7 @@ import type { Prisma } from "@prisma/client"
 
 import { MobileAuthError } from "@/lib/mobile-auth"
 import prisma from "@/lib/prisma"
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import { getMobileFeedDateFloor } from "@/lib/services/feed-service"
 import type { SubscriptionPlan } from "@/lib/subscription-utils"
 
@@ -115,8 +116,9 @@ function partyWhere(party: string | undefined): Prisma.CiEntityWhereInput | null
 
 function directoryWhere(filters: DirectoryFilters): Prisma.CiEntityWhereInput {
   return {
-    AND: [
-      { type: { not: "data_broker" } },
+  AND: [
+  CORPORATE_ENTITY_WHERE,
+  { type: { not: "data_broker" } },
       filters.search ? { name: { contains: filters.search, mode: "insensitive" } } : {},
       partyWhere(filters.party) ?? {},
       filters.state === "unknown"
@@ -181,7 +183,7 @@ export async function getDirectoryEntity(
   entityId: string,
 ) {
   const entity = (await prisma.ciEntity.findFirst({
-    where: { id: entityId, type: { not: "data_broker" } },
+    where: { id: entityId, ...CORPORATE_ENTITY_WHERE, type: { not: "data_broker" } },
     select: {
       ...directoryDetailSelect,
       subscriptions: {

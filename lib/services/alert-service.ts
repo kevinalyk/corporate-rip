@@ -1,3 +1,4 @@
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import prisma from "@/lib/prisma"
 import { MobileAuthError } from "@/lib/mobile-auth"
 import { PARTIES, STATES } from "@/lib/campaign-filter-options"
@@ -54,7 +55,7 @@ export async function createAlert(userId: string, clientId: string, input: Mobil
   if (entityIds.length > 100) throw new MobileAuthError(400, "INVALID_BODY", "Select no more than 100 entities")
   if (entityIds.length) {
     const validEntities = await prisma.ciEntity.count({
-      where: { id: { in: entityIds }, type: { not: "data_broker" } },
+      where: { id: { in: entityIds }, ...CORPORATE_ENTITY_WHERE, type: { not: "data_broker" } },
     })
     if (validEntities !== entityIds.length) {
       throw new MobileAuthError(400, "INVALID_BODY", "One or more selected entities are unavailable")

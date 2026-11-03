@@ -1,3 +1,4 @@
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import type { Prisma } from "@prisma/client"
 import { z } from "zod"
 
@@ -212,7 +213,7 @@ export async function createMobileSavedView(userId: string, clientId: string, va
   const entityIds = input.filters.entityIds || []
   const entities: SavedViewEntity[] = entityIds.length
     ? await prisma.ciEntity.findMany({
-        where: { id: { in: entityIds }, type: { not: "data_broker" } },
+        where: { id: { in: entityIds }, ...CORPORATE_ENTITY_WHERE, type: { not: "data_broker" } },
         select: { id: true, name: true },
       })
     : []
@@ -250,6 +251,7 @@ export async function listMobileSavedViews(userId: string, clientId: string) {
   const entities: SavedViewEntity[] = names.length || savedIds.length
     ? await prisma.ciEntity.findMany({
         where: {
+          ...CORPORATE_ENTITY_WHERE,
           type: { not: "data_broker" },
           OR: [
             ...(savedIds.length ? [{ id: { in: savedIds } }] : []),
