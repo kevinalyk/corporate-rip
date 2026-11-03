@@ -1,9 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
-import { cookies } from "next/headers"
-import jwt from "jsonwebtoken"
-
-const prisma = new PrismaClient()
+import prisma from "@/lib/prisma"
+import { getCurrentUser } from "@/lib/auth"
 
 // Rate limiting: max 30 requests per minute per IP
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
@@ -33,16 +30,18 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const cookieStore = await cookies()
-    const token = cookieStore.get("auth_token")?.value
+    const session = (await getCurrentUser()) as any
 
-    if (!token) {
+    if (!session?.userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any
+    if (session.brand) {
+      return NextResponse.json({ subscribed: false })
+    }
+
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
+      where: { id: session.userId },
     })
 
     if (!user || !user.clientId) {

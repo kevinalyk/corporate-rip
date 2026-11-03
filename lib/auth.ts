@@ -128,6 +128,11 @@ export async function isSystemAdmin(userId: string) {
       return true
     }
 
+    const brandUser = await prisma.brandUser.findUnique({ where: { id: userId }, select: { role: true } })
+    if (brandUser?.role === "super_admin") {
+      return true
+    }
+
     // Also check if they have admin role in any client domain
     const adminAccess = await prisma.userDomainAccess.findFirst({
       where: {
@@ -189,6 +194,10 @@ export async function isAuthenticated(request: Request) {
         return true
       }
     }
+    const brandToken = cookies[BRAND_COOKIE]
+    if (brandToken && (await verifyBrandSession(brandToken))) {
+      return true
+    }
   }
 
   return false
@@ -212,18 +221,19 @@ export async function getAuthenticatedUser(request: Request) {
   const authHeader = request.headers.get("Authorization")
   let token = authHeader ? authHeader.split(" ")[1] : null
 
+  const cookieHeader = request.headers.get("cookie")
+  const requestCookies = cookieHeader ? parseCookies(cookieHeader) : {}
+
   // If no auth header, check cookies
-  if (!token) {
-    const cookieHeader = request.headers.get("cookie")
-    if (cookieHeader) {
-      const cookies = parseCookies(cookieHeader)
-      token = cookies["auth_token"]
-    }
+  if (!token) token = requestCookies["auth_token"] ?? null
+
+  let payload = token ? ((await verifyToken(token)) as any) : null
+
+  // A stale or foreign auth_token must not mask a valid brandinbox.ai session.
+  if (!payload && requestCookies[BRAND_COOKIE]) {
+    payload = await verifyBrandSession(requestCookies[BRAND_COOKIE])
   }
 
-  if (!token) return null
-
-  const payload = (await verifyToken(token)) as any
   if (!payload) return null
 
   // Handle both userId and id fields from JWT for backward compatibility

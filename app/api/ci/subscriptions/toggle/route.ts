@@ -1,23 +1,22 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
-import { cookies } from "next/headers"
-import jwt from "jsonwebtoken"
+import prisma from "@/lib/prisma"
+import { getCurrentUser } from "@/lib/auth"
 import { canFollowMoreEntities, getCIFollowLimit, type SubscriptionPlan } from "@/lib/subscription-utils"
-
-const prisma = new PrismaClient()
 
 export async function POST(request: NextRequest) {
   try {
-    const cookieStore = await cookies()
-    const token = cookieStore.get("auth_token")?.value
+    const session = (await getCurrentUser()) as any
 
-    if (!token) {
+    if (!session?.userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any
+    if (session.brand) {
+      return NextResponse.json({ error: "Following is not available for brand accounts yet" }, { status: 403 })
+    }
+
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
+      where: { id: session.userId },
       include: { client: true },
     })
 

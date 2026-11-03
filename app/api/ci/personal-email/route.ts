@@ -1,10 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
-import { cookies } from "next/headers"
-import jwt from "jsonwebtoken"
+import prisma from "@/lib/prisma"
+import { getCurrentUser } from "@/lib/auth"
 import { getFreeTierCIWindow } from "@/lib/subscription-utils"
-
-const prisma = new PrismaClient()
 
 // Donation-platform CTA link domains. Mirrors /api/competitive-insights so
 // behavior is identical across the regular CI feed and the personal tabs.
@@ -22,16 +19,18 @@ const SAFETY_LIMIT = 5000
 
 export async function GET(request: NextRequest) {
   try {
-    const cookieStore = await cookies()
-    const token = cookieStore.get("auth_token")?.value
+    const session = (await getCurrentUser()) as any
 
-    if (!token) {
+    if (!session?.userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any
+    if (session.brand) {
+      return NextResponse.json({ insights: [] })
+    }
+
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
+      where: { id: session.userId },
     })
 
     if (!user || !user.clientId) {
