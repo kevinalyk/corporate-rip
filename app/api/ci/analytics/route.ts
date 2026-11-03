@@ -1,3 +1,4 @@
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import { type NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { verifyAuth } from "@/lib/auth"
@@ -105,7 +106,7 @@ export async function GET(request: NextRequest) {
     let entityIdFilter: { in: string[] } | undefined = undefined
 
     if (hasEntityFilter || hasPartyFilter || hasStateFilter) {
-      const entityWhere: any = {}
+      const entityWhere: any = { ...CORPORATE_ENTITY_WHERE }
       if (hasEntityFilter) entityWhere.name = { in: senders, mode: "insensitive" }
       if (hasPartyFilter) entityWhere.party = { equals: party, mode: "insensitive" }
       if (hasStateFilter) entityWhere.state = { equals: state, mode: "insensitive" }
@@ -134,7 +135,7 @@ export async function GET(request: NextRequest) {
         prisma.ciEntityMapping.findMany({
           select: { entityId: true, senderEmail: true, senderDomain: true },
         }),
-        prisma.ciEntity.findMany({ select: { id: true, donationIdentifiers: true } }),
+        prisma.ciEntity.findMany({ where: CORPORATE_ENTITY_WHERE, select: { id: true, donationIdentifiers: true } }),
         prisma.ciEntityMapping.findMany({
           where: {
             OR: [
@@ -182,6 +183,7 @@ export async function GET(request: NextRequest) {
         where: {
           isDeleted: false,
           isHidden: false,
+          entity: CORPORATE_ENTITY_WHERE,
           ...(isThirdPartyFilter ? { entityId: { in: [...entitiesWithMappings] } } : { entityId: { not: null } }),
           ...(entityIdFilter ? { entityId: entityIdFilter } : {}),
         },
@@ -205,6 +207,7 @@ export async function GET(request: NextRequest) {
         where: {
           isDeleted: false,
           isHidden: false,
+          entity: CORPORATE_ENTITY_WHERE,
           entityId: { not: null },
           ...(isThirdPartyFilter ? { entityId: { in: [...entitiesWithPhoneMappings] } } : {}),
           ...(entityIdFilter ? { entityId: entityIdFilter } : {}),
@@ -237,6 +240,7 @@ export async function GET(request: NextRequest) {
         where: {
           isDeleted: false,
           isHidden: false,
+          entity: CORPORATE_ENTITY_WHERE,
           ...(entityIdFilter && !isThirdPartyFilter && !isHouseFileFilter ? { entityId: entityIdFilter } : {}),
           ...(thirdPartyOrHouseFileCampaignIds !== null ? { id: { in: thirdPartyOrHouseFileCampaignIds } } : {}),
           ...(Object.keys(dateFilter).length > 0 ? { dateReceived: dateFilter } : {}),
@@ -282,6 +286,7 @@ export async function GET(request: NextRequest) {
     if (includeSMS) {
       const rawSmsMessages = await prisma.smsQueue.findMany({
         where: {
+          entity: CORPORATE_ENTITY_WHERE,
           ...(entityIdFilter ? { entityId: entityIdFilter } : {}),
           isDeleted: false,
           isHidden: false,

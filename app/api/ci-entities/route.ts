@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
           },
         },
       })
-      if (!entity) {
+      if (!entity || !entity.isCorporate) {
         return NextResponse.json({ error: "Entity not found" }, { status: 404 })
       }
       return NextResponse.json({ entity })

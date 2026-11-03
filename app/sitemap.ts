@@ -1,3 +1,4 @@
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import type { MetadataRoute } from "next"
 import prisma from "@/lib/prisma"
 import {
@@ -65,7 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     const entities = await prisma.ciEntity.findMany({
-      where: { type: { not: "data_broker" } },
+      where: { ...CORPORATE_ENTITY_WHERE, type: { not: "data_broker" } },
       select: { name: true, state: true, party: true, updatedAt: true },
       orderBy: { name: "asc" },
     })

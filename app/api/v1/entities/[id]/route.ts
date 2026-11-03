@@ -1,3 +1,4 @@
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 /**
  * GET /api/v1/entities/[id]
  * Get a single entity by ID with campaign and SMS counts
@@ -29,8 +30,8 @@ async function handler(
     const { id } = await params;
 
     // Fetch entity with counts
-    const entity = await prisma.ciEntity.findUnique({
-      where: { id },
+    const entity = await prisma.ciEntity.findFirst({
+      where: { id, ...CORPORATE_ENTITY_WHERE },
       include: {
         tags: true,
         _count: {

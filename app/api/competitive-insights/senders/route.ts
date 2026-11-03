@@ -1,3 +1,4 @@
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import { type NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { verifyAuth } from "@/lib/auth"
@@ -11,6 +12,7 @@ export async function GET(request: NextRequest) {
 
     const entities = await prisma.ciEntity.findMany({
       where: {
+        ...CORPORATE_ENTITY_WHERE,
         type: { not: "data_broker" },
       },
       select: {

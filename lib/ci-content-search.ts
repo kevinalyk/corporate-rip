@@ -8,6 +8,7 @@
 import prisma from "@/lib/prisma"
 import { CiApiError } from "@/lib/ci-api-auth"
 import { nameToSlug } from "@/lib/directory-utils"
+import { CORPORATE_ENTITY_WHERE, corporateEntitySqlString } from "@/lib/corporate-scope"
 
 export interface SearchContentParams {
   query: string
@@ -197,8 +198,8 @@ export async function searchContent(params: SearchContentParams) {
   const entityIds = Array.from(counts.keys()).filter((id): id is string => id !== null)
   const entities = entityIds.length
     ? await prisma.ciEntity.findMany({
-        where: { id: { in: entityIds } },
-        select: { id: true, name: true, party: true, state: true },
+  where: { id: { in: entityIds }, ...CORPORATE_ENTITY_WHERE },
+  select: { id: true, name: true, party: true, state: true },
       })
     : []
   type EntityInfo = { id: string; name: string; party: string | null; state: string | null }
@@ -315,7 +316,8 @@ export async function listEntities(params: {
 }) {
   const { query, party, state, type, limit, page } = params
   const where = {
-    ...(query ? { name: { contains: query, mode: "insensitive" as const } } : {}),
+  ...CORPORATE_ENTITY_WHERE,
+  ...(query ? { name: { contains: query, mode: "insensitive" as const } } : {}),
     ...(party ? { party: { equals: party === "R" ? "republican" : "democrat", mode: "insensitive" as const } } : {}),
     ...(state ? { state: { equals: state, mode: "insensitive" as const } } : {}),
     ...(type ? { type } : {}),
@@ -347,7 +349,8 @@ export async function listEntities(params: {
 export async function getEntityBySlug(slug: string) {
   // Names are the stable key; slugs are derived, so match on the derived slug.
   const candidates = await prisma.ciEntity.findMany({
-    select: { id: true, name: true, type: true, party: true, state: true, office: true, description: true, bio: true },
+  where: CORPORATE_ENTITY_WHERE,
+  select: { id: true, name: true, type: true, party: true, state: true, office: true, description: true, bio: true },
   })
   const entity = candidates.find((e: { name: string }) => nameToSlug(e.name) === slug)
   if (!entity) throw new CiApiError("Entity not found", 404)
@@ -433,6 +436,7 @@ export async function getInboxPlacement(params: {
     conditions.push(`(c."senderEmail" ILIKE '%' || ${p} || '%' OR c."senderName" ILIKE '%' || ${p} || '%')`)
   }
 
+  conditions.push(corporateEntitySqlString("e"))
   const fromClause = `FROM "CompetitiveInsightCampaign" c LEFT JOIN "CiEntity" e ON e."id" = c."entityId" WHERE ${conditions.join(" AND ")}`
   const sums = `count(*)::int AS "campaigns",
     COALESCE(sum(c."inboxCount"), 0)::int AS "inbox",

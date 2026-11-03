@@ -1,3 +1,4 @@
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 /**
  * GET /api/v1/entities
  * List all public entities (paginated)
@@ -42,7 +43,7 @@ async function handler(
     const search = searchParams.get("search");
 
     // Build where clause
-    const where: any = {};
+    const where: any = { ...CORPORATE_ENTITY_WHERE };
 
     if (type) {
       where.type = type;

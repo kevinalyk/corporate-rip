@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma"
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 
 // Each window pairs a "current" period with a longer "baseline" period immediately before
 // it, used to establish each entity's normal daily sending rate. The current period's total
@@ -204,8 +205,8 @@ export async function getTrendingEntities(window: TrendingWindowKey = DEFAULT_TR
 
   const entities: EntityInfo[] = entityIds.length
     ? await prisma.ciEntity.findMany({
-        where: { id: { in: entityIds } },
-        select: { id: true, name: true, type: true, party: true, state: true, imageUrl: true },
+  where: { id: { in: entityIds }, ...CORPORATE_ENTITY_WHERE },
+  select: { id: true, name: true, type: true, party: true, state: true, imageUrl: true },
       })
     : []
   const entityMap = new Map(entities.map((e) => [e.id, e]))

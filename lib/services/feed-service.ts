@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client"
 import { nanoid } from "nanoid"
 
 import prisma from "@/lib/prisma"
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import {
   FREE_TIER_DELAY_HOURS,
   FREE_TIER_WINDOW_HOURS,
@@ -143,6 +144,7 @@ export function normalizeMobileCtaLinks(value: unknown): unknown[] {
 const PAGE_SIZE = 25
 
 const mobileFeedEntitySelect = {
+  isCorporate: true,
   id: true,
   name: true,
   type: true,
@@ -245,7 +247,7 @@ export async function getMobileFeedDateFloor(clientId: string, plan: Subscriptio
  * exposing them.
  */
 function entityAttributeWhere(filters: FeedFilters): Record<string, unknown> {
-  const conditions: Record<string, unknown>[] = [{ type: { not: "data_broker" } }]
+  const conditions: Record<string, unknown>[] = [CORPORATE_ENTITY_WHERE, { type: { not: "data_broker" } }]
   if (filters.party) {
     const party = filters.party.toLowerCase()
     if (party === "independent" || party === "third party") {
@@ -427,11 +429,11 @@ async function resolveOwnershipWhere(filters: FeedFilters): Promise<OwnershipWhe
   // File and Third Party messages disappear from mobile results.
   const [legacyEmails, legacySms] = await Promise.all([
     prisma.competitiveInsightCampaign.findMany({
-      where: { isThirdParty: null, entityId: { not: null }, entity: { type: { not: "data_broker" } } },
+      where: { isThirdParty: null, entityId: { not: null }, entity: { ...CORPORATE_ENTITY_WHERE, type: { not: "data_broker" } } },
       select: { id: true, entityId: true, senderEmail: true },
     }),
     prisma.smsQueue.findMany({
-      where: { isThirdParty: null, entityId: { not: null }, entity: { type: { not: "data_broker" } } },
+      where: { isThirdParty: null, entityId: { not: null }, entity: { ...CORPORATE_ENTITY_WHERE, type: { not: "data_broker" } } },
       select: { id: true, entityId: true, phoneNumber: true },
     }),
   ])
@@ -468,7 +470,7 @@ async function resolveOwnershipWhere(filters: FeedFilters): Promise<OwnershipWhe
 export async function listMobileFeedEntities(clientId: string, userId: string) {
   const [entities, subscriptions] = await Promise.all([
     prisma.ciEntity.findMany({
-      where: { type: { not: "data_broker" } },
+      where: { ...CORPORATE_ENTITY_WHERE, type: { not: "data_broker" } },
       select: { id: true, name: true, type: true, party: true, state: true },
       orderBy: { name: "asc" },
       take: 10000,
@@ -682,7 +684,7 @@ export async function getFeedItemById(
       where: { id },
       include: { entity: { select: mobileFeedEntitySelect } },
     })
-    if (!campaign || campaign.isDeleted || campaign.isHidden) return null
+    if (!campaign || campaign.isDeleted || campaign.isHidden || !campaign.entity?.isCorporate) return null
     if (dateBounds.gte && campaign.dateReceived < dateBounds.gte) return null
     if (dateBounds.lte && campaign.dateReceived > dateBounds.lte) return null
 
@@ -714,7 +716,7 @@ export async function getFeedItemById(
     where: { id },
     include: { entity: { select: mobileFeedEntitySelect } },
   })
-  if (!sms || sms.isDeleted || sms.isHidden) return null
+  if (!sms || sms.isDeleted || sms.isHidden || !sms.entity?.isCorporate) return null
   // Unprocessed SMS has no reliable extracted content/sender yet — treat it the same
   // as "not found" rather than exposing a half-parsed row.
   if (!sms.processed) return null

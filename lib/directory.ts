@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma"
 export { nameToSlug } from "@/lib/directory-utils"
 import { nameToSlug } from "@/lib/directory-utils"
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 
 // hasFullAccess is resolved by the caller (server page or API route) so this
 // lib file stays free of next/headers and can be safely imported anywhere.
@@ -9,7 +10,7 @@ export async function getEntityBySlug(slug: string, hasFullAccess = false) {
     const cutoffAt = new Date(Date.now() - 3 * 60 * 60 * 1000)
 
     const entities = await prisma.ciEntity.findMany({
-      where: { type: { not: "data_broker" } },
+      where: { ...CORPORATE_ENTITY_WHERE, type: { not: "data_broker" } },
       select: {
         id: true,
         name: true,

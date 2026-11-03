@@ -1,3 +1,4 @@
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import { Prisma } from "@prisma/client"
 import prisma from "@/lib/prisma"
 import { canFollowMoreEntities, getCIFollowLimit, type SubscriptionPlan } from "@/lib/subscription-utils"
@@ -64,7 +65,10 @@ export async function followEntity(
   entityId: string,
   attempt = 0,
 ): Promise<{ alreadyFollowing: boolean }> {
-  const entity = await prisma.ciEntity.findUnique({ where: { id: entityId }, select: { id: true } })
+  const entity = await prisma.ciEntity.findFirst({
+    where: { id: entityId, ...CORPORATE_ENTITY_WHERE },
+    select: { id: true },
+  })
   if (!entity) {
     throw new MobileAuthError(404, "ENTITY_NOT_FOUND", "Entity not found")
   }

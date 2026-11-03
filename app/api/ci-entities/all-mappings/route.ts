@@ -1,3 +1,4 @@
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import { NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 
@@ -14,6 +15,7 @@ export async function GET() {
         },
       }),
       prisma.ciEntity.findMany({
+        where: CORPORATE_ENTITY_WHERE,
         select: { id: true, donationIdentifiers: true },
       }),
     ])
