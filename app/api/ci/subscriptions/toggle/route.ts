@@ -22,6 +22,10 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "User not found or not associated with a client" }, { status: 404 })
       }
 
+      if (brandUser.role !== "super_admin" && brandUser.client?.product !== "brand") {
+        return NextResponse.json({ error: "Client is not a Brand workspace" }, { status: 403 })
+      }
+
       const { entityId: brandEntityId } = await request.json()
       if (!brandEntityId) {
         return NextResponse.json({ error: "Entity ID is required" }, { status: 400 })

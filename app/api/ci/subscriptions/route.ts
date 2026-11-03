@@ -22,11 +22,15 @@ export async function GET(request: NextRequest) {
 
     const client = await prisma.client.findUnique({
       where: { id: user.clientId },
-      select: { subscriptionPlan: true },
+      select: { subscriptionPlan: true, product: true },
     })
 
     if (!client) {
       return NextResponse.json({ error: "Client not found" }, { status: 404 })
+    }
+
+    if (isBrand && user.role !== "super_admin" && client.product !== "brand") {
+      return NextResponse.json({ error: "Client is not a Brand workspace" }, { status: 403 })
     }
 
     let dateFilter: any = undefined
