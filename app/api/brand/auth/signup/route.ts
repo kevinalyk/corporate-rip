@@ -1,8 +1,11 @@
+import { randomBytes } from "crypto"
 import { NextResponse } from "next/server"
 import bcryptjs from "bcryptjs"
+import type { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 import { checkMobileRateLimit } from "@/lib/mobile-auth"
 import { createBrandToken, getRequestIp, setBrandCookie, toPublicBrandUser } from "@/lib/brand-auth"
+import type { BrandRole } from "@/lib/brand-roles"
 
 const MAX_ATTEMPTS = 5
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000
@@ -16,6 +19,57 @@ function passwordError(password: string): string | null {
 }
 
 const clean = (value: unknown, max = 120) => (typeof value === "string" ? value.trim().slice(0, max) : "")
+
+function slugify(value: string) {
+  return (
+    value
+      .toLowerCase()
+      .normalize("NFKD")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 40) || "workspace"
+  )
+}
+
+// Client.name and Client.slug are globally unique across both products. The slug is also a top-level
+// URL segment (/<slug>/ci/...), so the random suffix keeps it from ever colliding with an app route.
+async function createUserWithWorkspace(input: {
+  email: string
+  firstName: string
+  lastName: string
+  company: string | null
+  jobTitle: string | null
+  hashedPassword: string
+  workspaceName: string
+  signupIp: string | null
+}) {
+  const suffix = randomBytes(3).toString("hex")
+  const slug = `${slugify(input.workspaceName)}-${suffix}`
+  const nameTaken = await prisma.client.findUnique({ where: { name: input.workspaceName }, select: { id: true } })
+  const name = nameTaken ? `${input.workspaceName} (${suffix})` : input.workspaceName
+
+  return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+    const client = await tx.client.create({
+      data: { id: `brand_${slug}`, name, slug, product: "brand" },
+    })
+    return tx.brandUser.create({
+      data: {
+        email: input.email,
+        firstName: input.firstName,
+        lastName: input.lastName,
+        company: input.company,
+        jobTitle: input.jobTitle,
+        password: input.hashedPassword,
+        agreedToTermsAt: new Date(),
+        signupIp: input.signupIp,
+        lastLoginAt: new Date(),
+        role: "owner" satisfies BrandRole,
+        clientId: client.id,
+      },
+      include: { client: { select: { id: true, name: true, slug: true } } },
+    })
+  })
+}
 
 export async function POST(request: Request) {
   try {
@@ -64,19 +118,32 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "An account with this email already exists" }, { status: 400 })
     }
 
-    const user = await prisma.brandUser.create({
-      data: {
-        email,
-        firstName,
-        lastName,
-        company,
-        jobTitle,
-        password: await bcryptjs.hash(password, 10),
-        agreedToTermsAt: new Date(),
-        signupIp: ip !== "unknown" ? ip : null,
-        lastLoginAt: new Date(),
-      },
-    })
+    const hashedPassword = await bcryptjs.hash(password, 10)
+    const workspaceName = company || `${firstName} ${lastName}`
+
+    let user: Awaited<ReturnType<typeof createUserWithWorkspace>> | null = null
+    for (let attempt = 0; attempt < 3 && !user; attempt++) {
+      try {
+        user = await createUserWithWorkspace({
+          email,
+          firstName,
+          lastName,
+          company,
+          jobTitle,
+          hashedPassword,
+          workspaceName,
+          signupIp: ip !== "unknown" ? ip : null,
+        })
+      } catch (error) {
+        const isUniqueConflict = (error as { code?: string })?.code === "P2002"
+        if (!isUniqueConflict || attempt === 2) throw error
+        const taken = await prisma.brandUser.findUnique({ where: { email }, select: { id: true } })
+        if (taken) {
+          return NextResponse.json({ error: "An account with this email already exists" }, { status: 400 })
+        }
+      }
+    }
+    if (!user) throw new Error("Workspace creation failed")
 
     const response = NextResponse.json({ user: toPublicBrandUser(user) }, { status: 201 })
     setBrandCookie(response, await createBrandToken(user))

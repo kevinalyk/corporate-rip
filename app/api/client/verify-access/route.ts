@@ -27,6 +27,7 @@ export async function GET(request: Request) {
       client: {
         select: {
           slug: true,
+          product: true,
         },
       },
     } as const
@@ -44,6 +45,12 @@ export async function GET(request: Request) {
     if (user.role === "super_admin") {
       console.log("[v0] Super-admin access granted")
       return NextResponse.json({ access: true })
+    }
+
+    // Brand users can only access their own client, and only if it is a Brand client
+    if (currentUser.brand && user.client?.product !== "brand") {
+      console.log("[v0] Access denied - brand user's client is not a Brand client")
+      return NextResponse.json({ error: "Access denied" }, { status: 403 })
     }
 
     // Regular users can only access their own client

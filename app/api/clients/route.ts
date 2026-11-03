@@ -11,17 +11,21 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const role = payload.brand
-      ? (await prisma.brandUser.findUnique({ where: { id: payload.userId }, select: { role: true } }))?.role
-      : (await prisma.user.findUnique({ where: { id: payload.userId }, select: { role: true } }))?.role
+    const account = payload.brand
+      ? await prisma.brandUser.findUnique({ where: { id: payload.userId }, select: { role: true, clientId: true } })
+      : await prisma.user.findUnique({ where: { id: payload.userId }, select: { role: true, clientId: true } })
 
-    if (role !== "super_admin") {
+    if (account?.role !== "super_admin") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
+    // Brand super admins see every Brand client plus the RIP client they are attached to.
     const clients = await prisma.client.findMany({
       where: {
         active: true,
+        ...(payload.brand && {
+          OR: [{ product: "brand" }, ...(account.clientId ? [{ id: account.clientId }] : [])],
+        }),
       },
       select: {
         id: true,

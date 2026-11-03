@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { getCurrentUser } from "@/lib/auth"
+import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import { canFollowMoreEntities, getCIFollowLimit, type SubscriptionPlan } from "@/lib/subscription-utils"
 
 export async function POST(request: NextRequest) {
@@ -12,7 +13,65 @@ export async function POST(request: NextRequest) {
     }
 
     if (session.brand) {
-      return NextResponse.json({ error: "Following is not available for brand accounts yet" }, { status: 403 })
+      const brandUser = await prisma.brandUser.findUnique({
+        where: { id: session.userId },
+        include: { client: true },
+      })
+
+      if (!brandUser || !brandUser.clientId) {
+        return NextResponse.json({ error: "User not found or not associated with a client" }, { status: 404 })
+      }
+
+      if (brandUser.role !== "super_admin" && brandUser.client?.product !== "brand") {
+        return NextResponse.json({ error: "Client is not a Brand workspace" }, { status: 403 })
+      }
+
+      const { entityId: brandEntityId } = await request.json()
+      if (!brandEntityId) {
+        return NextResponse.json({ error: "Entity ID is required" }, { status: 400 })
+      }
+
+      const existing = await prisma.brandEntitySubscription.findUnique({
+        where: { userId_entityId: { userId: brandUser.id, entityId: brandEntityId } },
+      })
+
+      if (existing) {
+        await prisma.brandEntitySubscription.delete({ where: { id: existing.id } })
+        return NextResponse.json({ subscribed: false })
+      }
+
+      const entity = await prisma.ciEntity.findFirst({
+        where: { id: brandEntityId, ...CORPORATE_ENTITY_WHERE },
+        select: { id: true },
+      })
+      if (!entity) {
+        return NextResponse.json({ error: "Entity not found" }, { status: 404 })
+      }
+
+      // Super admins are never limited by plan.
+      if (brandUser.role !== "super_admin") {
+        const brandPlan = (brandUser.client?.subscriptionPlan || "free") as SubscriptionPlan
+        const brandFollowCount = await prisma.brandEntitySubscription.count({
+          where: { clientId: brandUser.clientId, userId: brandUser.id },
+        })
+        if (!canFollowMoreEntities(brandPlan, brandFollowCount)) {
+          const limit = getCIFollowLimit(brandPlan)
+          return NextResponse.json(
+            {
+              error: "Follow limit reached",
+              message: `Your plan allows following ${limit} ${limit === 1 ? "entity" : "entities"}. Upgrade to follow more.`,
+              currentCount: brandFollowCount,
+              limit,
+            },
+            { status: 403 },
+          )
+        }
+      }
+
+      await prisma.brandEntitySubscription.create({
+        data: { clientId: brandUser.clientId, userId: brandUser.id, entityId: brandEntityId },
+      })
+      return NextResponse.json({ subscribed: true })
     }
 
     const user = await prisma.user.findUnique({

@@ -11,13 +11,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    if (session.brand) {
-      return NextResponse.json({ insights: [] })
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { id: session.userId },
-    })
+    const isBrand = !!session.brand
+    const user = isBrand
+      ? await prisma.brandUser.findUnique({ where: { id: session.userId } })
+      : await prisma.user.findUnique({ where: { id: session.userId } })
 
     if (!user || !user.clientId) {
       return NextResponse.json({ error: "User not found or not associated with a client" }, { status: 404 })
@@ -25,11 +22,15 @@ export async function GET(request: NextRequest) {
 
     const client = await prisma.client.findUnique({
       where: { id: user.clientId },
-      select: { subscriptionPlan: true },
+      select: { subscriptionPlan: true, product: true },
     })
 
     if (!client) {
       return NextResponse.json({ error: "Client not found" }, { status: 404 })
+    }
+
+    if (isBrand && user.role !== "super_admin" && client.product !== "brand") {
+      return NextResponse.json({ error: "Client is not a Brand workspace" }, { status: 403 })
     }
 
     let dateFilter: any = undefined
@@ -45,12 +46,17 @@ export async function GET(request: NextRequest) {
     // For 'all', 'enterprise': no date filter (full history)
 
     // Get all subscribed entity IDs
-    const subscriptions = await prisma.ciEntitySubscription.findMany({
-      where: { clientId: user.clientId, userId: user.id },
-      include: { entity: true },
-    })
+    const subscriptions = isBrand
+      ? await prisma.brandEntitySubscription.findMany({
+          where: { clientId: user.clientId, userId: user.id },
+          select: { entityId: true },
+        })
+      : await prisma.ciEntitySubscription.findMany({
+          where: { clientId: user.clientId, userId: user.id },
+          select: { entityId: true },
+        })
 
-    const entityIds = subscriptions.map((sub) => sub.entityId)
+    const entityIds = subscriptions.map((sub: { entityId: string }) => sub.entityId)
 
     // Fetch campaigns from subscribed entities OR campaigns from client's personal email
     const [emailCampaigns, smsMessages] = await Promise.all([

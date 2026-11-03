@@ -10,9 +10,13 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Following is stored against RIP users only; brand accounts have no subscriptions yet.
+    // Brand accounts follow through their own table (BrandEntitySubscription).
     if (session.brand) {
-      return NextResponse.json({ entityIds: [] })
+      const brandSubscriptions = await prisma.brandEntitySubscription.findMany({
+        where: { userId: session.userId },
+        select: { entityId: true },
+      })
+      return NextResponse.json({ entityIds: brandSubscriptions.map((sub: { entityId: string }) => sub.entityId) })
     }
 
     const user = await prisma.user.findUnique({
@@ -29,7 +33,7 @@ export async function GET() {
       select: { entityId: true },
     })
 
-    const entityIds = subscriptions.map((sub) => sub.entityId)
+    const entityIds = subscriptions.map((sub: { entityId: string }) => sub.entityId)
 
     return NextResponse.json({ entityIds })
   } catch (error) {
