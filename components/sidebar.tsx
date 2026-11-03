@@ -24,14 +24,10 @@ import {
   ChevronDown,
   ChevronUp,
   LayoutDashboard,
-  Inbox,
   Building,
   Star,
-  Globe,
   ScanSearch,
-  MailCheck,
   Code,
-  Key,
   Smartphone,
   Bot,
 } from "lucide-react"
@@ -95,7 +91,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     ci: false,
     radar: false,
-    inbox: false,
     developers: false,
     account: false,
   })
@@ -160,8 +155,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
       setExpandedSections((prev) => ({ ...prev, ci: true }))
     } else if (pathname === "/directory" || pathname.startsWith("/directory/")) {
       setExpandedSections((prev) => ({ ...prev, radar: true }))
-    } else if (pathname.includes("/inbox/")) {
-      setExpandedSections((prev) => ({ ...prev, inbox: true }))
     } else if (pathname.includes("/developers/")) {
       setExpandedSections((prev) => ({ ...prev, developers: true }))
     }
@@ -414,36 +407,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
               </>
             )}
 
-            {(selectedClientSlug === "rip" || !selectedClientSlug || selectedClientSlug === "redsparkstrategy") && (
-              <>
-                <NavSection
-                  icon={<Inbox size={20} />}
-                  label="Inbox Tools"
-                  collapsed={collapsed}
-                  expanded={expandedSections.inbox}
-                  onToggle={() => toggleSection("inbox")}
-                />
-                {expandedSections.inbox && !collapsed && (
-                  <div className="ml-4 space-y-1">
-                    <NavItem
-                      icon={<Globe size={18} />}
-                      label="Domain Health"
-                      active={pathname.includes("/inbox/domain-health")}
-                      collapsed={false}
-                      onClick={() => navigate(`/${getClientSlug()}/inbox/domain-health`)}
-                    />
-                    <NavItem
-                      icon={<MailCheck size={18} />}
-                      label="Spam Tester"
-                      active={pathname.includes("/inbox/spam-test")}
-                      collapsed={false}
-                      onClick={() => navigate(`/${getClientSlug()}/inbox/spam-test`)}
-                    />
-                  </div>
-                )}
-              </>
-            )}
-
             {showDevelopersNav && (
               <>
                 <NavSection
@@ -455,15 +418,6 @@ export function Sidebar({ collapsed, setCollapsed, isAdminView = false, onNaviga
                 />
                 {expandedSections.developers && !collapsed && (
                   <div className="ml-4 space-y-1">
-                    {userRole === "super_admin" && (
-                      <NavItem
-                        icon={<Key size={18} />}
-                        label="API Keys"
-                        active={pathname === `/${selectedClientSlug}/developers/api-keys`}
-                        collapsed={false}
-                        onClick={() => navigate(`/${selectedClientSlug}/developers/api-keys`)}
-                      />
-                    )}
                     {mcpStatus?.eligible && (
                       <NavItem
                         icon={<Bot size={18} />}

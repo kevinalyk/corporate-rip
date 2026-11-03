@@ -1,21 +1,37 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { verifyToken } from "@/lib/auth"
+import { getCurrentUser } from "@/lib/auth"
 import { neon } from "@neondatabase/serverless"
 
 const sql = neon(process.env.DATABASE_URL!)
 
+type SessionResult = { userId: string } | { response: NextResponse }
+
+// Saved views belong to RIP users (User table). Brand accounts are a separate
+// user space, so they get an empty list on read and a 403 on write.
+async function requireRipUser(): Promise<SessionResult> {
+  const session = (await getCurrentUser()) as any
+  if (!session?.userId) {
+    return { response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) }
+  }
+  if (session.brand) {
+    return {
+      response: NextResponse.json({ error: "Saved views are not available for brand accounts yet" }, { status: 403 }),
+    }
+  }
+  return { userId: session.userId }
+}
+
 // GET - Fetch the signed-in user's views for the selected client context.
 export async function GET(request: NextRequest) {
   try {
-    const token = request.cookies.get("auth_token")?.value
-    if (!token) {
+    const session = (await getCurrentUser()) as any
+    if (!session?.userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
-
-    const decoded = await verifyToken(token)
-    if (!decoded?.userId) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 })
+    if (session.brand) {
+      return NextResponse.json({ views: [] })
     }
+    const userId: string = session.userId
 
     const searchParams = request.nextUrl.searchParams
     const clientSlug = searchParams.get("clientSlug")
@@ -24,18 +40,17 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Client slug is required" }, { status: 400 })
     }
 
-    // Get user info
     const userResult = await sql`
       SELECT "clientId", role 
       FROM "User" 
-      WHERE id = ${decoded.userId}
+      WHERE id = ${userId}
     `
 
     if (!userResult || userResult.length === 0) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    // Determine target client - for super_admins, use the selected client
+    // Super admins view the selected client; everyone else uses their own.
     let clientId = userResult[0].clientId
     if (userResult[0].role === "super_admin") {
       const targetClientResult = await sql`
@@ -59,7 +74,7 @@ export async function GET(request: NextRequest) {
         "createdAt",
         "updatedAt"
       FROM "UserCiView"
-      WHERE "clientId" = ${clientId} AND "createdBy" = ${decoded.userId}
+      WHERE "clientId" = ${clientId} AND "createdBy" = ${userId}
       ORDER BY "createdAt" DESC
     `
 
@@ -73,15 +88,9 @@ export async function GET(request: NextRequest) {
 // POST - Create a new view
 export async function POST(request: NextRequest) {
   try {
-    const token = request.cookies.get("auth_token")?.value
-    if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
-
-    const decoded = await verifyToken(token)
-    if (!decoded?.userId) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 })
-    }
+    const session = await requireRipUser()
+    if ("response" in session) return session.response
+    const { userId } = session
 
     const body = await request.json()
     const { name, filterSettings, clientSlug } = body
@@ -90,11 +99,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Name, filterSettings, and clientSlug are required" }, { status: 400 })
     }
 
-    // Get the user's client and role.
     const userResult = await sql`
       SELECT "clientId", role
       FROM "User" 
-      WHERE id = ${decoded.userId}
+      WHERE id = ${userId}
     `
 
     if (!userResult || userResult.length === 0) {
@@ -111,7 +119,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Create new view
     const viewId = crypto.randomUUID()
     const now = new Date()
 
@@ -129,7 +136,7 @@ export async function POST(request: NextRequest) {
         ${name},
         ${clientId},
         ${JSON.stringify(filterSettings)},
-        ${decoded.userId},
+        ${userId},
         ${now},
         ${now}
       )
@@ -139,7 +146,7 @@ export async function POST(request: NextRequest) {
       id: viewId,
       name,
       filterSettings,
-      createdBy: decoded.userId,
+      createdBy: userId,
       createdAt: now,
       updatedAt: now,
     }
@@ -154,15 +161,9 @@ export async function POST(request: NextRequest) {
 // PUT - Update an existing view
 export async function PUT(request: NextRequest) {
   try {
-    const token = request.cookies.get("auth_token")?.value
-    if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
-
-    const decoded = await verifyToken(token)
-    if (!decoded?.userId) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 })
-    }
+    const session = await requireRipUser()
+    if ("response" in session) return session.response
+    const { userId } = session
 
     const body = await request.json()
     const { id, name, filterSettings } = body
@@ -171,11 +172,10 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "View ID is required" }, { status: 400 })
     }
 
-    // Get user's client
     const userResult = await sql`
       SELECT "clientId" 
       FROM "User" 
-      WHERE id = ${decoded.userId}
+      WHERE id = ${userId}
     `
 
     if (!userResult || userResult.length === 0) {
@@ -188,7 +188,7 @@ export async function PUT(request: NextRequest) {
     const viewCheck = await sql`
       SELECT id 
       FROM "UserCiView"
-      WHERE id = ${id} AND "clientId" = ${clientId} AND "createdBy" = ${decoded.userId}
+      WHERE id = ${id} AND "clientId" = ${clientId} AND "createdBy" = ${userId}
     `
 
     if (!viewCheck || viewCheck.length === 0) {
@@ -197,7 +197,6 @@ export async function PUT(request: NextRequest) {
 
     const now = new Date()
 
-    // Build update query dynamically based on what's provided
     const updates: string[] = []
     const values: Array<string | Date> = []
 
@@ -215,7 +214,7 @@ export async function PUT(request: NextRequest) {
     values.push(now)
 
     values.push(id)
-    values.push(decoded.userId)
+    values.push(userId)
 
     await sql.unsafe(
       `
@@ -236,15 +235,9 @@ export async function PUT(request: NextRequest) {
 // DELETE - Delete a view
 export async function DELETE(request: NextRequest) {
   try {
-    const token = request.cookies.get("auth_token")?.value
-    if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
-
-    const decoded = await verifyToken(token)
-    if (!decoded?.userId) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 })
-    }
+    const session = await requireRipUser()
+    if ("response" in session) return session.response
+    const { userId } = session
 
     const searchParams = request.nextUrl.searchParams
     const viewId = searchParams.get("id")
@@ -253,11 +246,10 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "View ID is required" }, { status: 400 })
     }
 
-    // Get user's client
     const userResult = await sql`
       SELECT "clientId" 
       FROM "User" 
-      WHERE id = ${decoded.userId}
+      WHERE id = ${userId}
     `
 
     if (!userResult || userResult.length === 0) {
@@ -269,7 +261,7 @@ export async function DELETE(request: NextRequest) {
     // Delete only the authenticated user's personal copy.
     const result = await sql`
       DELETE FROM "UserCiView"
-      WHERE id = ${viewId} AND "clientId" = ${clientId} AND "createdBy" = ${decoded.userId}
+      WHERE id = ${viewId} AND "clientId" = ${clientId} AND "createdBy" = ${userId}
       RETURNING id
     `
 
