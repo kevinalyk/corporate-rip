@@ -62,7 +62,7 @@ async function createUserWithWorkspace(input: {
         agreedToTermsAt: new Date(),
         signupIp: input.signupIp,
         lastLoginAt: new Date(),
-        role: "admin",
+        role: "owner",
         clientId: client.id,
       },
       include: { client: { select: { id: true, name: true, slug: true } } },
