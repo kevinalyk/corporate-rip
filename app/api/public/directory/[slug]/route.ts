@@ -1,7 +1,7 @@
 import { CORPORATE_ENTITY_WHERE } from "@/lib/corporate-scope"
 import { type NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
-import { verifyToken } from "@/lib/auth"
+import { getDirectoryAccess } from "@/lib/directory-access"
 
 // Convert a name to a URL slug: "Bernie Sanders" -> "bernie-sanders"
 function nameToSlug(name: string): string {
@@ -20,31 +20,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     // We check the auth cookie; unauthenticated AND free-tier users are both
     // restricted to the last 3 hours of communications — matching the CI feed
     // and the interactive map.
-    let hasFullAccess = false
-    const token = request.cookies.get("auth_token")?.value
-    if (token) {
-      try {
-        const payload = await verifyToken(token)
-        if (payload) {
-          // Any authenticated user with a ciAccessLevel above "none" gets full access.
-          // Super admins always get full access.
-          const user = await prisma.user.findUnique({
-            where: { id: payload.userId as string },
-            select: {
-              role: true,
-              client: { select: { hasCompetitiveInsights: true } },
-            },
-          })
-          if (user) {
-            hasFullAccess =
-              user.role === "super_admin" ||
-              (user.client?.hasCompetitiveInsights ?? false)
-          }
-        }
-      } catch {
-        // Invalid token — treat as unauthenticated
-      }
-    }
+    const { hasFullAccess } = await getDirectoryAccess()
 
     // The 3-hour cutoff used for restricted users. Sent back to the client so
     // the component can apply per-item blur without any extra logic.

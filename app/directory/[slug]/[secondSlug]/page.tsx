@@ -1,10 +1,9 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { cookies } from "next/headers"
 import { CiDirectoryContent } from "@/components/ci-directory-content"
 import AppLayout from "@/components/app-layout"
 import { getAllEntitiesWithCounts } from "@/lib/ci-entity-utils"
-import { verifyToken } from "@/lib/auth"
+import { getDirectoryAccess } from "@/lib/directory-access"
 import {
   isStateSlug,
   isPartySlug,
@@ -94,19 +93,7 @@ export async function generateMetadata({
 }
 
 async function getClientSlug(): Promise<string> {
-  try {
-    const cookieStore = await cookies()
-    const token = cookieStore.get("auth_token")?.value
-    if (token) {
-      const payload = await verifyToken(token)
-      if (payload) {
-        return (payload.clientSlug as string) || ""
-      }
-    }
-  } catch {
-    // unauthenticated — fall through
-  }
-  return ""
+  return (await getDirectoryAccess()).clientSlug
 }
 
 export default async function DirectoryStatePartyPage({

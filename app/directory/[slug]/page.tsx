@@ -1,12 +1,10 @@
 import type { Metadata } from "next"
-import { cookies } from "next/headers"
 import { DirectoryProfileContent } from "@/components/directory-profile-content"
 import { CiDirectoryContent } from "@/components/ci-directory-content"
 import AppLayout from "@/components/app-layout"
 import { getEntityBySlug } from "@/lib/directory"
 import { getAllEntitiesWithCounts } from "@/lib/ci-entity-utils"
-import { verifyToken } from "@/lib/auth"
-import prisma from "@/lib/prisma"
+import { getDirectoryAccess } from "@/lib/directory-access"
 import {
   resolveSlug,
   PARTY_SLUG_TO_LABEL,
@@ -234,19 +232,7 @@ function buildLandingCollectionPage(name: string, description: string, slug: str
 // ──────────────────────────────────────────────────────────────────────────────
 
 async function getClientSlug(): Promise<string> {
-  try {
-    const cookieStore = await cookies()
-    const token = cookieStore.get("auth_token")?.value
-    if (token) {
-      const payload = await verifyToken(token)
-      if (payload) {
-        return (payload.clientSlug as string) || ""
-      }
-    }
-  } catch {
-    // unauthenticated — fall through
-  }
-  return ""
+  return (await getDirectoryAccess()).clientSlug
 }
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -333,27 +319,7 @@ export default async function DirectorySlugPage({ params }: { params: Promise<{ 
   // Resolve full CI access here in the server page (which already imports
   // next/headers) so lib/directory.ts stays free of that dependency and can
   // be safely imported by client-side code without breaking the build.
-  const cookieStore = await cookies()
-  const authToken = cookieStore.get("auth_token")?.value
-  let hasFullAccess = false
-  if (authToken) {
-    try {
-      const payload = await verifyToken(authToken)
-      if (payload) {
-        const user = await prisma.user.findUnique({
-          where: { id: payload.userId as string },
-          select: { role: true, client: { select: { hasCompetitiveInsights: true } } },
-        })
-        if (user) {
-          hasFullAccess =
-            user.role === "super_admin" ||
-            (user.client?.hasCompetitiveInsights ?? false)
-        }
-      }
-    } catch {
-      // invalid token — treat as unauthenticated
-    }
-  }
+  const { hasFullAccess } = await getDirectoryAccess()
   const initialData = await getEntityBySlug(slug, hasFullAccess)
   const structuredData = initialData ? buildEntityStructuredData(initialData) : null
   const breadcrumbData = initialData ? buildEntityBreadcrumb(initialData.entity.name, slug) : null
@@ -378,7 +344,7 @@ export default async function DirectorySlugPage({ params }: { params: Promise<{ 
   )
 }
 
-// ─────────────────────────────────────��────���───────────────────────────────────
+// ─────────��───────────────────────────��────���───────────────────────────────────
 // Server-rendered SEO content block
 // Rendered as real visible HTML so both Google and users see it.
 // Appears below the main interactive profile — subtle styling so it doesn't
