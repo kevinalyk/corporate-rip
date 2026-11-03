@@ -37,7 +37,14 @@ export async function GET(request: NextRequest) {
     }
 
     if (session.brand) {
-      return NextResponse.json({ subscribed: false })
+      const brandEntityId = new URL(request.url).searchParams.get("entityId")
+      if (!brandEntityId) {
+        return NextResponse.json({ error: "Entity ID is required" }, { status: 400 })
+      }
+      const brandSubscription = await prisma.brandEntitySubscription.findUnique({
+        where: { userId_entityId: { userId: session.userId, entityId: brandEntityId } },
+      })
+      return NextResponse.json({ subscribed: !!brandSubscription })
     }
 
     const user = await prisma.user.findUnique({
