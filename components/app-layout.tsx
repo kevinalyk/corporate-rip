@@ -20,6 +20,7 @@ import {
   Menu,
   Moon,
   Plug,
+  ScanSearch,
   Settings,
   Smartphone,
   Star,
@@ -126,7 +127,7 @@ function AppLayout({ children, clientSlug, isAdminView = false }: AppLayoutProps
     { revalidateOnFocus: false },
   )
 
-  const primaryLinks: NavLinkItem[] = [
+  const contentLinks: NavLinkItem[] = [
     {
       label: "Feed",
       href: `/${activeSlug}/ci/campaigns`,
@@ -153,14 +154,16 @@ function AppLayout({ children, clientSlug, isAdminView = false }: AppLayoutProps
     },
   ]
 
-  if (isSuperAdmin) {
-    primaryLinks.push({
-      label: "Directory",
-      href: "/directory",
-      icon: Building2,
-      active: pathname === "/directory" || pathname.startsWith("/directory/"),
-    })
-  }
+  const radarLinks: NavLinkItem[] = isSuperAdmin
+    ? [
+        {
+          label: "Directory",
+          href: "/directory",
+          icon: Building2,
+          active: pathname === "/directory" || pathname.startsWith("/directory/"),
+        },
+      ]
+    : []
 
   const developerLinks: NavLinkItem[] = []
   if (showDevelopers) {
@@ -189,6 +192,8 @@ function AppLayout({ children, clientSlug, isAdminView = false }: AppLayoutProps
     { label: "Integrations", href: `/${activeSlug}/account/integrations`, icon: Plug, active: pathname.includes("/account/integrations") },
   ]
 
+  const contentActive = contentLinks.some((l) => l.active)
+  const radarActive = radarLinks.some((l) => l.active)
   const accountActive = accountLinks.some((l) => l.active)
   const developersActive = developerLinks.some((l) => l.active)
 
@@ -250,12 +255,20 @@ function AppLayout({ children, clientSlug, isAdminView = false }: AppLayoutProps
 
           {!isSignedOut && (
             <nav className="hidden h-full items-stretch gap-1 lg:flex" aria-label="Primary">
-              {primaryLinks.map((item) => (
-                <TopNavLink key={item.label} item={item} />
-              ))}
+              <MenuGroup label="Content" icon={LayoutDashboard} active={contentActive} items={contentLinks} />
+              {radarLinks.length > 0 && (
+                <MenuGroup label="Radar" icon={ScanSearch} active={radarActive} items={radarLinks} />
+              )}
               {developerLinks.length > 0 && (
                 <MenuGroup label="Developers" icon={Code} active={developersActive} items={developerLinks} />
               )}
+              <MenuGroup
+                label="Account"
+                icon={UserCog}
+                active={accountActive}
+                items={accountLinks}
+                header={currentUser?.email}
+              />
             </nav>
           )}
 
@@ -280,46 +293,15 @@ function AppLayout({ children, clientSlug, isAdminView = false }: AppLayoutProps
               </Button>
             ) : (
               <>
-                <div className="hidden lg:block">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={cn("h-9 gap-2 px-3", accountActive && "bg-accent text-accent-foreground")}
-                      >
-                        <UserCog size={16} />
-                        Account
-                        <ChevronDown size={14} className="opacity-60" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56">
-                      {currentUser?.email && (
-                        <>
-                          <DropdownMenuLabel className="truncate text-xs font-normal text-muted-foreground">
-                            {currentUser.email}
-                          </DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                        </>
-                      )}
-                      {accountLinks.map((item) => (
-                        <DropdownMenuItem
-                          key={item.label}
-                          onSelect={() => router.push(item.href)}
-                          className={cn(item.active && "bg-accent")}
-                        >
-                          <item.icon size={16} />
-                          {item.label}
-                        </DropdownMenuItem>
-                      ))}
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onSelect={handleLogout}>
-                        <LogOut size={16} />
-                        Log out
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hidden h-9 w-9 lg:inline-flex"
+                  onClick={handleLogout}
+                  aria-label="Log out"
+                >
+                  <LogOut size={18} />
+                </Button>
 
                 <Button
                   variant="ghost"
@@ -340,9 +322,18 @@ function AppLayout({ children, clientSlug, isAdminView = false }: AppLayoutProps
           <div className="max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-t border-border bg-background lg:hidden">
             <nav className="mx-auto flex w-full max-w-7xl flex-col gap-1 px-4 py-3 sm:px-6" aria-label="Mobile">
               {clientSwitcher && <div className="pb-2">{clientSwitcher}</div>}
-              {primaryLinks.map((item) => (
+              <MobileSectionLabel>Content</MobileSectionLabel>
+              {contentLinks.map((item) => (
                 <MobileNavLink key={item.label} item={item} />
               ))}
+              {radarLinks.length > 0 && (
+                <>
+                  <MobileSectionLabel>Radar</MobileSectionLabel>
+                  {radarLinks.map((item) => (
+                    <MobileNavLink key={item.label} item={item} />
+                  ))}
+                </>
+              )}
               {developerLinks.length > 0 && (
                 <>
                   <MobileSectionLabel>Developers</MobileSectionLabel>
@@ -387,33 +378,18 @@ function AppLayout({ children, clientSlug, isAdminView = false }: AppLayoutProps
   )
 }
 
-function TopNavLink({ item }: { item: NavLinkItem }) {
-  return (
-    <Link
-      href={item.href}
-      aria-current={item.active ? "page" : undefined}
-      className={cn(
-        "relative flex items-center gap-2 px-3 text-sm font-medium transition-colors",
-        item.active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
-      )}
-    >
-      <item.icon size={16} className={item.active ? "text-brand-primary" : undefined} />
-      {item.label}
-      {item.active && <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-brand-primary" />}
-    </Link>
-  )
-}
-
 function MenuGroup({
   label,
   icon: Icon,
   active,
   items,
+  header,
 }: {
   label: string
   icon: React.ElementType
   active: boolean
   items: NavLinkItem[]
+  header?: string | null
 }) {
   const router = useRouter()
   return (
@@ -432,9 +408,19 @@ function MenuGroup({
           {active && <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-brand-primary" />}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-48">
+      <DropdownMenuContent align="start" className="w-52">
+        {header && (
+          <>
+            <DropdownMenuLabel className="truncate text-xs font-normal text-muted-foreground">{header}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+          </>
+        )}
         {items.map((item) => (
-          <DropdownMenuItem key={item.label} onSelect={() => router.push(item.href)}>
+          <DropdownMenuItem
+            key={item.label}
+            onSelect={() => router.push(item.href)}
+            className={cn(item.active && "bg-accent")}
+          >
             <item.icon size={16} />
             {item.label}
           </DropdownMenuItem>
