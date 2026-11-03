@@ -5,6 +5,7 @@ import type { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 import { checkMobileRateLimit } from "@/lib/mobile-auth"
 import { createBrandToken, getRequestIp, setBrandCookie, toPublicBrandUser } from "@/lib/brand-auth"
+import type { BrandRole } from "@/lib/brand-roles"
 
 const MAX_ATTEMPTS = 5
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000
@@ -62,7 +63,7 @@ async function createUserWithWorkspace(input: {
         agreedToTermsAt: new Date(),
         signupIp: input.signupIp,
         lastLoginAt: new Date(),
-        role: "owner",
+        role: "owner" satisfies BrandRole,
         clientId: client.id,
       },
       include: { client: { select: { id: true, name: true, slug: true } } },
