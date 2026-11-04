@@ -1642,13 +1642,13 @@ export function CompetitiveInsights({
         </div>
       )}
 
-      <div className="mb-5 rounded-2xl border bg-card p-3 shadow-none sm:p-4">
+      <div className="mb-5">
           <div
-            className={`space-y-4 ${shouldShowPaywall || shouldShowPreview ? "pointer-events-none opacity-50" : ""}`}
+            className={`space-y-3 ${shouldShowPaywall || shouldShowPreview ? "pointer-events-none opacity-50" : ""}`}
           >
             <div className={`${subscriptionPlan === "free" && !hasAdminAccess ? "relative" : ""}`}>
               {/* Top row - Search bar centered (hidden on reporting view) */}
-              <div className={`flex mb-4 ${isReportingView ? "hidden" : ""}`}>
+              <div className={`flex items-center gap-2 mb-3 ${isReportingView ? "hidden" : ""}`}>
                 <div
                   className={`w-full relative ${subscriptionPlan === "free" && !hasAdminAccess ? "blur-sm pointer-events-none" : ""}`}
                   ref={searchRef}
@@ -1659,7 +1659,7 @@ export function CompetitiveInsights({
                     value={searchTerm}
                     onChange={(e) => handleSearchChange(e.target.value)}
                     onKeyDown={handleSearchKeyDown}
-                    className="pl-10"
+                    className="pl-10 bg-card md:h-11 md:rounded-full md:pl-11 md:text-base"
                     disabled={
                       shouldShowPaywall || shouldShowPreview || (subscriptionPlan === "free" && !hasAdminAccess)
                     }
@@ -1678,6 +1678,17 @@ export function CompetitiveInsights({
                     </div>
                   )}
                 </div>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleRefresh}
+                  disabled={shouldShowPaywall || shouldShowPreview || refreshing}
+                  aria-label="Refresh"
+                  title="Refresh"
+                  className="hidden md:inline-flex h-11 w-11 shrink-0 rounded-full bg-card"
+                >
+                  <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
+                </Button>
               </div>
 
               {/* ── Mobile-only: active filter chips (horizontal scroll) ──── */}
@@ -1827,7 +1838,7 @@ export function CompetitiveInsights({
               <div
                 className={cn(
                   // Desktop layout (md+)
-                  "md:relative md:z-auto md:inset-auto md:transform-none md:rounded-none md:border-0 md:bg-transparent md:p-0 md:max-h-none md:overflow-visible md:flex md:flex-col md:gap-2 md:transition-none md:translate-y-0 md:shadow-none",
+                  "md:relative md:z-auto md:inset-auto md:transform-none md:rounded-none md:border-0 md:bg-transparent md:p-0 md:max-h-none md:overflow-visible md:flex md:flex-row md:flex-wrap md:items-center md:gap-2 md:transition-none md:translate-y-0 md:shadow-none",
                   // Mobile bottom sheet
                   "fixed inset-x-0 bottom-0 z-50 bg-background border-t border-border rounded-t-2xl p-4 pb-8 max-h-[85vh] overflow-y-auto flex flex-col gap-3 transition-transform duration-300 ease-in-out shadow-2xl",
                   mobileFiltersOpen ? "translate-y-0" : "translate-y-full",
@@ -1847,7 +1858,7 @@ export function CompetitiveInsights({
                   </Button>
                 </div>
                 {/* Row 1: dropdowns */}
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2 md:contents">
                 {/* Entity filter — temporarily hidden on reporting view, re-enable by removing the !isReportingView condition */}
                 {!isReportingView && (() => {
                   // Inside the mobile filter sheet, bind to draft state. Otherwise applied state.
@@ -1858,7 +1869,7 @@ export function CompetitiveInsights({
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full md:w-[200px] justify-between"
+                      className="w-full md:w-auto md:h-9 md:rounded-full md:bg-card md:px-4 justify-between gap-2"
                       disabled={shouldShowPaywall || shouldShowPreview}
                     >
                       {senderValue.length === 0
@@ -1931,7 +1942,7 @@ export function CompetitiveInsights({
                   onValueChange={mobileFiltersOpen ? setDraftEntityTypeFilter : setSelectedEntityTypeFilter}
                   disabled={shouldShowPaywall || shouldShowPreview}
                 >
-                  <SelectTrigger className="w-full md:w-[160px]">
+                  <SelectTrigger className="w-full md:w-auto md:h-9 md:gap-2 md:rounded-full md:bg-card md:px-4">
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -1960,7 +1971,7 @@ export function CompetitiveInsights({
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full md:w-auto bg-transparent justify-between gap-2"
+                      className="w-full md:w-auto md:h-9 md:rounded-full md:bg-card md:px-4 bg-transparent justify-between gap-2"
                       disabled={shouldShowPaywall || shouldShowPreview}
                     >
                       {messageFiltersValue.length === 0
@@ -2043,7 +2054,7 @@ export function CompetitiveInsights({
 
                 </div>{/* end row 1 */}
                 {/* Row 2: date range + actions */}
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2 md:contents">
                 {/* Date Range Filter (hidden on reporting view) */}
                 {(() => {
                   // On desktop: read from draftDateRange for display, but only commit to dateRange
@@ -2068,12 +2079,14 @@ export function CompetitiveInsights({
                         })
                       }
                   return (
-                <div className={`flex items-center gap-2 ${isReportingView ? "hidden" : ""}`}>
+                <div
+                  className={`flex items-center gap-2 md:gap-0 md:overflow-hidden md:rounded-full md:border md:bg-card ${isReportingView ? "hidden" : ""}`}
+                >
                   <Popover open={isFromCalendarOpen} onOpenChange={setIsFromCalendarOpen}>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
-                        className="w-[140px] justify-start text-left font-normal bg-transparent"
+                        className="w-[140px] justify-start text-left font-normal bg-transparent md:h-9 md:w-[132px] md:rounded-none md:border-0 md:shadow-none"
                         disabled={shouldShowPaywall || shouldShowPreview}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
@@ -2100,13 +2113,14 @@ export function CompetitiveInsights({
                     </PopoverContent>
                   </Popover>
 
-                  <span className="text-muted-foreground">-</span>
+                  <span className="text-muted-foreground md:hidden">-</span>
+                  <span className="hidden h-4 w-px bg-border md:block" aria-hidden="true" />
 
                   <Popover open={isToCalendarOpen} onOpenChange={setIsToCalendarOpen}>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
-                        className="w-[140px] justify-start text-left font-normal bg-transparent"
+                        className="w-[140px] justify-start text-left font-normal bg-transparent md:h-9 md:w-[132px] md:rounded-none md:border-0 md:shadow-none"
                         disabled={shouldShowPaywall || shouldShowPreview}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
@@ -2147,7 +2161,7 @@ export function CompetitiveInsights({
                 <Button
                   variant="outline"
                   onClick={handleRefresh}
-                  className="w-full md:w-auto bg-transparent"
+                  className="w-full md:hidden bg-transparent"
                   disabled={shouldShowPaywall || shouldShowPreview || refreshing}
                 >
                   <RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
@@ -2157,7 +2171,7 @@ export function CompetitiveInsights({
                 <Button
                   variant="outline"
                   onClick={mobileFiltersOpen ? resetDraftFilters : resetFilters}
-                  className="w-full md:w-auto bg-transparent"
+                  className="w-full bg-transparent md:ml-auto md:h-9 md:w-auto md:rounded-full md:border-0 md:px-3 md:text-muted-foreground md:shadow-none"
                   disabled={
                     shouldShowPaywall ||
                     shouldShowPreview ||
