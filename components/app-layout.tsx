@@ -12,6 +12,7 @@ import {
   Building,
   Building2,
   ChevronDown,
+  CircleUser,
   Code,
   CreditCard,
   LayoutDashboard,
@@ -25,7 +26,6 @@ import {
   Smartphone,
   Star,
   Sun,
-  UserCog,
   Users,
   X,
   BarChart3,
@@ -262,13 +262,6 @@ function AppLayout({ children, clientSlug, isAdminView = false }: AppLayoutProps
               {developerLinks.length > 0 && (
                 <MenuGroup label="Developers" icon={Code} active={developersActive} items={developerLinks} />
               )}
-              <MenuGroup
-                label="Account"
-                icon={UserCog}
-                active={accountActive}
-                items={accountLinks}
-                header={currentUser?.email}
-              />
             </nav>
           )}
 
@@ -293,15 +286,14 @@ function AppLayout({ children, clientSlug, isAdminView = false }: AppLayoutProps
               </Button>
             ) : (
               <>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hidden h-9 w-9 lg:inline-flex"
-                  onClick={handleLogout}
-                  aria-label="Log out"
-                >
-                  <LogOut size={18} />
-                </Button>
+                <div className="hidden lg:block">
+                  <AccountMenu
+                    active={accountActive}
+                    items={accountLinks}
+                    email={currentUser?.email}
+                    onLogout={handleLogout}
+                  />
+                </div>
 
                 <Button
                   variant="ghost"
@@ -425,6 +417,57 @@ function MenuGroup({
             {item.label}
           </DropdownMenuItem>
         ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+function AccountMenu({
+  active,
+  items,
+  email,
+  onLogout,
+}: {
+  active: boolean
+  items: NavLinkItem[]
+  email?: string | null
+  onLogout: () => void
+}) {
+  const router = useRouter()
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn("h-9 w-9 rounded-full", active && "bg-accent text-brand-primary")}
+          aria-label="Account menu"
+        >
+          <CircleUser size={22} />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        {email && (
+          <>
+            <DropdownMenuLabel className="truncate text-xs font-normal text-muted-foreground">{email}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+          </>
+        )}
+        {items.map((item) => (
+          <DropdownMenuItem
+            key={item.label}
+            onSelect={() => router.push(item.href)}
+            className={cn(item.active && "bg-accent")}
+          >
+            <item.icon size={16} />
+            {item.label}
+          </DropdownMenuItem>
+        ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={onLogout}>
+          <LogOut size={16} />
+          Log out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
