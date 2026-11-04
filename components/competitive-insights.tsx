@@ -69,6 +69,7 @@ import { CiEntitySubscribeButton } from "./ci-entity-subscribe-button"
 import { useToast } from "@/hooks/use-toast"
 import { CiViewsManager } from "./ci-views-manager" // Imported CiViewsManager
 import { CiAnalyticsView } from "./ci-analytics-view"
+import { FeedItem } from "./feed-item"
 import { nameToSlug } from "@/lib/directory-utils"
 
 interface CompetitiveInsightsProps {
@@ -270,6 +271,27 @@ function cleanEmailPreview(preview: string, emailContent?: string | null): strin
 
 function isUselessText(text: string): boolean {
   return text.length < 10 || /^[\s.…\-–—|]+$/.test(text)
+}
+
+function groupCampaignsByDay<T extends { dateReceived: string }>(campaigns: T[]) {
+  const today = new Date()
+  const yesterday = new Date()
+  yesterday.setDate(today.getDate() - 1)
+  const keyOf = (d: Date) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`
+  const groups: { key: string; label: string; items: { campaign: T; index: number }[] }[] = []
+  campaigns.forEach((campaign, index) => {
+    const date = new Date(campaign.dateReceived)
+    const key = keyOf(date)
+    let group = groups.find((g) => g.key === key)
+    if (!group) {
+      const label =
+        key === keyOf(today) ? "Today" : key === keyOf(yesterday) ? "Yesterday" : format(date, "EEEE, MMM d")
+      group = { key, label, items: [] }
+      groups.push(group)
+    }
+    group.items.push({ campaign, index })
+  })
+  return groups
 }
 
 export function CompetitiveInsights({
@@ -1620,8 +1642,7 @@ export function CompetitiveInsights({
         </div>
       )}
 
-      <Card className="mb-6 shadow-none">
-        <CardContent className="pt-6">
+      <div className="mb-5 rounded-2xl border bg-card p-3 shadow-none sm:p-4">
           <div
             className={`space-y-4 ${shouldShowPaywall || shouldShowPreview ? "pointer-events-none opacity-50" : ""}`}
           >
@@ -2210,42 +2231,43 @@ export function CompetitiveInsights({
               )}
             </div>
           </div>
-        </CardContent>
-      </Card>
+      </div>
 
       <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <CiViewsManager
-            clientSlug={clientSlug}
-            currentFilters={getCurrentFilters()}
-            onLoadView={handleLoadView}
-            hasActiveFilters={hasActiveFilters}
-          />
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <CiViewsManager
+              clientSlug={clientSlug}
+              currentFilters={getCurrentFilters()}
+              onLoadView={handleLoadView}
+              hasActiveFilters={hasActiveFilters}
+            />
+            {activeView === "emails" && !shouldShowPaywall && !shouldShowPreview && totalCampaigns > 0 && (
+              <div className="text-sm text-muted-foreground">
+                Showing {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, totalCampaigns)}{" "}
+                of {totalCampaigns}
+              </div>
+            )}
+          </div>
+          {activeView === "emails" && !shouldShowPaywall && !shouldShowPreview && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">Per page</span>
+              <Select value={itemsPerPage.toString()} onValueChange={(value) => setItemsPerPage(Number(value))}>
+                <SelectTrigger className="w-[80px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
 
         {activeView === "emails" ? (
           <>
-            {!shouldShowPaywall && !shouldShowPreview && (
-              <div className="mb-4 flex items-center justify-between">
-                <div className="text-sm text-muted-foreground">
-                  Showing {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, totalCampaigns)}{" "}
-                  of {totalCampaigns} campaigns
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">Per page:</span>
-                  <Select value={itemsPerPage.toString()} onValueChange={(value) => setItemsPerPage(Number(value))}>
-                    <SelectTrigger className="w-[80px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="10">10</SelectItem>
-                      <SelectItem value="20">20</SelectItem>
-                      <SelectItem value="50">50</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            )}
 
             <div className="relative">
               {shouldShowPaywall && (
@@ -2265,177 +2287,42 @@ export function CompetitiveInsights({
               )}
 
               <div className={shouldShowPaywall ? "blur-md pointer-events-none" : ""}>
-                <Card>
-                  <CardContent className="p-0">
-                    {/* Mobile card list */}
-                    <div className="md:hidden divide-y">
-                      {currentPaginatedCampaigns.map((campaign, index) => {
-                        const isBlurred = shouldShowPreview && index >= previewLimit
-                        const preview =
-                          campaign.type !== "sms"
-                            ? cleanEmailPreview(campaign.emailPreview, campaign.emailContent)
-                            : ""
-                        return (
-                          <div
-                            key={campaign.id}
-                            className={`p-4 hover:bg-muted/30 cursor-pointer transition-colors ${isBlurred ? "blur-sm" : ""} ${campaign.isHidden && resolvedUser?.role === "super_admin" ? "opacity-60" : ""}`}
-                            onClick={() => {
-                              if (!shouldShowPreview || index < previewLimit) {
-                                setSelectedCampaign(campaign)
-                                fetch("/api/track-view", {
-                                  method: "POST",
-                                  headers: { "Content-Type": "application/json" },
-                                  body: JSON.stringify({ id: campaign.id, type: campaign.type }),
-                                }).catch(() => {})
-                              }
-                            }}
-                          >
-                            {/* Row 1: icon + sender + date */}
-                            <div className="flex items-start gap-2">
-                              {campaign.type === "sms" ? (
-                                <Smartphone className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                              ) : (
-                                <Mail className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                              )}
-                              <div className="font-medium text-sm truncate flex-1 min-w-0">
-                                {campaign.entity ? campaign.entity.name : campaign.senderName}
-                              </div>
-                              <div className="text-xs text-muted-foreground flex-shrink-0 text-right">
-                                <div>{new Date(campaign.dateReceived).toLocaleDateString()}</div>
-                                <div>
-                                  {new Date(campaign.dateReceived).toLocaleTimeString([], {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  })}
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Row 2: badges */}
-                            <div className="flex flex-wrap gap-1 mt-2">
-                              {campaign.isHidden && resolvedUser?.role === "super_admin" && (
-                                <Badge variant="outline" className="text-xs bg-muted">
-                                  <EyeOff className="h-3 w-3 mr-1" />
-                                  Hidden
-                                </Badge>
-                              )}
-                              {shouldShowPersonalBadge(campaign) && (
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700"
-                                >
-                                  <User className="h-3 w-3 mr-1" />
-                                  Personal
-                                </Badge>
-                              )}
-                              {campaign.entity && shouldShowFollowingBadge(campaign) && (
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs bg-amber-100 dark:bg-amber-900 border-amber-300 dark:border-amber-700"
-                                >
-                                  <Star className="h-3 w-3 mr-1" />
-                                  Following
-                                </Badge>
-                              )}
-                              {campaign.entity && !isDomainMappedToEntity(campaign) && (
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
-                                >
-                                  <Info className="h-3 w-3 mr-1" />
-                                  Third Party
-                                </Badge>
-                              )}
-                              {campaign.type !== "sms" && (campaign.sendCount ?? 1) >= 2 && (resolvedPlan === "all" || resolvedPlan === "enterprise" || resolvedUser?.role === "super_admin") && (
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs bg-purple-100 dark:bg-purple-950 border-purple-300 dark:border-purple-700 text-purple-800 dark:text-purple-300"
-                                >
-                                  <RefreshCw className="h-3 w-3 mr-1" />
-                                  Subject sent {campaign.sendCount}x
-                                </Badge>
-                              )}
-                              {campaign.type !== "sms" && (campaign.bodySendCount ?? 1) >= 2 && (resolvedPlan === "all" || resolvedPlan === "enterprise" || resolvedUser?.role === "super_admin") && (
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs bg-blue-100 dark:bg-blue-950 border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-300"
-                                >
-                                  <RefreshCw className="h-3 w-3 mr-1" />
-                                  Body sent {campaign.bodySendCount}x
-                                </Badge>
-                              )}
-                              {campaign.type === "sms" && (campaign.sendCount ?? 1) >= 2 && (resolvedPlan === "all" || resolvedPlan === "enterprise" || resolvedUser?.role === "super_admin") && (
-                                <Badge
-                                  variant="outline"
-                                  className="text-xs bg-green-100 dark:bg-green-950 border-green-300 dark:border-green-700 text-green-800 dark:text-green-300"
-                                >
-                                  <RefreshCw className="h-3 w-3 mr-1" />
-                                  Sent {campaign.sendCount}x
-                                </Badge>
-                              )}
-                            </div>
-
-                            {/* Row 3: number/email */}
-                            <div className="text-xs text-muted-foreground truncate mt-2">
-                              {campaign.type === "sms" ? campaign.phoneNumber : campaign.senderEmail}
-                            </div>
-
-                            {/* Row 4: subject (clamp 2) */}
-                            {campaign.subject && (
-                              <div className="text-sm font-medium mt-2 line-clamp-2 break-words">
-                                {campaign.subject}
-                              </div>
-                            )}
-
-                            {/* Row 5: preview (clamp 2) */}
-                            {preview && (
-                              <div className="text-xs text-muted-foreground mt-1 line-clamp-2 break-words">
-                                {preview}
-                              </div>
-                            )}
-
-                            {/* Assign sender (super admin) */}
-                            {resolvedUser?.role === "super_admin" &&
-                              (campaign.entity ? !isDomainMappedToEntity(campaign) : true) && (
-                                <button
-                                  className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground border rounded px-1.5 py-0.5 hover:bg-muted transition-colors"
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    setAssignDialogCampaign(campaign)
-                                    setAssignPopoverCampaignId(campaign.id)
-                                    setAssignEntitySearch("")
-                                  }}
-                                >
-                                  <UserPlus className="h-3 w-3" />
-                                  {campaign.entity ? "Assign sender" : "Assign to entity"}
-                                </button>
-                              )}
-                          </div>
-                        )
-                      })}
-                    </div>
-
-                    {/* Desktop table */}
-                    <div className="hidden md:block overflow-x-auto">
-                      <table className="w-full">
-                        <thead className="bg-muted/50 border-b">
-                          <tr>
-                            <th className="text-left p-4 font-medium text-sm">Sender</th>
-                            <th className="text-left p-4 font-medium text-sm">Subject</th>
-                            <th className="text-left p-4 font-medium text-sm">Date</th>
-                            {/* <th className="text-left p-4 font-medium text-sm">Status</th> */}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {currentPaginatedCampaigns.map((campaign, index) => (
-                            <tr
+                <div className="divide-y overflow-hidden rounded-2xl border bg-card">
+                  {groupCampaignsByDay(currentPaginatedCampaigns).map((group) => (
+                    <section key={group.key}>
+                      <h3 className="flex items-center gap-2 border-b bg-muted/60 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground sm:px-5">
+                        {group.label}
+                        <span className="font-normal normal-case tracking-normal">
+                          {group.items.length} {group.items.length === 1 ? "message" : "messages"}
+                        </span>
+                      </h3>
+                      <div className="divide-y">
+                        {group.items.map(({ campaign, index }) => {
+                          const canSeeRepeats =
+                            resolvedPlan === "all" || resolvedPlan === "enterprise" || resolvedUser?.role === "super_admin"
+                          const isSuperAdmin = resolvedUser?.role === "super_admin"
+                          return (
+                            <FeedItem
                               key={campaign.id}
-                              className={`border-b hover:bg-muted/30 cursor-pointer transition-colors ${shouldShowPreview && index >= previewLimit ? "blur-sm" : ""
-                                } ${campaign.isHidden && resolvedUser?.role === "super_admin" ? "opacity-60" : ""}`}
-                              onClick={() => {
+                              campaign={campaign}
+                              preview={
+                                campaign.type !== "sms" ? cleanEmailPreview(campaign.emailPreview, campaign.emailContent) : ""
+                              }
+                              blurred={shouldShowPreview && index >= previewLimit}
+                              dimmed={!!campaign.isHidden && isSuperAdmin}
+                              showPersonal={shouldShowPersonalBadge(campaign)}
+                              showFollowing={!!campaign.entity && !!shouldShowFollowingBadge(campaign)}
+                              showThirdParty={!!campaign.entity && !isDomainMappedToEntity(campaign)}
+                              showRepeats={canSeeRepeats}
+                              canAssign={isSuperAdmin && (campaign.entity ? !isDomainMappedToEntity(campaign) : true)}
+                              onAssign={() => {
+                                setAssignDialogCampaign(campaign)
+                                setAssignPopoverCampaignId(campaign.id)
+                                setAssignEntitySearch("")
+                              }}
+                              onOpen={() => {
                                 if (!shouldShowPreview || index < previewLimit) {
                                   setSelectedCampaign(campaign)
-                                  // Fire-and-forget view tracking
                                   fetch("/api/track-view", {
                                     method: "POST",
                                     headers: { "Content-Type": "application/json" },
@@ -2443,176 +2330,24 @@ export function CompetitiveInsights({
                                   }).catch(() => {})
                                 }
                               }}
-                            >
-                              <td className="p-4">
-                                <div className="flex items-start gap-2">
-                                  {campaign.type === "sms" ? (
-                                    <Smartphone className="h-4 w-4 text-muted-foreground mt-1 flex-shrink-0" />
-                                  ) : (
-                                    <Mail className="h-4 w-4 text-muted-foreground mt-1 flex-shrink-0" />
-                                  )}
-                                  <div className="min-w-0">
-                                    {campaign.entity ? (
-                                      <>
-                                        <div className="flex items-center gap-2 mb-1">
-                                          <div className="font-medium text-sm truncate">{campaign.entity.name}</div>
-                                          {campaign.isHidden && resolvedUser?.role === "super_admin" && (
-                                            <Badge variant="outline" className="text-xs bg-muted">
-                                              <EyeOff className="h-3 w-3 mr-1" />
-                                              Hidden
-                                            </Badge>
-                                          )}
-                                          {shouldShowPersonalBadge(campaign) && ( // Use helper function
-                                            <Badge
-                                              variant="outline"
-                                              className="text-xs bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700"
-                                            >
-                                              <User className="h-3 w-3 mr-1" />
-                                              Personal
-                                            </Badge>
-                                          )}
-                                          {shouldShowFollowingBadge(campaign) && (
-                                            <Badge
-                                              variant="outline"
-                                              className="text-xs bg-amber-100 dark:bg-amber-900 border-amber-300 dark:border-amber-700"
-                                            >
-                                              <Star className="h-3 w-3 mr-1" />
-                                              Following
-                                            </Badge>
-                                          )}
-                                          {!isDomainMappedToEntity(campaign) && (
-                                            <Badge
-                                              variant="outline"
-                                              className="text-xs bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
-                                            >
-                                              <Info className="h-3 w-3 mr-1" />
-                                              Third Party
-                                            </Badge>
-                                          )}
-                                        </div>
-                                        {campaign.type === "sms" ? (
-                                          <div className="text-xs text-muted-foreground truncate">
-                                            {campaign.phoneNumber}
-                                          </div>
-                                        ) : (
-                                          <>
-                                            <div className="text-xs text-muted-foreground truncate">
-                                              {campaign.senderName}
-                                            </div>
-                                            <div className="text-xs text-muted-foreground truncate">
-                                              {campaign.senderEmail}
-                                            </div>
-                                          </>
-                                        )}
-                                        {resolvedUser?.role === "super_admin" && !isDomainMappedToEntity(campaign) && (
-                                          <button
-                                            className="mt-1.5 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground border rounded px-1.5 py-0.5 hover:bg-muted transition-colors"
-                                            onClick={(e) => { e.stopPropagation(); setAssignDialogCampaign(campaign); setAssignPopoverCampaignId(campaign.id); setAssignEntitySearch("") }}
-                                          >
-                                            <UserPlus className="h-3 w-3" />
-                                            Assign sender
-                                          </button>
-                                        )}
-                                      </>
-                                    ) : (
-                                      <>
-                                        <div className="flex items-center gap-2 mb-1">
-                                          <div className="font-medium text-sm truncate">{campaign.senderName}</div>
-                                          {shouldShowPersonalBadge(campaign) && ( // Use helper function
-                                            <Badge
-                                              variant="outline"
-                                              className="text-xs bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700"
-                                            >
-                                              <User className="h-3 w-3 mr-1" />
-                                              Personal
-                                            </Badge>
-                                          )}
-                                          {campaign.isHidden && resolvedUser?.role === "super_admin" && (
-                                            <Badge variant="outline" className="text-xs bg-muted">
-                                              <EyeOff className="h-3 w-3 mr-1" />
-                                              Hidden
-                                            </Badge>
-                                          )}
-                                        </div>
-                                        <div className="text-xs text-muted-foreground truncate">
-                                          {campaign.type === "sms" ? campaign.phoneNumber : campaign.senderEmail}
-                                        </div>
-                                        {resolvedUser?.role === "super_admin" && (
-                                          <button
-                                            className="mt-1.5 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground border rounded px-1.5 py-0.5 hover:bg-muted transition-colors"
-                                            onClick={(e) => { e.stopPropagation(); setAssignDialogCampaign(campaign); setAssignPopoverCampaignId(campaign.id); setAssignEntitySearch("") }}
-                                          >
-                                            <UserPlus className="h-3 w-3" />
-                                            Assign to entity
-                                          </button>
-                                        )}
-                                      </>
-                                    )}
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="p-4">
-                                <div>
-                                  <div className="text-sm font-medium truncate max-w-md">{campaign.subject}</div>
-                                  {campaign.type !== "sms" && (cleanEmailPreview(campaign.emailPreview, campaign.emailContent)) && (
-                                    <div className="text-xs text-muted-foreground truncate max-w-md mt-1">
-                                      {cleanEmailPreview(campaign.emailPreview, campaign.emailContent)}
-                                    </div>
-                                  )}
-                                </div>
-                              </td>
-                              <td className="p-4">
-                                <div className="flex flex-col gap-1">
-                                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                    <Calendar className="h-4 w-4" />
-                                    {new Date(campaign.dateReceived).toLocaleDateString()}
-                                  </div>
-                                  <div className="text-xs text-muted-foreground">
-                                    {new Date(campaign.dateReceived).toLocaleTimeString([], {
-                                      hour: "2-digit",
-                                      minute: "2-digit",
-                                    })}
-                                  </div>
-                                </div>
-                              </td>
-                              {/* <td className="p-4">
-                                <div className="flex flex-wrap gap-1">
-                                  {campaign.inboxCount > 0 && (
-                                    <Badge
-                                      variant="secondary"
-                                      className="bg-green-500/10 text-green-500 border-green-500/20"
-                                    >
-                                      Inbox
-                                    </Badge>
-                                  )}
-                                  {campaign.spamCount > 0 && (
-                                    <Badge variant="secondary" className="bg-red-500/10 text-red-500 border-red-500/20">
-                                      Spam
-                                    </Badge>
-                                  )}
-                                  {campaign.inboxCount === 0 && campaign.spamCount === 0 && (
-                                    <span className="text-xs text-muted-foreground">No data</span>
-                                  )}
-                                </div>
-                              </td> */}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                    {campaigns.length === 0 && !loading && (
-                      <div className="text-center py-12 text-muted-foreground">
-                        {subscriptionsOnly
-                          ? totalCampaigns === 0
-                            ? "Follow entities to see their campaigns here. Browse the Feed to discover entities you want to track."
-                            : "No campaigns found matching your filters. Try adjusting your search criteria or date range."
-                          : totalCampaigns === 0
-                            ? "No competitive insights data available yet. New campaigns will appear here as they are detected."
-                            : "No campaigns found matching your filters"}
+                            />
+                          )
+                        })}
                       </div>
-                    )}
-                  </CardContent>
-                </Card>
+                    </section>
+                  ))}
+                  {campaigns.length === 0 && !loading && (
+                    <div className="px-6 py-16 text-center text-sm text-muted-foreground">
+                      {subscriptionsOnly
+                        ? totalCampaigns === 0
+                          ? "Follow entities to see their campaigns here. Browse the Feed to discover entities you want to track."
+                          : "No campaigns found matching your filters. Try adjusting your search criteria or date range."
+                        : totalCampaigns === 0
+                          ? "No competitive insights data available yet. New campaigns will appear here as they are detected."
+                          : "No campaigns found matching your filters"}
+                    </div>
+                  )}
+                </div>
 
                 {!shouldShowPaywall && !shouldShowPreview && totalCampaigns > 0 && (
                   <div className="mt-4 flex items-center justify-center gap-2">
