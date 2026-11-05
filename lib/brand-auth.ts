@@ -11,7 +11,7 @@ const SESSION_SECONDS = BRAND_SESSION_SECONDS
 export function getBrandHomePath(user: { role: string; client?: { slug: string } | null }) {
   if (user.client?.slug) return `/${user.client.slug}/ci/campaigns`
   if (user.role === "super_admin") return "/rip/ci/campaigns"
-  return "/account"
+  return "/login"
 }
 
 export function setBrandCookie(response: NextResponse, token: string) {

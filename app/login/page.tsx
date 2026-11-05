@@ -31,7 +31,7 @@ export default function LoginPage() {
       if (!response.ok) {
         throw new Error(data.error || "Login failed")
       }
-      window.location.href = data.redirectTo || (data.user?.clientSlug ? `/${data.user.clientSlug}/ci/campaigns` : "/account")
+      window.location.href = data.redirectTo || (data.user?.clientSlug ? `/${data.user.clientSlug}/ci/campaigns` : "/login")
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to sign in. Please try again.")
       setLoading(false)

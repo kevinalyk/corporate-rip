@@ -99,7 +99,7 @@ export default function SignupPage() {
       if (!response.ok) {
         throw new Error(data.error || "Signup failed")
       }
-      window.location.href = "/account"
+      window.location.href = data.redirectTo || "/login"
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred during signup")
       setLoading(false)
