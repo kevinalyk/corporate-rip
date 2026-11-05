@@ -9,9 +9,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Eye, EyeOff } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
-import { BrandWordmark } from "@/components/brand-wordmark"
+import { AuthShell } from "@/components/auth-shell"
 
 function validatePassword(password: string) {
   if (password.length < 12) return "Password must be at least 12 characters long"
@@ -109,23 +108,8 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
-      <div className="text-center mb-8">
-        <div className="relative w-32 h-32 mx-auto mb-4">
-          <Image
-            src="/images/IconOnly_Transparent_NoBuffer.png"
-            alt="brandinbox.ai"
-            fill
-            style={{ objectFit: "contain" }}
-            priority
-          />
-        </div>
-        <h1 className="text-4xl">
-          <BrandWordmark />
-        </h1>
-      </div>
-
-      <Card className="w-full max-w-md">
+    <AuthShell>
+      <Card className="w-full border-0 shadow-none lg:border lg:shadow-sm">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Create your account</CardTitle>
           <CardDescription>Sign up to get started with brandinbox.ai</CardDescription>
@@ -265,6 +249,6 @@ export default function SignupPage() {
           </p>
         </CardFooter>
       </Card>
-    </div>
+    </AuthShell>
   )
 }
