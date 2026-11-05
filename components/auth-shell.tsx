@@ -73,7 +73,7 @@ const signupContent = {
 
 function BrandPanel({ variant }: { variant: AuthVariant }) {
   return (
-    <aside className="relative hidden overflow-hidden bg-gradient-to-br from-[#1e1b4b] via-[#312e81] to-[#4c1d95] text-white lg:flex lg:flex-col lg:justify-between lg:p-12 xl:p-16">
+    <aside className="relative hidden overflow-hidden bg-gradient-to-br from-[#1e1b4b] via-[#312e81] to-[#4c1d95] text-white lg:flex lg:flex-col lg:justify-between lg:gap-10 lg:p-12 xl:p-16">
       <div className="auth-glow pointer-events-none absolute -left-24 -top-24 h-96 w-96 rounded-full bg-indigo-500/40 blur-3xl" />
       <div
         className="auth-glow pointer-events-none absolute -bottom-32 -right-24 h-[28rem] w-[28rem] rounded-full bg-violet-500/40 blur-3xl"
@@ -105,7 +105,11 @@ function BrandPanel({ variant }: { variant: AuthVariant }) {
 
       <div className="relative z-10 space-y-10">
         <div className="auth-card-in space-y-4" style={{ animationDelay: "0.15s" }}>
-          <h2 className="max-w-md text-balance text-4xl font-bold leading-tight tracking-tight xl:text-5xl">
+          <h2
+            className={`max-w-md text-balance font-bold leading-tight tracking-tight ${
+              variant === "signup" ? "text-3xl xl:text-4xl" : "text-4xl xl:text-5xl"
+            }`}
+          >
             {variant === "login" ? loginContent.headline : signupContent.headline}
           </h2>
           <p className="max-w-md text-pretty text-lg text-indigo-100/80">
@@ -176,8 +180,16 @@ export function AuthShell({ variant, title, description, footer, children }: Aut
   return (
     <main className="grid min-h-dvh bg-background lg:grid-cols-2">
       <BrandPanel variant={variant} />
-      <section className="flex flex-col items-center justify-center px-6 py-12 sm:px-10">
-        <div className="mb-10 flex flex-col items-center gap-3 lg:hidden">
+      <section className="relative flex flex-col items-center justify-center overflow-hidden bg-muted/40 px-4 py-12 sm:px-10">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60"
+          style={{
+            backgroundImage:
+              "radial-gradient(60rem 30rem at 100% 0%, rgba(99,102,241,0.10), transparent 60%), radial-gradient(40rem 24rem at 0% 100%, rgba(139,92,246,0.08), transparent 60%)",
+          }}
+          aria-hidden="true"
+        />
+        <div className="relative mb-8 flex flex-col items-center gap-3 lg:hidden">
           <div className="relative h-16 w-16">
             <Image
               src="/images/IconOnly_Transparent_NoBuffer.png"
@@ -190,19 +202,22 @@ export function AuthShell({ variant, title, description, footer, children }: Aut
           <BrandWordmark className="text-3xl" />
         </div>
 
-        <div className="auth-card-in w-full max-w-sm" style={{ animationDelay: "0.2s" }}>
-          <header className="mb-8 space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">{title}</h1>
-            <p className="text-pretty text-muted-foreground">{description}</p>
-          </header>
+        <div
+          className={`auth-card-in relative w-full ${variant === "signup" ? "max-w-lg" : "max-w-md"}`}
+          style={{ animationDelay: "0.2s" }}
+        >
+          <div className="rounded-3xl border border-border/60 bg-card p-8 shadow-2xl shadow-indigo-950/10 ring-1 ring-black/[0.02] sm:p-10 dark:shadow-black/40">
+            <header className="mb-8 space-y-2">
+              <h1 className="text-balance text-3xl font-bold tracking-tight text-foreground">{title}</h1>
+              <p className="text-pretty text-muted-foreground">{description}</p>
+            </header>
 
-          <div className="[&_input:not([type=checkbox])]:h-11 [&_button[type=submit]]:h-11 [&_button[type=submit]]:text-base">
-            {children}
+            <div className="[&_input:not([type=checkbox])]:h-11 [&_input:not([type=checkbox])]:rounded-lg [&_input:not([type=checkbox])]:bg-background [&_label]:text-sm [&_label]:font-medium [&_button[type=submit]]:h-11 [&_button[type=submit]]:rounded-lg [&_button[type=submit]]:text-base [&_button[type=submit]]:shadow-md">
+              {children}
+            </div>
           </div>
 
-          <footer className="mt-8 border-t border-border pt-6 text-center text-sm text-muted-foreground">
-            {footer}
-          </footer>
+          <footer className="mt-6 text-center text-sm text-muted-foreground">{footer}</footer>
         </div>
       </section>
     </main>
