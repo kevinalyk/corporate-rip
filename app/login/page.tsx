@@ -5,7 +5,6 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import Link from "next/link"
 import { AuthShell } from "@/components/auth-shell"
@@ -40,13 +39,20 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthShell>
-      <Card className="w-full border-0 shadow-none lg:border lg:shadow-sm">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Sign in to your account</CardTitle>
-          <CardDescription>Enter your email and password to access brandinbox.ai</CardDescription>
-        </CardHeader>
-        <CardContent>
+    <AuthShell
+      variant="login"
+      title="Welcome back"
+      description="Sign in to your brandinbox.ai account."
+      footer={
+        <p>
+          Don&apos;t have an account?{" "}
+          <Link href="/signup" className="font-medium text-brand-secondary hover:underline">
+            Sign up
+          </Link>
+        </p>
+      }
+    >
+      <div>
           {error && (
             <Alert variant="destructive" className="mb-4">
               <AlertDescription>{error}</AlertDescription>
@@ -81,16 +87,7 @@ export default function LoginPage() {
               {loading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
-        </CardContent>
-        <CardFooter className="flex justify-center">
-          <p className="text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-brand-secondary hover:underline">
-              Sign up
-            </Link>
-          </p>
-        </CardFooter>
-      </Card>
+      </div>
     </AuthShell>
   )
 }
