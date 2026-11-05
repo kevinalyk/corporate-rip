@@ -5,7 +5,6 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Eye, EyeOff } from "lucide-react"
@@ -108,13 +107,20 @@ export default function SignupPage() {
   }
 
   return (
-    <AuthShell>
-      <Card className="w-full border-0 shadow-none lg:border lg:shadow-sm">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Create your account</CardTitle>
-          <CardDescription>Sign up to get started with brandinbox.ai</CardDescription>
-        </CardHeader>
-        <CardContent>
+    <AuthShell
+      variant="signup"
+      title="Create your account"
+      description="Get started with brandinbox.ai in a minute."
+      footer={
+        <p>
+          Already have an account?{" "}
+          <Link href="/login" className="font-medium text-brand-secondary hover:underline">
+            Sign in
+          </Link>
+        </p>
+      }
+    >
+      <div>
           {error && (
             <Alert variant="destructive" className="mb-4">
               <AlertDescription>{error}</AlertDescription>
@@ -239,16 +245,7 @@ export default function SignupPage() {
               {loading ? "Creating account..." : "Create Account"}
             </Button>
           </form>
-        </CardContent>
-        <CardFooter className="flex justify-center">
-          <p className="text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link href="/login" className="text-brand-secondary hover:underline">
-              Sign in
-            </Link>
-          </p>
-        </CardFooter>
-      </Card>
+      </div>
     </AuthShell>
   )
 }
