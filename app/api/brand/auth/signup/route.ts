@@ -4,7 +4,7 @@ import bcryptjs from "bcryptjs"
 import type { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 import { checkMobileRateLimit } from "@/lib/mobile-auth"
-import { createBrandToken, getRequestIp, setBrandCookie, toPublicBrandUser } from "@/lib/brand-auth"
+import { createBrandToken, getBrandHomePath, getRequestIp, setBrandCookie, toPublicBrandUser } from "@/lib/brand-auth"
 import type { BrandRole } from "@/lib/brand-roles"
 
 const MAX_ATTEMPTS = 5
@@ -145,7 +145,7 @@ export async function POST(request: Request) {
     }
     if (!user) throw new Error("Workspace creation failed")
 
-    const response = NextResponse.json({ user: toPublicBrandUser(user) }, { status: 201 })
+    const response = NextResponse.json({ user: toPublicBrandUser(user), redirectTo: getBrandHomePath(user) }, { status: 201 })
     setBrandCookie(response, await createBrandToken(user))
     return response
   } catch (error) {

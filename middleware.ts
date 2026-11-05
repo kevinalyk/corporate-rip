@@ -18,7 +18,6 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname === "/api/health" ||
     // brandinbox.ai accounts (BrandUser) — separate cookie, each route checks its own session
     request.nextUrl.pathname.startsWith("/api/brand/") ||
-    request.nextUrl.pathname === "/account" ||
     request.nextUrl.pathname === "/api/auth/me" ||
     request.nextUrl.pathname.startsWith("/api/auth/login") ||
     request.nextUrl.pathname.startsWith("/api/auth/signup") ||
