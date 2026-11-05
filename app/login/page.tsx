@@ -7,9 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import Image from "next/image"
 import Link from "next/link"
-import { BrandWordmark } from "@/components/brand-wordmark"
+import { AuthShell } from "@/components/auth-shell"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -41,23 +40,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen min-h-dvh flex flex-col items-center justify-center bg-background p-4">
-      <div className="text-center mb-12">
-        <div className="relative w-40 h-40 mx-auto mb-4">
-          <Image
-            src="/images/IconOnly_Transparent_NoBuffer.png"
-            alt="brandinbox.ai"
-            fill
-            style={{ objectFit: "contain" }}
-            priority
-          />
-        </div>
-        <h1 className="mt-2 text-4xl">
-          <BrandWordmark />
-        </h1>
-      </div>
-
-      <Card className="w-full max-w-md">
+    <AuthShell>
+      <Card className="w-full border-0 shadow-none lg:border lg:shadow-sm">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Sign in to your account</CardTitle>
           <CardDescription>Enter your email and password to access brandinbox.ai</CardDescription>
@@ -107,6 +91,6 @@ export default function LoginPage() {
           </p>
         </CardFooter>
       </Card>
-    </div>
+    </AuthShell>
   )
 }

@@ -238,3 +238,55 @@
 .pr-safe {
   padding-right: env(safe-area-inset-right, 0px);
 }
+
+/* Login / signup brand panel animations */
+@keyframes auth-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes auth-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.12);
+  }
+}
+@keyframes auth-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.auth-float {
+  animation: auth-float 7s ease-in-out infinite;
+}
+.auth-glow {
+  animation: auth-glow 9s ease-in-out infinite;
+}
+.auth-card-in {
+  opacity: 0;
+  animation: auth-card-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-float,
+  .auth-glow {
+    animation: none;
+  }
+  .auth-card-in {
+    opacity: 1;
+    animation: none;
+  }
+}
