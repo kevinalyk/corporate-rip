@@ -468,6 +468,7 @@ export async function GET(request: NextRequest) {
         type: true,
         party: true,
         state: true,
+        imageUrl: true,
         tags: {
           where: { clientId: authResult.user.clientId! },
           select: {
@@ -574,6 +575,7 @@ export async function GET(request: NextRequest) {
                 type: true,
                 party: true,
                 state: true,
+                imageUrl: true,
                 tags: {
                   where: { clientId: targetClientId },
                   select: { tagName: true, tagColor: true },

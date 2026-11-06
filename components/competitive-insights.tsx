@@ -108,6 +108,7 @@ interface Campaign {
     type: string
     party?: string | null
     state?: string | null
+    imageUrl?: string | null
     tag?: string | null // Added tag property to entity
   } | null // Removed position from interface
   shareToken?: string | null // Added for sharing

@@ -2,6 +2,7 @@
 
 import { ChevronRight, EyeOff, Info, Mail, RefreshCw, Smartphone, Star, User, UserPlus } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export interface FeedItemCampaign {
   id: number | string
@@ -11,7 +12,7 @@ export interface FeedItemCampaign {
   subject: string
   dateReceived: string
   phoneNumber?: string
-  entity?: { id: string; name: string } | null
+  entity?: { id: string; name: string; imageUrl?: string | null } | null
   isHidden?: boolean
   sendCount?: number
   bodySendCount?: number
@@ -88,9 +89,14 @@ export function FeedItem({
         className="absolute left-0 top-3 bottom-3 w-0.5 rounded-full bg-primary opacity-0 transition-opacity group-hover:opacity-100"
       />
 
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-sm font-semibold text-primary">
-        {name.trim().charAt(0).toUpperCase()}
-      </div>
+      <Avatar className="h-10 w-10 shrink-0 rounded-xl">
+        {campaign.entity?.imageUrl && (
+          <AvatarImage src={campaign.entity.imageUrl} alt="" className="object-cover object-top" />
+        )}
+        <AvatarFallback className="rounded-xl bg-primary/10 text-sm font-semibold text-primary">
+          {name.trim().charAt(0).toUpperCase()}
+        </AvatarFallback>
+      </Avatar>
 
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-3">
